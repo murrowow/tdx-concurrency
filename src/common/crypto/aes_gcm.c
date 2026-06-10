@@ -19,7 +19,6 @@
 // OR OTHER DEALINGS IN THE SOFTWARE.                                            
 //                                                                               
 // SPDX-License-Identifier: MIT
-
 /**
  * @file aes_gcm.c
  * @brief Crypto implementation for AES GCM library
