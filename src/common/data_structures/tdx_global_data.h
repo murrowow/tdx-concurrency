@@ -45,6 +45,12 @@
 #define AES_XTS_256                BIT(2)
 #define AES_XTS_256_WITH_INTEGRITY BIT(3)
 
+#define TDX_MODULE_HV 1
+#define TDX_MIN_UPDATE_HV 0
+#define TDX_NO_DOWNGRADE 1
+#define CRYPTO_LIB_COMPAT_VERSION 1 // ICP 1.0.1
+#define MIN_UPDATE_COMPATIBILITY_HV 1
+
 typedef enum
 {
     SYSINIT_PENDING = 0,
@@ -262,6 +268,20 @@ typedef struct xsave_component_info_s
     bool_t   align;
 } xsave_component_info_t;
 
+
+
+typedef union handoff_s
+{
+    struct
+    {
+        uint64_t handoff_version        : 16;
+        uint64_t avoid_compat_sensitive :  1;
+        uint64_t reserved               : 47;
+    };
+
+    uint64_t raw;
+} handoff_t;
+
 /**
  * @struct tdx_module_local_t
  *
@@ -287,6 +307,9 @@ typedef struct tdx_module_global_s
     uint16_t min_update_hv;
     uint16_t no_downgrade;
     uint16_t num_handoff_pages;
+    bool_t update_compatibility;
+    uint16_t td_build_count;
+    uint16_t mig_interrupted_count;
 
     /* SEAMDB_INDEX/NONCE are sampled by TDH.SYS.INIT using SEAMOPS(SEAMDB_GETREF).  If TD preserving
        is not supported by the CPU, they are set to 0. */
@@ -384,9 +407,7 @@ typedef struct tdx_module_global_s
     cpuid_1a_eax_t  native_model_info;
 
     // fatal error diagnostics
-    uint64_t* fatal_info_p;
     uint64_t fatal_info_config_hpa;
-    sharex_lock_t fatal_info_lock;
     uint64_t fatal_info_icr;
 
     // interruption checking interval

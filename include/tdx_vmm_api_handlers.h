@@ -464,12 +464,16 @@ api_error_type tdh_mem_sept_remove(page_info_api_input_t sept_page_info, uint64_
  * @param tdmr_info_array_pa The physical address of an array of TDMR_INFO entries
  * @param num_of_tdmr_entries The number of TDMR_INFO entries in the about buffer
  * @param global_private_hkid TDX-SEAM global private HKID value
+ * @param version
+ * @param enabling_flags TDX module feature enabling flags, formatted similarly to TDX_FEATURES0
+ * @param reserved_r10 must be zero
  *
  * @return Success or Error type
  */
 api_error_type tdh_sys_config(uint64_t tdmr_info_array_pa,
-                             uint64_t num_of_tdmr_entries,
-                             sys_config_options_t sysconfig_options);
+                              uint64_t num_of_tdmr_entries,
+                              sys_config_options_t sysconfig_options
+                              );
 
 
 /**
@@ -853,14 +857,19 @@ api_error_type tdh_sys_shutdown(uint64_t hv_input);
 /**
  * @brief Finished updating TDX module by retrieving and loading handoff data from the previous module
  *
+ * @param version
+ * @param enabling_flags TDX module feature enabling flags, formatted similarly to TDX_FEATURES0
+ *
  * @return Success or Error type
  */
-api_error_type tdh_sys_update(void);
+api_error_type tdh_sys_update(uint8_t version, uint64_t enabling_flags, uint64_t reserved_r10);
 
 api_error_type tdh_phymem_pamt_add(page_size_api_input_t page_info,
                                    uint64_t pamt_hpa0,
                                    uint64_t pamt_hpa1);
 
 api_error_type tdh_phymem_pamt_remove(page_size_api_input_t page_info);
+
+
 
 #endif // __TDX_VMM_API_HANDLERS_H_INCLUDED__

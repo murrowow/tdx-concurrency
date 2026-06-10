@@ -20,6 +20,6 @@
 //                                                                               
 // SPDX-License-Identifier: MIT
 /**
- * @file aes_gcm.c
- * @brief Crypto implementation stubs for AES GCM library
+ * @file tdg_intr_post
+ * @brief TDG_INTR_POST API handler
  */

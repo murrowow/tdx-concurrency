@@ -27,6 +27,7 @@ PROJ_FLAGS =
 FAULT_SAFE_MAGIC_INDICATOR=0xFF0F0F0F0F0F0FFF
 PROJ_FLAGS += -DFAULT_SAFE_MAGIC_INDICATOR=$(FAULT_SAFE_MAGIC_INDICATOR)
 
+
 ################################################################
 ## Versioning
 
@@ -51,13 +52,13 @@ endif # TDX_MODULE_INTERNAL_VER
 ifdef TDX_MODULE_SEAM_MINOR_SVN
  PROJ_FLAGS += -DTDX_MINOR_SEAM_SVN=$(TDX_MODULE_SEAM_MINOR_SVN)
 else # TDX_MODULE_SEAM_MINOR_SVN
- PROJ_FLAGS += -DTDX_MINOR_SEAM_SVN=12
+ PROJ_FLAGS += -DTDX_MINOR_SEAM_SVN=13
 endif # TDX_MODULE_SEAM_MINOR_SVN
 
  ########################################
  PROJ_FLAGS += -DTDX_MODULE_MAJOR_VER=1
  PROJ_FLAGS += -DTDX_MODULE_MINOR_VER=5
- PROJ_FLAGS += -DTDX_MODULE_UPDATE_VER=20
+ PROJ_FLAGS += -DTDX_MODULE_UPDATE_VER=24
  ########################################
 
 ################################################################
@@ -69,27 +70,16 @@ endif # TDX_MODULE_SEAM_MINOR_SVN
 PROJ_FLAGS += -DNO_SPEC_CTRL_VIRT_SUPPORT
 PROJ_FLAGS += -DDYNAMIC_PAMT_SUPPORT
 PROJ_FLAGS += -DHSD_18042345067_WA # https://hsdes.intel.com/appstore/article/#/18042345067
+
+
+PROJ_FLAGS += -DINTR_STATE_SUPPORTED
+
+PROJ_FLAGS += -DVEINFO_INTR_STATE_SUPPORTED
+
 PROJ_FLAGS += -DTD_MIGRATION_SUPPORTED
+
 PROJ_FLAGS += -DTD_PART_MIGRATION_SUPPORTED
 
-
-ifdef TDX_MODULE_HV
-PROJ_FLAGS += -DTDX_MODULE_HV=$(TDX_MODULE_HV)
-else # TDX_MODULE_HV
-PROJ_FLAGS += -DTDX_MODULE_HV=0
-endif # TDX_MODULE_HV
-
-ifdef TDX_MIN_UPDATE_HV
-PROJ_FLAGS += -DTDX_MIN_UPDATE_HV=$(TDX_MIN_UPDATE_HV)
-else # TDX_MIN_UPDATE_HV
-PROJ_FLAGS += -DTDX_MIN_UPDATE_HV=0
-endif # TDX_MIN_UPDATE_HV
-
-ifdef TDX_NO_DOWNGRADE
-PROJ_FLAGS += -DTDX_NO_DOWNGRADE=$(TDX_NO_DOWNGRADE)
-else # TDX_NO_DOWNGRADE
-PROJ_FLAGS += -DTDX_NO_DOWNGRADE=0
-endif # TDX_NO_DOWNGRADE
 
 ################################################################
 
@@ -114,13 +104,14 @@ PROJ_FLAGS += -D_NO_IPP_DEPRECATED
 
 ################################################################
 PRODUCTION_FLAGS =
+
 ################################################################
 
 
 #Architecture git data
 ################################################################
-    COMMIT_ID = 75c7f773
-    ARCHITECTURE_BRANCH_NAME = TDX_Module_1.5.20_v0.96
+    COMMIT_ID = 9659993f
+    ARCHITECTURE_BRANCH_NAME = TDX_Module_1.5.24_v0.97
     CPUID_EXCEL_VERSION_SUPPORTED = 10
     MSR_EXCEL_VERSION_SUPPORTED = 6
     TDVPS_EXCEL_VERSION_SUPPORTED = 28
@@ -128,7 +119,9 @@ PRODUCTION_FLAGS =
     TD_VMCS_EXCEL_VERSION_SUPPORTED = 26
     GLOBAL_SYS_EXCEL_VERSION_SUPPORTED = 2
     ERRORS_VERSION_SUPPORTED = 5
-    OP_STATE_VERSION_SUPPORTED = 2
+    OP_STATE_VERSION_SUPPORTED = 4
     SEPT_STATE_VERSION_SUPPORTED = 9
     L2_VMCS_VERSION_SUPPORTED = 25
+################################################################
+################################################################
 ################################################################

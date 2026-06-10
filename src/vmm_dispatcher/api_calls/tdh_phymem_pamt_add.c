@@ -20,7 +20,6 @@
 //
 // SPDX-License-Identifier: MIT
 
-
 /**
  * @file tdh_phymem_pamt_add
  * @brief TDHPHYMEMPAMTADD API handler

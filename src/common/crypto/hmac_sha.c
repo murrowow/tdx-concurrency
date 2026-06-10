@@ -19,3 +19,9 @@
 // OR OTHER DEALINGS IN THE SOFTWARE.
 //
 // SPDX-License-Identifier: MIT
+
+
+/**
+ * @file hmac_sha.c
+ * @brief Crypto implementation for HMAC SHA
+ */

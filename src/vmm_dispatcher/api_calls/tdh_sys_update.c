@@ -36,7 +36,7 @@
 #include "accessors/data_accessors.h"
 #include "accessors/vt_accessors.h"
 
-api_error_type tdh_sys_update(void)
+api_error_type tdh_sys_update(uint8_t version, uint64_t enabling_flags, uint64_t reserved_r10)
 {
     // Global data
     tdx_module_global_t* global_data = get_global_data();
@@ -44,7 +44,6 @@ api_error_type tdh_sys_update(void)
 
     bool_t global_locked_flag = false;
     api_error_type ret_val = TDX_OPERAND_INVALID;
-
 
     // Acquire an exclusive lock to the whole TDX-SEAM module
     if (acquire_sharex_lock_ex(&global_data->global_lock) != LOCK_RET_SUCCESS)
@@ -84,6 +83,38 @@ api_error_type tdh_sys_update(void)
     uint8_t* handoff_data_bytes = (uint8_t*)(sysinfo_table->data_rgn_base + sizeof(handoff_data_header_t));
 
     retrieve_handoff_data(hv, size, handoff_data_bytes);
+
+    if (version)
+    {
+        if (version > 1)
+        {
+			// Versions 0 and 1 are the only supported versions
+            TDX_ERROR("Max supported version of TDH.SYS.UPDATE is 1\n");
+            ret_val = api_error_with_operand_id(TDX_OPERAND_INVALID, OPERAND_ID_RAX);
+            goto EXIT;
+        }
+
+        tdx_features_enum0_t enabled_features = (tdx_features_enum0_t)enabling_flags;
+        tdx_features_enum0_t tdx_enabled_features = get_tdx_features_enum0();
+
+        // A bit may be set to 1 if the corresponding TDX_FEATURES0 bit is 1
+        if ((enabled_features.raw | tdx_enabled_features.raw) != tdx_enabled_features.raw)
+        {
+            TDX_ERROR("An enabling bit may be set to 1 only if the corresponding TDX_FEATURES0 bit is 1 (readable by TDH.SYS.RD)\n");
+            ret_val = api_error_with_operand_id(TDX_OPERAND_INVALID, OPERAND_ID_R9);
+            goto EXIT;
+        }
+
+
+        if (reserved_r10)
+        {
+            TDX_ERROR("R10 is reserved and must be zero\n");
+            ret_val = api_error_with_operand_id(TDX_OPERAND_INVALID, OPERAND_ID_R10);
+            goto EXIT;
+        }
+
+        global_data->update_compatibility = enabled_features.update_compatibility;
+    }
 
     complete_cpuid_handling(global_data);
 

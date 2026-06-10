@@ -664,6 +664,15 @@ _STATIC_INLINE_ api_error_type check_cpuid_configurations(tdx_module_global_t* g
          */
         else if (leaf == CPUID_GET_TOPOLOGY_LEAF)
         {
+            // Check that ECX provides the correct subleaf number.
+            if (cpuid_config.leaf_subleaf.subleaf != ((cpuid_topology_level_t)cpuid_config.values.ecx).level_number)
+            {
+                TDX_ERROR("CPUID_GET_TOPOLOGY_LEAF subleaf %d does not match expected value %d\n",
+                    cpuid_config.leaf_subleaf.subleaf, ((cpuid_topology_level_t)cpuid_config.values.ecx).level_number);
+
+                return TDX_CPUID_LEAF_1F_FORMAT_UNRECOGNIZED;
+            }
+
             if (((cpuid_topology_level_t)cpuid_config.values.ecx).level_type != (uint32_t)LEVEL_TYPE_INVALID)
             {
                 /* This is a valid leaf.  Checks that level type higher than the last one
@@ -1302,6 +1311,9 @@ _STATIC_INLINE_ void tdx_init_global_data(tdx_module_global_t* tdx_global_data_p
 
     uint32_t freq = (uint32_t)get_tsc_ratio();
     tdx_global_data_ptr->twenty_usec_in_tsc = translate_usec_to_tsc(USECOND * 20, freq);
+
+    tdx_global_data_ptr->td_build_count = 0;
+    tdx_global_data_ptr->mig_interrupted_count = 0;
 }
 
 _STATIC_INLINE_ api_error_type tdx_init_stack_canary(void)
@@ -1365,9 +1377,9 @@ _STATIC_INLINE_ api_error_type check_module_build_time_defs(tdx_module_global_t*
     tdx_global_data_ptr->no_downgrade      = sysinfo_table->no_downgrade;
     tdx_global_data_ptr->num_handoff_pages = sysinfo_table->num_handoff_pages;
 
-    if ((tdx_global_data_ptr->module_hv != GLOBAL_TDX_MODULE_HV) ||
-        (tdx_global_data_ptr->min_update_hv < GLOBAL_TDX_MIN_UPDATE_HV) ||
-        ((tdx_global_data_ptr->no_downgrade == 0) && (GLOBAL_TDX_NO_DOWNGRADE == 1)) ||
+    if ((tdx_global_data_ptr->module_hv != TDX_MODULE_HV) ||
+        (tdx_global_data_ptr->min_update_hv < TDX_MIN_UPDATE_HV) ||
+        ((tdx_global_data_ptr->no_downgrade == 0) && (TDX_NO_DOWNGRADE == 1)) ||
         ((tdx_global_data_ptr->num_handoff_pages + 1) < TDX_MIN_HANDOFF_PAGES))
     {
         TDX_ERROR("Incompatible TD preserving defs\n");
@@ -1380,7 +1392,7 @@ _STATIC_INLINE_ api_error_type check_module_build_time_defs(tdx_module_global_t*
 _STATIC_INLINE_ api_error_type configure_fatal_info_diagnostics(bool_t enable_configuration, fatal_error_config_t fatal_error_config)
 {
     tdx_module_global_t* global_data = get_global_data();
-    global_data->fatal_info_p = NULL;
+
     global_data->fatal_info_icr = 0;
     global_data->fatal_info_config_hpa = (uint64_t)(-1);
 
@@ -1425,20 +1437,20 @@ _STATIC_INLINE_ api_error_type configure_fatal_info_diagnostics(bool_t enable_co
                     return TDX_OPERAND_INVALID;
                 }
 
-                icr.delivery_mode = APIC_DELIVERY_FIXED;
-                icr.vector = fatal_error_config.notification_vector;
+                icr.icr_low.delivery_mode = APIC_DELIVERY_FIXED;
+                icr.icr_low.vector = fatal_error_config.notification_vector;
                 break;
             }
             case 0x2: // NMI
             {
-                icr.delivery_mode = APIC_DELIVERY_NMI;
-                icr.vector = 2;
+                icr.icr_low.delivery_mode = APIC_DELIVERY_NMI;
+                icr.icr_low.vector = 2;
                 break;
             }
             case 0x3: // SMI
             {
-                icr.delivery_mode = APIC_DELIVERY_SMI;
-                icr.vector = 0; // the vector is ignored
+                icr.icr_low.delivery_mode = APIC_DELIVERY_SMI;
+                icr.icr_low.vector = 0; // the vector is ignored
                 break;
             }
             default:
@@ -1449,14 +1461,14 @@ _STATIC_INLINE_ api_error_type configure_fatal_info_diagnostics(bool_t enable_co
             }
             }
 
-            icr.destination_mode = 0; // physical
-            icr.level            = 1; // assert
-            icr.trigger_mode     = 0; // edge
-            icr.dest_shorthand   = 3; // all excluding self
-            icr.raw_high         = 0; // destination
-            icr.rsvd0            = 0;
-            icr.rsvd1            = 0;
-            icr.rsvd2            = 0;
+            icr.icr_low.destination_mode = 0; // physical
+            icr.icr_low.level            = 1; // assert
+            icr.icr_low.trigger_mode     = 0; // edge
+            icr.icr_low.dest_shorthand   = 3; // all excluding self
+            icr.raw_high                 = 0; // destination
+            icr.icr_low.rsvd0            = 0;
+            icr.icr_low.rsvd1            = 0;
+            icr.icr_low.rsvd2            = 0;
 
             global_data->fatal_info_icr = icr.raw;
         }

@@ -79,3 +79,4 @@ INCLUDE_PATH := -I$(PROJ_DIR)/include -I$(CRYPTO_LIB_BUILD_PATH)/include -I$(PRO
 # Tools
 TOOLS_DIR := $(PROJ_DIR)/tools
 PAD_BINARY_PY := $(TOOLS_DIR)/pad_binary/pad_binary.py
+

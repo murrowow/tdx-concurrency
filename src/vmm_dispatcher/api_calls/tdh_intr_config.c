@@ -19,7 +19,8 @@
 // OR OTHER DEALINGS IN THE SOFTWARE.                                            
 //                                                                               
 // SPDX-License-Identifier: MIT
+
 /**
- * @file aes_gcm.c
- * @brief Crypto implementation stubs for AES GCM library
+ * @file tdh_intr_config
+ * @brief TDHINTRCONFIG API handler
  */

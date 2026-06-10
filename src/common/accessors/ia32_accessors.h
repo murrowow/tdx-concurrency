@@ -116,6 +116,7 @@ _STATIC_INLINE_ void ia32_hlt( uint64_t leaf, uint64_t id )
 }
 
 
+
 /**
  * @brief Induce SEAM shutdown by jumping to linear address 0 (long mode)
  */
@@ -530,6 +531,11 @@ _STATIC_INLINE_ void _lock_or_16b(uint16_t *mem, uint16_t quantum)
     _ASM_VOLATILE_ ("lock; orw %1, %0" : "=m" ( *mem ) : "a"(quantum) : "memory");
 }
 
+_STATIC_INLINE_ void _lock_or_32b(uint32_t *mem, uint32_t quantum)
+{
+    _ASM_VOLATILE_ ("lock; or %1, %0" : "=m" ( *mem ) : "a"(quantum) : "memory");
+}
+
 _STATIC_INLINE_ void _lock_or_64b(uint64_t *mem, uint64_t quantum)
 {
     _ASM_VOLATILE_ ("lock; orq %1, %0" : "=m" ( *mem ) : "a"(quantum) : "memory");
@@ -550,11 +556,27 @@ _STATIC_INLINE_ void _lock_xor_16b(uint16_t *mem, uint16_t quantum)
     _ASM_VOLATILE_ ("lock; xorw %1, %0" : "=m" ( *mem ) : "a"(quantum) : "memory");
 }
 
+_STATIC_INLINE_ bool_t _lock_bts_16b(volatile uint16_t* mem, uint16_t bit)
+{
+    bool_t result;
+
+    _ASM_VOLATILE_ ("lock; btsw %2, %0; adc %1,%1" : "=m" ( *mem ) , "=b"(result) : "a"(bit) , "b"(0) : "cc" , "memory");
+    return result;
+}
+
 _STATIC_INLINE_ bool_t _lock_bts_32b(volatile uint32_t* mem, uint32_t bit)
 {
     bool_t result;
 
     _ASM_VOLATILE_ ("lock; bts %2, %0; adc %1,%1" : "=m" ( *mem ) , "=b"(result) : "a"(bit) , "b"(0) : "cc" , "memory");
+    return result;
+}
+
+_STATIC_INLINE_ bool_t _lock_btr_16b(volatile uint16_t* mem, uint16_t bit)
+{
+    bool_t result;
+
+    _ASM_VOLATILE_ ("lock; btrw %2, %0; adc %1,%1" : "=m" ( *mem ) , "=b"(result) : "a"(bit) , "b"(0) : "cc" , "memory");
     return result;
 }
 
@@ -592,16 +614,6 @@ _STATIC_INLINE_ bool_t bit_scan_forward64(uint64_t mask, uint64_t* lsb_position)
     return (mask != 0);
 }
 
-_STATIC_INLINE_ uint32_t bit_scan_forward32(uint32_t mask)
-{
-    uint32_t lsb_position;
-    _ASM_VOLATILE_ ("bsfl %1, %0 \n"
-                        :"=r"(lsb_position)
-                        :"r"(mask)
-                        :"cc");
-
-    return lsb_position;
-}
 
 _STATIC_INLINE_ bool_t bit_scan_reverse32(uint32_t value, uint32_t* msb_position)
 {
@@ -620,11 +632,6 @@ _STATIC_INLINE_ bool_t bit_scan_reverse64(uint64_t value, uint64_t* msb_position
                             :"r"(value)
                             :"cc");
     return (value != 0);
-}
-
-_STATIC_INLINE_ void bts_32b(volatile uint32_t* mem, uint32_t bit)
-{
-    _ASM_VOLATILE_ ("bts %1, %0;" : "=m" ( *mem ) : "a"(bit) : "cc" , "memory");
 }
 
 _STATIC_INLINE_ void btr_32b(volatile uint32_t* mem, uint32_t bit)
@@ -658,28 +665,6 @@ _STATIC_INLINE_ void ia32_clflushopt(volatile void *p)
     _ASM_VOLATILE_ ("clflushopt (%0)" :: "r"(p));
 }
 
-_STATIC_INLINE_ void clear_xmms(void)
-{
-    _ASM_VOLATILE_ (
-         // XOR the existing XMM's
-            "pxor %%xmm0, %%xmm0\n"
-            "pxor %%xmm1, %%xmm1\n"
-            "pxor %%xmm2, %%xmm2\n"
-            "pxor %%xmm3, %%xmm3\n"
-            "pxor %%xmm4, %%xmm4\n"
-            "pxor %%xmm5, %%xmm5\n"
-            "pxor %%xmm6, %%xmm6\n"
-            "pxor %%xmm7, %%xmm7\n"
-            "pxor %%xmm8, %%xmm8\n"
-            "pxor %%xmm9, %%xmm9\n"
-            "pxor %%xmm10, %%xmm10\n"
-            "pxor %%xmm11, %%xmm11\n"
-            "pxor %%xmm12, %%xmm12\n"
-            "pxor %%xmm13, %%xmm13\n"
-            "pxor %%xmm14, %%xmm14\n"
-            "pxor %%xmm15, %%xmm15\n"
-        :::);
-}
 
 _STATIC_INLINE_ void store_xmms_in_buffer(uint128_t xmms[16])
 {
@@ -803,24 +788,5 @@ _STATIC_INLINE_ void atomic_mem_write_64b(uint64_t* mem, uint64_t val)
     _ASM_VOLATILE_ ("movq %0, (%1)" : : "r" (val), "r" (mem) : "memory");
 }
 
-/**
- * @brief This instruction is only supported starting from PTL
- *
- * @param msr_table - Linear address of a table of MSR addresses (8 bytes per address).
- * @param msr_table_size - Number of elements in msr_table.
- * @param data_table - Linear address of a table into which MSR data is stored (8 bytes per MSR).
- * @param msr_bitmap - 64-bit bitmask of valid bits for the MSRs. Bit 0 is the valid bit for entry 0 in each table, etc.
- */
-_STATIC_INLINE_ void rdmsr_list(const uint64_t* msr_table, uint8_t msr_table_size, uint64_t* data_table, uint64_t msr_bitmap)
-{
-    for (uint32_t i = 0; i < msr_table_size; i++)
-    {
-        tdx_sanity_check(i < 32, FATAL_ERROR_ID_275, 0);
-        if ((msr_bitmap & BIT(i)) != 0)
-        {
-            data_table[i] = ia32_rdmsr(msr_table[i]);
-        }
-    }
-}
 
 #endif /* SRC_COMMON_ACCESSORS_IA32_ACCESSORS_H_ */

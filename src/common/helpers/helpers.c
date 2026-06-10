@@ -815,26 +815,6 @@ api_error_type lock_sept_check_and_walk_private_gpa(
                                              sept_entry_ptr, level, cached_sept_entry, is_sept_locked, set_d_bit);
 }
 
-api_error_type lock_sept_check_and_walk_private_gpa_to_leaf(
-        tdcs_t* tdcs_p,
-        uint64_t operand_id,
-        pa_t gpa,
-        uint16_t hkid,
-        lock_type_t lock_type,
-        ia32e_sept_t** sept_entry_ptr,
-        ept_level_t* level,
-        ia32e_sept_t* cached_sept_entry,
-        bool_t* is_sept_locked)
-{
-    tdx_debug_assert(lock_type != TDX_LOCK_NO_LOCK);
-
-    return lock_sept_check_and_walk_internal(tdcs_p, operand_id, gpa, hkid,
-                                             lock_type, // Lock the SEPT tree
-                                             true,      // Check private GPA validity
-                                             SEPT_WALK_TO_LEAF,
-                                             sept_entry_ptr, level, cached_sept_entry, is_sept_locked, false);
-}
-
 
 api_error_type check_and_walk_private_gpa_to_leaf(
         tdcs_t* tdcs_p,
@@ -884,7 +864,7 @@ uint64_t get_guest_cr0_pe(void)
 
 static void inject_ve_and_return_to_td(tdvps_t* tdvps_p, pa_t gpa, vmx_exit_qualification_t exit_qual, ve_category_e category)
 {
-    tdx_inject_ve(VMEXIT_REASON_EPT_VIOLATION, exit_qual.raw, category, tdvps_p, gpa.raw, 0);
+    tdx_inject_ve(VMEXIT_REASON_EPT_VIOLATION, exit_qual.raw, category, tdvps_p, gpa.raw, 0, 0);
     bus_lock_exit();
     check_pending_voe_on_debug_td_return();
     tdx_return_to_td(true, false, &tdvps_p->guest_state.gpr_state);
@@ -1038,7 +1018,7 @@ api_error_code_e associate_vcpu(tdvps_t * tdvps_ptr,
                                 bool_t* new_association)
 {
     uint32_t         prev_assoc_lpid;  // Previous associated LPID
-    uint32_t         curr_lp_id = get_local_data()->lp_info.lp_id;
+    uint32_t         curr_lp_id = get_local_data()->lp_info.x2apic_id;
 
     /**
      *  Atomically check that this VCPU is not associated with any LP, and
@@ -1114,7 +1094,7 @@ api_error_code_e check_and_associate_vcpu(tdvps_t * tdvps_ptr,
 void associate_vcpu_initial(tdvps_t * tdvps_ptr,
                             tdcs_t * tdcs_ptr)
 {
-    uint32_t         curr_lp_id = get_local_data()->lp_info.lp_id;
+    uint32_t         curr_lp_id = get_local_data()->lp_info.x2apic_id;
 
     tdvps_ptr->management.last_seamdb_index = get_global_data()->seamdb_index;
 
@@ -1152,8 +1132,8 @@ void init_tdvps_fields(tdcs_t * tdcs_ptr, tdvps_t * tdvps_ptr)
 {
     tdx_module_global_t* tdx_global_data_ptr = get_global_data();
 
-    tdvps_ptr->management.shadow_pid_hpa = NULL_PA;
-    tdvps_ptr->management.shadow_pinbased_exec_ctls = tdx_global_data_ptr->td_vmcs_values.pinbased_ctls;
+    tdvps_ptr->management.shadow_pid_hpa[0] = NULL_PA;
+    tdvps_ptr->management.shadow_pinbased_exec_ctls[0] = tdx_global_data_ptr->td_vmcs_values.pinbased_ctls;
     tdvps_ptr->management.shadow_posted_int_notification_vector = POSTED_INTERRUPT_NOTFICATION_VECTOR_INIT;
     tdvps_ptr->management.shadow_procbased_exec_ctls2[0] = tdx_global_data_ptr->td_vmcs_values.procbased_ctls2;
     for(uint32_t indx = 0; indx <= tdcs_ptr->management_fields.num_l2_vms ; indx++)
@@ -1724,9 +1704,9 @@ void send_self_ipi(apic_delivery_mode_t delivery_mode, uint32_t vector)
     ia32_apic_icr_t icr;
 
     icr.raw = 0;
-    icr.delivery_mode = delivery_mode;
-    icr.dest_shorthand = DEST_SHORTHAND_NONE;
-    icr.vector = vector;
+    icr.icr_low.delivery_mode = delivery_mode;
+    icr.icr_low.dest_shorthand = DEST_SHORTHAND_NONE;
+    icr.icr_low.vector = vector;
 
     // APIC works in x2APIC mode (MSR access). APIC ID is 32 bits.
     if (delivery_mode == APIC_DELIVERY_FIXED)
@@ -2381,7 +2361,7 @@ _STATIC_INLINE_ void copy_global_field_from_handoff(void* field_ptr, uint32_t fi
     *data += field_size;
 }
 
-uint32_t prepare_handoff_data(uint16_t hv, uint32_t size, uint8_t* data)
+uint32_t prepare_handoff_data(uint32_t size, uint8_t* data)
 {
     // The function fills the handoff buffer with data variables that satisfy the following conditions:
     // 1)  Not initialized by TDH.SYS.INIT or TDH.SYS.LP.INIT
@@ -2391,10 +2371,6 @@ uint32_t prepare_handoff_data(uint16_t hv, uint32_t size, uint8_t* data)
 
     tdx_module_global_t* g_d = get_global_data();
     uint32_t written_size = 0;
-
-    // Currently support only HV 0
-    tdx_debug_assert(hv == 0);
-    UNUSED(hv);
 
     // All write size checks are done by tdx_memcpy inside
 
@@ -2425,6 +2401,15 @@ uint32_t prepare_handoff_data(uint16_t hv, uint32_t size, uint8_t* data)
     // Copy dynamic PAMT setting
     copy_global_field_to_handoff(&g_d->dynamic_pamt_enabled, sizeof(g_d->dynamic_pamt_enabled),
                                  &data, &size, &written_size);
+
+    // Copy TD_BUILD_COUNT
+    copy_global_field_to_handoff(&g_d->td_build_count, sizeof(g_d->td_build_count),
+                                 &data, &size, &written_size);
+
+    // Copy MIG_INTERRUPTED_COUNT
+    copy_global_field_to_handoff(&g_d->mig_interrupted_count, sizeof(g_d->mig_interrupted_count),
+                                 &data, &size, &written_size);
+    
     return written_size;
 }
 
@@ -2435,11 +2420,10 @@ void retrieve_handoff_data(uint16_t hv, uint32_t size, uint8_t* data)
 
     tdx_module_global_t* g_d = get_global_data();
 
-    // Currently support only HV 0
-    tdx_debug_assert(hv == 0);
-    UNUSED(hv);
-
+    // uint32_t total_required_size = TDX_MIN_HANDOFF_SIZE;
     UNUSED(size);
+
+    // tdx_sanity_check(total_required_size <= size, FATAL_ERROR_ID_179, 5);
 
     // Copy KOT entries (no need to copy the lock)
     copy_global_field_from_handoff(&g_d->kot.entries, sizeof(g_d->kot.entries), &data);
@@ -2461,6 +2445,23 @@ void retrieve_handoff_data(uint16_t hv, uint32_t size, uint8_t* data)
 
     // Copy dynamic PAMT setting
     copy_global_field_from_handoff(&g_d->dynamic_pamt_enabled, sizeof(g_d->dynamic_pamt_enabled), &data);
+
+    // If handoff data version is >= minimal version for supporting this feature, restore PL.TD_BUILD_COUNT and PL.MIG_INTERRUPTED_COUNT from the handoff data.
+    if (hv >= MIN_UPDATE_COMPATIBILITY_HV)
+    {
+        // Copy TD_BUILD_COUNT
+        copy_global_field_from_handoff(&g_d->td_build_count, sizeof(g_d->td_build_count), &data);
+    
+        // Copy MIG_INTERRUPTED_COUNT
+        copy_global_field_from_handoff(&g_d->mig_interrupted_count, sizeof(g_d->mig_interrupted_count), &data);
+    }
+    else
+    {
+        // Else, set PL.TD_BUILD_COUNT and PL.MIG_INTERRUPTED_COUNT to 0.
+        g_d->td_build_count = 0;
+        g_d->mig_interrupted_count = 0;
+    }
+
 }
 
 void complete_cpuid_handling(tdx_module_global_t* tdx_global_data_ptr)
@@ -3204,6 +3205,87 @@ void prepare_state_for_avx_usage(void)
     }
 }
 
+void update_vcpu_state_details_for_l1(tdvps_t* tdvps_p, bool_t update_vnmi)
+{
+    // Read the guest's current interrupt status from VMCS
+    guest_interrupt_status_t interrupt_status;
+    ia32_vmread(VMX_GUEST_INTERRUPT_STATUS_ENCODE, &interrupt_status.raw);
+
+    // Check if virtual interrupts are pending by comparing
+    // Request Virtual Interrupt (RVI) priority with Processor Priority Register (PPR).
+    // The 0xF0 mask extracts the 4-bit priority class
+    if ((interrupt_status.rvi & 0xF0UL) > (tdvps_p->vapic.vapic[PPR_INDEX] & 0xF0UL))
+    {
+        tdvps_p->guest_state.vcpu_state_details.vintr_pending_0 = 1;
+    }
+    else
+    {
+        tdvps_p->guest_state.vcpu_state_details.vintr_pending_0 = 0;
+    }
+
+    // Check if a high-priority interrupt is currently in service.
+    // SVI (Servicing Virtual Interrupt) > 30 indicates a high-priority interrupt.
+    if (interrupt_status.svi > 30)
+    {
+        tdvps_p->guest_state.vcpu_state_details.vintr_in_service_0 = 1;
+    }
+    else
+    {
+        tdvps_p->guest_state.vcpu_state_details.vintr_in_service_0 = 0;
+    }
+
+    if (update_vnmi)
+    {
+        // Check if an NMI (Non-Maskable Interrupt) is pending for this VCPU
+        if (tdvps_p->management.pend_nmi)
+        {
+            tdvps_p->guest_state.vcpu_state_details.vnmi_pending_0 = 1;
+        }
+        else
+        {
+            tdvps_p->guest_state.vcpu_state_details.vnmi_pending_0 = 0;
+        }
+    }
+}
+
+void update_vcpu_state_details_for_l2(tdvps_t* tdvps_p)
+{
+    // Read the guest's current interrupt status from VMCS
+    guest_interrupt_status_t interrupt_status;
+    ia32_vmread(VMX_GUEST_INTERRUPT_STATUS_ENCODE, &interrupt_status.raw);
+
+    // Map the L2 virtual APIC page to access its registers
+    uint16_t vm_id = tdvps_p->management.curr_vm;
+    tdvps_vapic_t* vapic = map_pa((void*)tdvps_p->management.l2_vapic_hpa[vm_id], TDX_RANGE_RO);
+
+    // Check if virtual interrupts are pending for the L2 guest.
+    // Uses bit position based on vm_id to track state for multiple L2 VMs.
+    if ((interrupt_status.rvi & 0xF0UL) > (vapic->vapic[PPR_INDEX] & 0xF0UL))
+    {
+        tdvps_p->guest_state.vcpu_state_details.raw |= BIT(vm_id);
+    }
+    else
+    {
+        tdvps_p->guest_state.vcpu_state_details.raw &= ~BIT(vm_id);
+    }
+
+    // Free the mapped virtual APIC page
+    free_la(vapic);
+
+    // Check if a high-priority interrupt is in service for the L2 guest.
+    // Uses bit position 4+vm_id to track in-service state for multiple L2 VMs.
+    if (interrupt_status.svi > 30)
+    {
+        tdvps_p->guest_state.vcpu_state_details.raw |= BIT(4 + vm_id);
+    }
+    else
+    {
+        tdvps_p->guest_state.vcpu_state_details.raw &= ~BIT(4 + vm_id);
+    }
+
+    // Note: Unlike L1, there's no NMI tracking for L2 guests.
+}
+
 tdx_features_enum0_t get_tdx_features_enum0(void)
 {
     tdx_features_enum0_t tdx_features_0;
@@ -3242,6 +3324,9 @@ tdx_features_enum0_t get_tdx_features_enum0(void)
     tdx_features_0.tdx_connect_partitioning = tdx_features_0.tdx_io;
     tdx_features_0.dynamic_pamt = 1;
     tdx_features_0.import_page_status = 1;
+    tdx_features_0.enhanced_intr_state = 1;
+    tdx_features_0.ve_info_intr_state = 1;
+    tdx_features_0.update_compatibility = 1;
 
     return tdx_features_0;
 }

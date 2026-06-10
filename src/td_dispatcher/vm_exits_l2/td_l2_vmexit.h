@@ -42,7 +42,10 @@ typedef enum l2_exit_route_e
  * @return Required routing, whether TD exit, resuming L2, or emulating L2 to L1 exit
  */
 l2_exit_route_t td_l2_interrupt_exit(tdx_module_local_t* tdx_local_data_ptr,
-                                     vmx_exit_inter_info_t vm_exit_inter_info, uint16_t vm_id);
+                                     vmx_exit_inter_info_t vm_exit_inter_info,
+                                     vm_vmexit_exit_reason_t vm_exit_reason,
+                                     vmx_exit_qualification_t vm_exit_qualification,
+                                     uint16_t vm_id);
 
 /**
  * @brief Handler for exception or NMI exit from L2 TD
