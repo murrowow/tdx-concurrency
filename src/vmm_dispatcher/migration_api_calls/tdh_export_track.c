@@ -39,8 +39,7 @@ api_error_type tdh_export_track(uint64_t target_tdr_pa, uint64_t hpa_and_size_pa
     // TDR and TDCS
     tdr_t             *tdr_p = NULL;         // Pointer to the owner TDR page
     pa_t               tdr_pa;               // Physical address of the owner TDR page
-    pamt_block_t       tdr_pamt_block;       // TDR PAMT block
-    pamt_entry_t      *tdr_pamt_entry_ptr = NULL;
+    pamt_walk_result_t tdr_pamt_walk_result;
     tdcs_t            *tdcs_p = NULL;        // Pointer to the TDCS structure
     bool_t             tdr_locked_flag = false;
 
@@ -71,8 +70,7 @@ api_error_type tdh_export_track(uint64_t target_tdr_pa, uint64_t hpa_and_size_pa
                                                  TDX_RANGE_RO,
                                                  TDX_LOCK_SHARED,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_p);
 
@@ -159,7 +157,7 @@ api_error_type tdh_export_track(uint64_t target_tdr_pa, uint64_t hpa_and_size_pa
         if (tdcs_p->management_fields.op_state != OP_STATE_PAUSED_EXPORT)
         {
             TDX_ERROR("OP state incorrect %d\n", tdcs_p->management_fields.op_state);
-            return_val = TDX_OP_STATE_INCORRECT;
+            return_val = api_error_with_operand_id(TDX_OP_STATE_INCORRECT,(uint64_t)tdcs_p->management_fields.op_state);
             goto EXIT;
         }
 
@@ -171,6 +169,7 @@ api_error_type tdh_export_track(uint64_t target_tdr_pa, uint64_t hpa_and_size_pa
             return_val = TDX_EXPORTED_DIRTY_PAGES_REMAIN;
             goto EXIT;
         }
+
 
         tdcs_p->migration_fields.mig_epoch = MIG_EPOCH_OUT_OF_ORDER;
         tdcs_p->management_fields.op_state = OP_STATE_POST_EXPORT;
@@ -267,7 +266,7 @@ EXIT:
 
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_SHARED, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_p);
     }
 

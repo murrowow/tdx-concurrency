@@ -642,8 +642,7 @@ api_error_type tdh_vp_enter(uint64_t vcpu_handle_and_flags)
     // TDVPR related variables
     pa_t                  tdvpr_pa;                    // TDVPR physical address
     tdvps_t             * tdvps_ptr = NULL;            // Pointer to the TDVPS (multi-page linear address)
-    pamt_block_t          tdvpr_pamt_block;            // TDVPR PAMT block
-    pamt_entry_t        * tdvpr_pamt_entry_ptr;        // Pointer to the TDVPR PAMT entry
+    pamt_walk_result_t    tdvpr_pamt_walk_result;
     bool_t                tdvpr_locked_flag = false;   // Indicate TDVPR is locked
 
     // TDR related variables
@@ -686,8 +685,7 @@ api_error_type tdh_vp_enter(uint64_t vcpu_handle_and_flags)
                                                          OPERAND_ID_RCX,
                                                          TDX_LOCK_SHARED,
                                                          PT_TDVPR,
-                                                         &tdvpr_pamt_block,
-                                                         &tdvpr_pamt_entry_ptr,
+                                                         &tdvpr_pamt_walk_result,
                                                          &tdvpr_locked_flag);
 
     IF_RARE (return_val != TDX_SUCCESS)
@@ -698,7 +696,7 @@ api_error_type tdh_vp_enter(uint64_t vcpu_handle_and_flags)
 
     // Get and lock the owner TDR page
     // TDR is mapped in static keyhole range, and thus doesn't need to be freed
-    tdr_pa = get_pamt_entry_owner(tdvpr_pamt_entry_ptr);
+    tdr_pa = get_pamt_entry_owner(tdvpr_pamt_walk_result.pamt_entry_p);
     return_val = lock_and_map_implicit_tdr(tdr_pa,
                                            OPERAND_ID_TDR,
                                            TDX_RANGE_RW,
@@ -918,8 +916,7 @@ api_error_type tdh_vp_enter(uint64_t vcpu_handle_and_flags)
     local_data_ptr->vp_ctx.tdr_pa            = tdr_pa;
 
     local_data_ptr->vp_ctx.tdvps             = tdvps_ptr;
-    local_data_ptr->vp_ctx.tdvpr_pamt_entry  = tdvpr_pamt_entry_ptr;
-    local_data_ptr->vp_ctx.tdvpr_pamt_block  = tdvpr_pamt_block;
+    local_data_ptr->vp_ctx.tdvpr_pamt_walk_result = tdvpr_pamt_walk_result;
     local_data_ptr->vp_ctx.tdvpr_pa          = tdvpr_pa;
 
     local_data_ptr->vp_ctx.tdcs              = tdcs_ptr;
@@ -989,7 +986,7 @@ api_error_type tdh_vp_enter(uint64_t vcpu_handle_and_flags)
     // FILTER_FAIL_TDENTER_SEPT_BUSY or FILTER_FAIL_TDENTER_EPFS
     if (is_sept_locked)
     {
-        release_sharex_lock_ex(&tdcs_ptr->executions_ctl_fields.secure_ept_lock);
+        release_sharex_lock_hp_sh(&tdcs_ptr->executions_ctl_fields.secure_ept_lock);
     }
 
     if (is_not_gnr_a0_stepping())
@@ -1005,6 +1002,7 @@ api_error_type tdh_vp_enter(uint64_t vcpu_handle_and_flags)
 
     // Before VM entry, update the current VM's VMCS' Guest IA32_PERF_GLOBAL_CTRL
     conditionally_write_vmcs_ia32_perf_global_ctrl_msr(tdcs_ptr);
+
 
     local_data_ptr->single_step_def_state.last_entry_tsc = ia32_rdtsc();
 
@@ -1033,7 +1031,7 @@ EXIT_FAILURE:
 
     if (is_sept_locked)
     {
-        release_sharex_lock_ex(&tdcs_ptr->executions_ctl_fields.secure_ept_lock);
+        release_sharex_lock_hp_sh(&tdcs_ptr->executions_ctl_fields.secure_ept_lock);
     }
 
     // Check if we need to load the SEAM VMCS
@@ -1060,7 +1058,7 @@ EXIT_FAILURE:
 
     IF_COMMON (tdvpr_locked_flag)
     {
-        pamt_unwalk(tdvpr_pa, tdvpr_pamt_block, tdvpr_pamt_entry_ptr, TDX_LOCK_SHARED, PT_4KB);
+        pamt_unwalk(&tdvpr_pamt_walk_result);
         if (tdvps_ptr != NULL)
         {
             free_la(tdvps_ptr);

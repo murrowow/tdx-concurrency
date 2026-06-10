@@ -86,6 +86,8 @@ typedef enum seamcall_leaf_opcode_e
     TDH_SYS_CONFIG_LEAF              = 45,
     TDH_SYS_SHUTDOWN_LEAF            = 52,
     TDH_SYS_UPDATE_LEAF              = 53,
+	TDH_PHYMEM_PAMT_ADD_LEAF         = 58,
+    TDH_PHYMEM_PAMT_REMOVE_LEAF      = 59,
     TDH_SERVTD_BIND_LEAF             = 48,
     TDH_SERVTD_PREBIND_LEAF          = 49,
     TDH_EXPORT_ABORT_LEAF            = 64,
@@ -416,7 +418,6 @@ typedef union eptp_controls_s {
 } eptp_controls_t;
 tdx_static_assert(sizeof(eptp_controls_t) == 8, eptp_controls_t);
 
-
 /**
  * @struct config_flags_t
  *
@@ -433,7 +434,9 @@ typedef union config_flags_s {
         no_rbp_mod          : 1,  /**< Controls whether RBP value can be modified by TDG.VP.VMCALL and TDH.VP.ENTER. */
         maxpa_virt          : 1,  /**< Controls MAXPA Virtualization. */
         maxgpa_virt         : 1,  /**< Controls MAXGPA Virtualization. */
-        reserved            : 59; /**< Must be 0. */
+        tdx_connect         : 1,  /**< Enables TDX Connect for the current TD. */
+        page_release        : 1,  /**< Enables TDG.MEM.PAGE.RELEASE for the current TD. */
+        reserved            : 57; /**< Must be 0. */
     };
     uint64_t raw;
 } config_flags_t;
@@ -481,7 +484,7 @@ typedef struct PACKED td_params_s
 
     uint8_t                      reserved_0[TD_PARAMS_RESERVED0_SIZE]; /**< Must be 0 */
     eptp_controls_t              eptp_controls;
-    config_flags_t              config_flags;
+    config_flags_t               config_flags;
 
 
     uint16_t                     tsc_frequency;
@@ -1032,9 +1035,8 @@ tdx_static_assert(sizeof(vcpu_and_flags_t) == 8, vcpu_and_flags_t);
 
 typedef enum gpa_list_format_e
 {
-    GPA_LIST_FORMAT_GPA_ONLY     = 0,
-    GPA_LIST_FORMAT_GPA_AND_ATTR = 1,
-    GPA_LIST_FORMAT_MAX          = 1
+    GPA_LIST_FORMAT_GPA_ONLY      = 0,
+    GPA_LIST_FORMAT_GPA_AND_ATTR  = 1,
 } gpa_list_info_format_t;
 
 typedef union gpa_list_info_u
@@ -1074,8 +1076,8 @@ typedef enum gpa_list_entry_operation_e
 {
     GPA_ENTRY_OP_NOP             = 0b00,   // 0
     GPA_ENTRY_OP_MIGRATE         = 0b01,   // 1
-    GPA_ENTRY_OP_CANCEL          = 0b10,   // 2
-    GPA_ENTRY_OP_REMIGRATE       = 0b11,   // 3
+    GPA_ENTRY_OP_CANCEL          = 0b10,   // 2 (reserved when the export is non-blocking)
+    GPA_ENTRY_OP_REMIGRATE       = 0b11,   // 3 (reserved when the export is non-blocking)
     GPA_ENTRY_OP_EXPORT_NOP_MASK = 0b01
 } gpa_list_entry_operation_t;
 
@@ -1104,9 +1106,8 @@ typedef enum gpa_list_entry_status_e
     GPA_ENTRY_STATUS_L2_SEPT_WALK_FAILED            = 13,
     GPA_ENTRY_STATUS_ATTR_LIST_ENTRY_INVALID        = 14,
     GPA_ENTRY_STATUS_GPA_LIST_ENTRY_INVALID         = 15,
-    GPA_ENTRY_STATUS_INVALID_MIGRATION_BUFFER_HPA   = 16
+    GPA_ENTRY_STATUS_INVALID_MIGRATION_BUFFER_HPA   = 16,
 } gpa_list_entry_status_t;
-
 
 #define NUM_TDX_FEATRUES        1   // Number of TDX_FEATURES entries
 
@@ -1148,7 +1149,14 @@ typedef union tdx_features_enum0_u
         uint64_t reserved_5                  :  2;    // Bits 35:34
         uint64_t dynamic_pamt                :  1;    // Bit 36
         uint64_t fatal_diagnostics           :  1;    // Bit 37
-        uint64_t reserved_6                  : 26;    // Bits 63:38
+        uint64_t page_release                :  1;    // Bit 38
+        uint64_t nrx                         :  1;    // Bit 39
+        uint64_t enhanced_intr_state         :  1;    // Bit 40
+        uint64_t non_blocking_export         :  1;    // Bit 41
+        uint64_t perf_mask                   :  1;    // Bit 42
+        uint64_t scan_export_restore         :  1;    // Bit 43
+        uint64_t import_page_status          :  1;    // Bit 44
+        uint64_t reserved_6                  : 19;    // Bits 63:45
     };
     uint64_t raw;
 } tdx_features_enum0_t;
@@ -1370,6 +1378,21 @@ typedef union exit_reason_and_ve_category_u
 } exit_reason_and_ve_category_t;
 tdx_static_assert(sizeof(exit_reason_and_ve_category_t) == 8, exit_reason_and_ve_category_t);
 
+#define TDX_CONNECT_FEATURES_MASK (BIT(0) | BIT(7) | BIT(9) | BIT(12))
+
+typedef union phymem_page_rdmd_pt_ret_u
+{
+    struct
+    {
+        uint64_t pt         : 4;
+        uint64_t reserved   : 59;
+        uint64_t non_leaf   : 1;
+    };
+    uint64_t raw;
+} phymem_page_rdmd_pt_ret_t;
+tdx_static_assert(sizeof(phymem_page_rdmd_pt_ret_t) == 8, phymem_page_rdmd_pt_ret_t);
+
 #pragma pack(pop)
+
 
 #endif // __TDX_API_DEFS_H_INCLUDED__

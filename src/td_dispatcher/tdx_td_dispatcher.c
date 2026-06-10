@@ -41,6 +41,7 @@
 #include "td_transitions/td_exit_stepping.h"
 #include "x86_defs/x86_defs.h"
 
+
 void tdx_failed_vmentry(void)
 {
 #ifdef DEBUGFEATURE_TDX_DBG_TRACE
@@ -246,6 +247,8 @@ void td_call(tdx_module_local_t* tdx_local_data_ptr, bool_t* interrupt_occurred)
 
     tdx_leaf_and_version_t leaf_opcode;
     leaf_opcode.raw = tdx_local_data_ptr->td_regs.rax;
+
+
 
     if ((leaf_opcode.reserved0 != 0) || (leaf_opcode.reserved1 != 0))
     {
@@ -581,7 +584,8 @@ static void handle_idt_vectoring(tdx_module_local_t* tdx_local_data_ptr, vm_vmex
 
 stepping_filter_e tdx_td_l1_l2_dispatcher_common_prologue(tdx_module_local_t* local_data, uint16_t vm_id,
         vm_vmexit_exit_reason_t* vm_exit_reason, vmx_exit_qualification_t* vm_exit_qualification,
-        vmx_exit_inter_info_t* vm_exit_inter_info)
+        vmx_exit_inter_info_t* vm_exit_inter_info
+        )
 {
     TDX_LOG("TD Dispatcher Entry from VM %d\n", vm_id);
 
@@ -754,7 +758,8 @@ void tdx_td_dispatcher(void)
 
     stepping_filter_e vmexit_stepping_result;
     vmexit_stepping_result = tdx_td_l1_l2_dispatcher_common_prologue(tdx_local_data_ptr, 0, &vm_exit_reason,
-                                    &vm_exit_qualification, &vm_exit_inter_info);
+                                    &vm_exit_qualification, &vm_exit_inter_info
+                                    );
 
     if (vmexit_stepping_result != FILTER_OK_CONTINUE)
     {

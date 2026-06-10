@@ -106,7 +106,9 @@ uint16_t td_l2_cr_access_exit(vmx_exit_qualification_t vm_exit_qualification, ui
                         return CR_L2_TO_L1_EXIT; // L2->L1 exit
                     }
 
-                    status = (uint16_t)write_guest_cr4(value, tdcs_p, tdvps_p);
+                    status = (uint16_t)write_guest_cr4(value, tdcs_p
+                                             , tdvps_p
+                                             );
                     break;
 
                 default:

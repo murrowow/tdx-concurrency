@@ -46,8 +46,7 @@ api_error_type tdh_mem_page_aug(page_info_api_input_t gpa_page_info,
     // TDR related variables
     pa_t                  tdr_pa;                    // TDR physical address
     tdr_t               * tdr_ptr;                   // Pointer to the TDR page (linear address)
-    pamt_block_t          tdr_pamt_block;            // TDR PAMT block
-    pamt_entry_t        * tdr_pamt_entry_ptr;        // Pointer to the TDR PAMT entry
+    pamt_walk_result_t    tdr_pamt_walk_result;
     bool_t                tdr_locked_flag = false;   // Indicate TDR is locked
 
     tdcs_t              * tdcs_ptr = NULL;           // Pointer to the TDCS structure (Multi-page)
@@ -63,8 +62,7 @@ api_error_type tdh_mem_page_aug(page_info_api_input_t gpa_page_info,
 
     // New TD private page variables
     pa_t                  td_page_pa;                // Physical address of the new TD page
-    pamt_block_t          td_page_pamt_block;        // New TD page PAMT block
-    pamt_entry_t        * td_page_pamt_entry_ptr;    // Pointer to the TD PAMT entry
+    pamt_walk_result_t    td_page_pamt_walk_result;  // Pointer to the TD PAMT entry
     bool_t                td_page_locked_flag = false;   // Indicate TD page is locked
 
     api_error_type        return_val = UNINITIALIZE_ERROR;
@@ -82,8 +80,7 @@ api_error_type tdh_mem_page_aug(page_info_api_input_t gpa_page_info,
                                                  TDX_RANGE_RW,
                                                  TDX_LOCK_SHARED,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_ptr);
     if (return_val != TDX_SUCCESS)
@@ -101,6 +98,7 @@ api_error_type tdh_mem_page_aug(page_info_api_input_t gpa_page_info,
         TDX_ERROR("State check or TDCS lock failure - error = %llx\n", return_val);
         goto EXIT;
     }
+
 
     if (!verify_page_info_input(gpa_mappings, LVL_PT, LVL_PD))
     {
@@ -120,7 +118,8 @@ api_error_type tdh_mem_page_aug(page_info_api_input_t gpa_page_info,
                                                       &page_sept_entry_ptr,
                                                       &page_level_entry,
                                                       &page_sept_entry_copy,
-                                                      &sept_locked_flag);
+                                                      &sept_locked_flag,
+                                                      true);
     if (return_val != TDX_SUCCESS)
     {
         if (return_val == api_error_with_operand_id(TDX_EPT_WALK_FAILED, OPERAND_ID_RCX))
@@ -160,8 +159,7 @@ api_error_type tdh_mem_page_aug(page_info_api_input_t gpa_page_info,
                                                OPERAND_ID_R8,
                                                TDX_LOCK_EXCLUSIVE,
                                                (page_size_t)page_level_entry,
-                                               &td_page_pamt_block,
-                                               &td_page_pamt_entry_ptr,
+                                               &td_page_pamt_walk_result,
                                                &td_page_locked_flag);
 
     if (return_val != TDX_SUCCESS)
@@ -177,22 +175,27 @@ api_error_type tdh_mem_page_aug(page_info_api_input_t gpa_page_info,
                                                        SEPT_PERMISSIONS_NONE,
                                                        td_page_pa,
                                                        tdr_ptr->key_management_fields.hkid,
-                                                       SEPT_STATE_PEND_MASK);
+                                                       SEPT_STATE_PEND_MASK,
+                                                       false,
+                                                       true);
     septe_locked_flag = false;
+
 
     // Increment TDR child count, use an atomic operation since we have SHARED lock on TDR
     (void)_lock_xadd_64b(&(tdr_ptr->management_fields.chldcnt), 1 << (9 * page_level_entry));
 
     // Update the new Secure EPT page’s PAMT entry
-    td_page_pamt_entry_ptr->pt = PT_REG;
-    set_pamt_entry_owner(td_page_pamt_entry_ptr, tdr_pa);
-    td_page_pamt_entry_ptr->bepoch.raw = 0;   // Setting BEPOCH to 0 is required to avoid confusion during page export
+    td_page_pamt_walk_result.pamt_entry_p->pt = PT_REG;
+    set_pamt_entry_owner(td_page_pamt_walk_result.pamt_entry_p, tdr_pa);
+    td_page_pamt_walk_result.pamt_entry_p->bepoch.raw = 0;   // Setting BEPOCH to 0 is required to avoid confusion during page export
+
+    pamt_inc_nl_page_count(td_page_pamt_walk_result.pamt_walk_path_nl[PT_2MB]);
 
 EXIT:
     // Release all acquired locks and free keyhole mappings
     if (td_page_locked_flag)
     {
-        pamt_unwalk(td_page_pa, td_page_pamt_block, td_page_pamt_entry_ptr, TDX_LOCK_EXCLUSIVE, (page_size_t)page_level_entry);
+        pamt_unwalk(&td_page_pamt_walk_result);
     }
     if (septe_locked_flag)
     {
@@ -200,7 +203,7 @@ EXIT:
     }
     if (sept_locked_flag)
     {
-        release_sharex_lock_sh(&tdcs_ptr->executions_ctl_fields.secure_ept_lock);
+        release_sharex_lock_hp_sh(&tdcs_ptr->executions_ctl_fields.secure_ept_lock);
         if (page_sept_entry_ptr != NULL)
         {
             free_la(page_sept_entry_ptr);
@@ -213,7 +216,7 @@ EXIT:
     }
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_SHARED, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_ptr);
     }
     return return_val;

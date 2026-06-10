@@ -30,17 +30,12 @@ MSG := echo -e
 # List of clean targets
 CLEAN_TARGETS := clean cleanall
 
-ifndef RELEASE
-TARGET = $(DEBUG_TARGET)
-TARGET_DIR = $(DEBUG_DIR)
-OBJS_DIR = $(DEBUG_DIR)/$(OBJ_DIR_NAME)
-else # RELEASE
 TARGET = $(RELEASE_TARGET)
 TARGET_DIR = $(RELEASE_DIR)
 OBJS_DIR = $(RELEASE_DIR)/$(OBJ_DIR_NAME)
-endif # RELEASE
 
 ORIG_TARGET := $(TARGET_DIR)/libtdx.so.unstripped
+
 
 # Check if the current target is a clean target
 ifneq ($(filter $(MAKECMDGOALS), $(CLEAN_TARGETS)),)
@@ -55,7 +50,7 @@ clean:
 cleanall: clean
 	rm -rf $(CRYPTO_LIB_MAIN_DIR)/_build
 
-else
+else # ($(filter $(MAKECMDGOALS), $(CLEAN_TARGETS)),)
 
 C_OBJECTS = $(foreach obj,$(__C_OBJECTS),$(OBJS_DIR)/$(obj))
 ASM_OBJECTS = $(foreach obj,$(__ASM_OBJECTS),$(OBJS_DIR)/$(obj))
@@ -80,7 +75,7 @@ $(CRYPTO_OBJECTS): $(CRYPTO_LIB_SRC_DIR)
 preBuildScripts:
 ifneq ($(shell expr $(CCVERSION) \>= 12), 1)
 	$(error Bad clang version - clang version should be 12.0.0 or above)
-endif
+endif # ($(shell expr $(CCVERSION) \>= 12), 1)
 
 $(C_OBJECTS): $(OBJS_DIR)/%.o: %.c
 	@mkdir -p $(@D)
@@ -113,4 +108,4 @@ help:
 
 -include $(DEPS) $(CPP_DEPS)
 
-endif
+endif # ($(filter $(MAKECMDGOALS), $(CLEAN_TARGETS)),)

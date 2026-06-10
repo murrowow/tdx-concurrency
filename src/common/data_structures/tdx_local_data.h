@@ -135,7 +135,7 @@ typedef struct PACKED keyhole_state_s
  *
  * @brief stores the context of the current running VP after VMEXIT
  */
-typedef struct PACKED vp_ctx_s
+typedef struct vp_ctx_s
 {
     /**
      * TDR structure context, physical address, linear address and linear address of PAMT entry
@@ -150,8 +150,7 @@ typedef struct PACKED vp_ctx_s
      * It is set before each TD entry
      */
     tdvps_t *             tdvps;
-    pamt_entry_t *        tdvpr_pamt_entry;
-    pamt_block_t          tdvpr_pamt_block;
+    pamt_walk_result_t    tdvpr_pamt_walk_result;
     pa_t                  tdvpr_pa;
 
     /**
@@ -204,7 +203,7 @@ typedef struct PACKED stepping_s
  *
  * @brief Per logical processor (lp) local data
  */
-typedef struct PACKED tdx_module_local_s
+typedef struct tdx_module_local_s
 {
     gprs_state_t          vmm_regs; /**< vmm host saved GPRs */
     gprs_state_t          td_regs;  /**< td guest saved GPRs */

@@ -184,6 +184,12 @@ static bool_t check_pamt_addresses_and_size(uint64_t pamt_base, uint64_t pamt_si
 
     uint64_t required_size = ((tdmr_size / entry_size) * sizeof(pamt_entry_t));
 
+    if ((get_global_data()->dynamic_pamt_enabled) && (entry_size == _4KB))
+    {
+        // Calculate required size for a bitmap, as 4K PAMT area serves as a bitmap instead
+        required_size = (tdmr_size / _4KB) / 8;
+    }
+
     // The size of each PAMT region must be large enough to contain the PAMT for its associated TDMR.
     if (pamt_size < required_size)
     {
@@ -738,7 +744,8 @@ static api_error_type check_and_set_tdmrs(tdmr_info_entry_t tdmr_info_copy[MAX_T
 
 api_error_type tdh_sys_config(uint64_t tdmr_info_array_pa,
                              uint64_t num_of_tdmr_entries,
-                             sys_config_options_t sysconfig_options)
+                             sys_config_options_t sysconfig_options
+                             )
 {
     // Temporary Variables
 
@@ -807,8 +814,22 @@ api_error_type tdh_sys_config(uint64_t tdmr_info_array_pa,
         goto EXIT;
     }
 
+
     tdx_global_data_ptr->kot.entries[hkid].state = KOT_STATE_HKID_RESERVED;
     tdx_global_data_ptr->hkid = hkid;
+
+    tdx_global_data_ptr->dynamic_pamt_enabled = sysconfig_options.dynamic_pamt;
+
+    if (tdx_global_data_ptr->dynamic_pamt_enabled)
+    {
+        if (tdx_global_data_ptr->hkid_start_bit > MAX_DYNAMIC_PAMT_HKID_START_BIT)
+        {
+            TDX_ERROR("HKID start bit %d is not allowed for Dynamic PAMT config\n",
+                    tdx_global_data_ptr->hkid_start_bit);
+            retval = api_error_with_operand_id(TDX_OPERAND_INVALID, OPERAND_ID_R8);
+            goto EXIT;
+        }
+    }
 
     tdmr_pa_array = map_pa(tdmr_info_pa.raw_void, TDX_RANGE_RO);
     tdmr_info_p_init = true;

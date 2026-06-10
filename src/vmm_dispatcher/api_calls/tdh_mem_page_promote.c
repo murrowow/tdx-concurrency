@@ -37,10 +37,8 @@
 #include "accessors/data_accessors.h"
 
 static api_error_type is_sept_page_valid_for_merge(ia32e_paging_table_t* merged_sept_page_ptr,
-                                                   ept_level_t merged_sept_parent_level_entry,
-                                                   uint32_t* locked_entries)
+                                                   ept_level_t merged_sept_parent_level_entry)
 {
-    api_error_type  return_val;
 
     tdx_debug_assert(merged_sept_parent_level_entry != LVL_PT);
     ept_level_t leaf_entry_level = merged_sept_parent_level_entry - 1;
@@ -48,33 +46,21 @@ static api_error_type is_sept_page_valid_for_merge(ia32e_paging_table_t* merged_
     uint64_t merged_page_size = ((merged_sept_parent_level_entry == LVL_PDPT) ? _1GB : _2MB);
     uint64_t leaf_page_size = ((merged_sept_parent_level_entry == LVL_PDPT) ? _2MB : _4KB);
 
-    *locked_entries = 0;
-
     ia32e_sept_t first_sept_copy = { .raw = 0 };
+    uint64_t a_d_mask = BIT(SEPT_ENTRY_A_BIT_POSITION) | BIT(SEPT_ENTRY_D_BIT_POSITION);
+    uint64_t tdhp_mask = BIT(SEPT_ENTRY_TDHP_BIT_POSITION);
+    uint64_t a_d_tdhp_mask = a_d_mask | tdhp_mask;
 
     for (uint32_t i = 0; i < 512; i++)
     {
-        ia32e_sept_t* current_sept = &merged_sept_page_ptr->sept[i];
-        ia32e_sept_t current_sept_copy;
+        ia32e_sept_t current_sept = merged_sept_page_ptr->sept[i];
 
-        return_val = sept_lock_acquire_host(current_sept);
-        if (return_val != TDX_SUCCESS)
-        {
-            TDX_ERROR("Can't acquire SEPT host side lock. Error Code = 0x%llx\n", return_val);
-            return return_val;
-        }
-
-        *locked_entries += 1;
-
-        // Read the copy after locking
-        current_sept_copy = *current_sept;
-        current_sept_copy.raw = remove_hkid_from_pa((pa_t)current_sept_copy.raw).raw;
-
-        sept_cleanup_if_pending(&current_sept_copy, leaf_entry_level);
+        current_sept.raw = remove_hkid_from_pa((pa_t)current_sept.raw).raw;
+        sept_cleanup_if_pending(&current_sept, leaf_entry_level);
 
         IF_RARE (i == 0)
         {
-            uint64_t start_addr = leaf_ept_entry_to_hpa(current_sept_copy, 0, leaf_entry_level);
+            uint64_t start_addr = leaf_ept_entry_to_hpa(current_sept, 0, leaf_entry_level);
 
             if (!is_addr_aligned_pwr_of_2(start_addr, merged_page_size))
             {
@@ -83,21 +69,21 @@ static api_error_type is_sept_page_valid_for_merge(ia32e_paging_table_t* merged_
                 return TDX_EPT_INVALID_PROMOTE_CONDITIONS;
             }
 
-            if (!sept_state_is_mapped_or_pending(current_sept_copy))
+            if (!sept_state_is_mapped_or_pending(current_sept))
             {
-                TDX_ERROR("SEPT[0] state is not mapped or pending - 0x%llx\n", current_sept_copy.raw);
+                TDX_ERROR("SEPT[0] state is not mapped or pending - 0x%llx\n", current_sept.raw);
                 return TDX_EPT_INVALID_PROMOTE_CONDITIONS;
             }
 
-            first_sept_copy = current_sept_copy;
+            first_sept_copy.raw = ((current_sept.raw & tdhp_mask) | (current_sept.raw & ~tdhp_mask) | a_d_mask);
         }
         else
         {
             first_sept_copy.raw += leaf_page_size;
-            if (current_sept_copy.raw != first_sept_copy.raw)
+            if ((current_sept.raw & ~a_d_tdhp_mask) != (first_sept_copy.raw & ~a_d_tdhp_mask))
             {
                 TDX_ERROR("Entry [%d] (0x%llx) - Invalid stride or SEPT state not matching the first entry\n",
-                            i, current_sept_copy.raw);
+                            i, current_sept.raw);
                 return TDX_EPT_INVALID_PROMOTE_CONDITIONS;
             }
         }
@@ -125,6 +111,9 @@ static api_error_type is_l2_sept_page_valid_for_merge(ia32e_paging_table_t* merg
 
     ia32e_sept_t first_sept_copy = { .raw = 0 };
     bool_t is_free = false;
+    uint64_t a_d_mask = BIT(SEPT_ENTRY_A_BIT_POSITION) | BIT(SEPT_ENTRY_D_BIT_POSITION);
+    uint64_t tdhp_mask = BIT(SEPT_ENTRY_TDHP_BIT_POSITION);
+    uint64_t a_d_tdhp_mask = a_d_mask | tdhp_mask;
 
     for (uint32_t i = 0; i < 512; i++)
     {
@@ -139,13 +128,14 @@ static api_error_type is_l2_sept_page_valid_for_merge(ia32e_paging_table_t* merg
             is_free = is_l2_sept_free(&current_sept_copy);
 
             if (!is_free && (!is_addr_aligned_pwr_of_2(start_addr, merged_page_size) ||
-                             !is_secure_ept_leaf_entry(&current_sept_copy)))
+                             !is_secure_ept_leaf_entry(&current_sept_copy, true)))
             {
                 TDX_ERROR("Starting address 0x%llx is not aligned on marged page size %d, or entry not leaf 0x%llx\n",
                         start_addr, merged_page_size, current_sept_copy.raw);
                 return TDX_EPT_INVALID_PROMOTE_CONDITIONS;
             }
 
+            first_sept_copy.raw = ((first_sept_copy.raw & tdhp_mask) | (current_sept_copy.raw & ~tdhp_mask) | a_d_mask);
             first_sept_copy = current_sept_copy;
             first_sept_copy.base = 0;
         }
@@ -153,7 +143,7 @@ static api_error_type is_l2_sept_page_valid_for_merge(ia32e_paging_table_t* merg
         {
             current_sept_copy.base = 0;
 
-            if (current_sept_copy.raw != first_sept_copy.raw)
+            if ((current_sept_copy.raw & ~a_d_tdhp_mask) != (first_sept_copy.raw & ~a_d_tdhp_mask))
             {
                 TDX_ERROR("Entry [%d] (0x%llx) - Invalid stride or SEPT state not matching the first entry\n",
                             i, current_sept_copy.raw);
@@ -172,8 +162,7 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
     // TDR related variables
     pa_t                  tdr_pa;                    // TDR physical address
     tdr_t               * tdr_ptr;                   // Pointer to the TDR page (linear address)
-    pamt_block_t          tdr_pamt_block;            // TDR PAMT block
-    pamt_entry_t        * tdr_pamt_entry_ptr;        // Pointer to the TDR PAMT entry
+    pamt_walk_result_t    tdr_pamt_walk_result;
     bool_t                tdr_locked_flag = false;   // Indicate TDR is locked
 
     tdcs_t              * tdcs_ptr = NULL;           // Pointer to the TDCS structure (Multi-page)
@@ -188,6 +177,7 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
     pa_t                  merged_sept_page_pa[MAX_VMS];
     ia32e_paging_table_t* merged_sept_page_ptr[MAX_VMS] = { 0 };
     pamt_entry_t        * merged_sept_page_pamt_entry_ptr[MAX_VMS] = { 0 };
+    pamt_non_leaf_entry_t* merged_sept_page_pamt_nl_entry_ptr[MAX_VMS] = { 0 };
     bool_t                merged_sept_page_pamt_locked_flag[MAX_VMS] = { 0 };
     bool_t                sept_locked_flag = false;     // Indicate SEPT is locked
     bool_t                septe_locked_flag = false;
@@ -196,7 +186,6 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
     pa_t                  merged_page_pa;
 
     api_error_type        return_val = UNINITIALIZE_ERROR;
-    uint32_t locked_entries = 0;
 
     tdr_pa.raw = target_tdr_pa;
 
@@ -227,8 +216,7 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
                                                  TDX_RANGE_RW,
                                                  TDX_LOCK_SHARED,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_ptr);
     if (return_val != TDX_SUCCESS)
@@ -248,6 +236,7 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
     }
     op_state_locked_flag = true;
 
+
     if (!verify_page_info_input(gpa_mappings, LVL_PD, LVL_PDPT))
     {
         TDX_ERROR("Input GPA page info (0x%llx) is not valid\n", gpa_mappings.raw);
@@ -264,11 +253,12 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
                                                       OPERAND_ID_RCX,
                                                       page_gpa,
                                                       tdr_ptr->key_management_fields.hkid,
-                                                      TDX_LOCK_SHARED,
+                                                      TDX_LOCK_EXCLUSIVE,
                                                       &merged_sept_page_sept_entry_ptr[0],
                                                       &merged_sept_parent_level_entry,
                                                       &merged_sept_page_sept_entry_copy,
-                                                      &sept_locked_flag);
+                                                      &sept_locked_flag,
+                                                      false);
     if (return_val != TDX_SUCCESS)
     {
         if (return_val == api_error_with_operand_id(TDX_EPT_WALK_FAILED, OPERAND_ID_RCX))
@@ -318,8 +308,10 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
     // Verify the TLB tacking of the blocked page has been completed
     merged_sept_page_pa[0].raw = merged_sept_page_sept_entry_copy.base << 12;
 
-    if ((return_val = pamt_implicit_get_and_lock(merged_sept_page_pa[0], PT_4KB,
-                      TDX_LOCK_EXCLUSIVE, &merged_sept_page_pamt_entry_ptr[0], false)) != TDX_SUCCESS)
+    if ((return_val = pamt_implicit_get_with_nl_entry_and_lock(merged_sept_page_pa[0], PT_4KB,
+                      TDX_LOCK_EXCLUSIVE,
+                      &merged_sept_page_pamt_entry_ptr[0],
+                      &merged_sept_page_pamt_nl_entry_ptr[0], false)) != TDX_SUCCESS)
     {
         TDX_ERROR("Can't acquire lock on merged page pamt entry\n");
         return_val = api_error_with_operand_id(return_val, OPERAND_ID_RCX);
@@ -347,7 +339,6 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
             TDX_ERROR("TLB tracking not done\n");
             return_val = TDX_TLB_TRACKING_NOT_DONE;
         }
-
         if (return_val != TDX_SUCCESS)
         {
             return_val = api_error_with_operand_id(return_val, OPERAND_ID_RCX);
@@ -365,7 +356,7 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
     //     are PT_REG)
     //   - Have contiguous HPA mapping aligned to the promoted range size
     if ((return_val = is_sept_page_valid_for_merge(merged_sept_page_ptr[0],
-            merged_sept_parent_level_entry, &locked_entries)) != TDX_SUCCESS)
+            merged_sept_parent_level_entry)) != TDX_SUCCESS)
     {
         TDX_ERROR("Target SEPT is not valid for merging\n");
         return_val = api_error_with_operand_id(return_val, OPERAND_ID_RCX);
@@ -379,16 +370,14 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
         {
             // Check for a pending interrupt
             // Interruption is not restartable, no need to save state.  We haven't committed anything yet.
-            if (is_interrupt_pending_host_side())
+            return_val = check_host_interrupt_and_hp_bit(&tdcs_ptr->executions_ctl_fields.secure_ept_lock,false);
+            if (TDX_SUCCESS != return_val)
             {
                 // Restore the original RCX and RDX values and terminate the flow
                 local_data_ptr->vmm_regs.rcx = original_rcx;
                 local_data_ptr->vmm_regs.rdx = original_rdx;
-                TDX_ERROR("Pending interrupt\n");
-                return_val = TDX_INTERRUPTED_RESTARTABLE;
                 goto EXIT;
             }
-
             // Walk the L2 SEPT to locate the non-leaf entry mapping the large range
             return_val = l2_sept_walk(tdr_ptr, tdcs_ptr, vm_id, page_gpa, &l2_sept_parent_level_entry,
                                       &merged_sept_page_sept_entry_ptr[vm_id]);
@@ -403,15 +392,18 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
             ia32e_sept_t l2_merged_sept_page_sept_entry_copy = *merged_sept_page_sept_entry_ptr[vm_id];
 
             // The L2 SEPT entry must be a non-leaf entry since the L1 SEPT entry is a non-leaf
-            tdx_sanity_check(!is_secure_ept_leaf_entry(&l2_merged_sept_page_sept_entry_copy) &&
+            tdx_sanity_check(!is_secure_ept_leaf_entry(&l2_merged_sept_page_sept_entry_copy, (bool_t)vm_id) &&
                              !is_l2_sept_free(&l2_merged_sept_page_sept_entry_copy),
                              FATAL_ERROR_ID_285, 0);
 
             merged_sept_page_pa[vm_id].raw = merged_sept_page_sept_entry_ptr[vm_id]->base << 12;
             merged_sept_page_pa[vm_id] = set_hkid_to_pa(merged_sept_page_pa[vm_id], tdr_ptr->key_management_fields.hkid);
 
-            if ((return_val = pamt_implicit_get_and_lock(merged_sept_page_pa[vm_id], PT_4KB,
-                                TDX_LOCK_EXCLUSIVE, &merged_sept_page_pamt_entry_ptr[vm_id], false)) != TDX_SUCCESS)
+            if ((return_val = pamt_implicit_get_with_nl_entry_and_lock(merged_sept_page_pa[vm_id], PT_4KB,
+                                TDX_LOCK_EXCLUSIVE,
+                                &merged_sept_page_pamt_entry_ptr[vm_id],
+                                &merged_sept_page_pamt_nl_entry_ptr[vm_id],
+                                false)) != TDX_SUCCESS)
             {
                 TDX_ERROR("Can't acquire lock on L2 (%d) merged page pamt entry\n", vm_id);
                 return_val = api_error_with_operand_id(return_val, OPERAND_ID_RCX);
@@ -446,16 +438,14 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
 
     // Check for a pending interrupt
     // Interruption is not restartable, no need to save state.  We haven't committed anything yet.
-    if (is_interrupt_pending_host_side())
+    return_val = check_host_interrupt_and_hp_bit(&tdcs_ptr->executions_ctl_fields.secure_ept_lock,false);
+    if (TDX_SUCCESS != return_val)
     {
         // Restore the original RCX and RDX values and terminate the flow
         local_data_ptr->vmm_regs.rcx = original_rcx;
         local_data_ptr->vmm_regs.rdx = original_rdx;
-        TDX_ERROR("Pending interrupt\n");
-        return_val = TDX_INTERRUPTED_RESTARTABLE;
         goto EXIT;
     }
-
     // Get the merge page address
     merged_page_pa.raw = leaf_ept_entry_to_hpa(merged_sept_page_ptr[0]->sept[0], 0,
                                           (ept_level_t)(merged_sept_parent_level_entry - 1));
@@ -478,25 +468,36 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
     //  ALL_CHECKS_PASSED:  The function is guaranteed to succeed
     //---------------------------------------------------------------
 
-    locked_entries = 0;
-
     // Atomically map the merged Secure-EPT entry to SEPT_PRESENT leaf entry,
     // pointing to the merged HPA range
+    // Set the A and D bits but keep the TDHP bit.
 
     for (uint16_t vm_id = 0; vm_id <= tdcs_ptr->management_fields.num_l2_vms; vm_id++)
     {
         if ((vm_id == 0) || (merged_sept_page_sept_entry_ptr[vm_id] != NULL))
         {
             // The first SEPTE of VM 0 is locked so the large page SEPTE remains locked.
-            atomic_mem_write_64b(&merged_sept_page_sept_entry_ptr[vm_id]->raw, merged_sept_page_ptr[vm_id]->sept[0].raw);
+            ia32e_sept_t tmp_merged_sept_page_copy = merged_sept_page_ptr[vm_id]->sept[0];
+            
+            if (vm_id == 0)
+            {
+                tmp_merged_sept_page_copy.tdel = 1;
+            }
+
+            atomically_update_sept_state_keep_tdhp(merged_sept_page_sept_entry_ptr[vm_id], tmp_merged_sept_page_copy.raw);
 
             (void)_lock_xadd_64b(&tdr_ptr->management_fields.chldcnt, (uint64_t)-1);
             merged_sept_page_pamt_entry_ptr[vm_id]->pt = PT_NDA; // PT = PT_NDA, OWNER = 0
 
-            if ((version > 0) && (vm_id > 0))
+            if (vm_id > 0)
             {
-                local_data_ptr->vmm_regs.gprs[GPR_LIST_R9_INDEX + (vm_id - 1)] =
-                        remove_hkid_from_pa(merged_sept_page_pa[vm_id]).raw;;
+                uint64_t hint = pamt_dec_nl_page_count_and_get_hint(merged_sept_page_pamt_nl_entry_ptr[vm_id]);
+                if (version > 0)
+                {
+                    local_data_ptr->vmm_regs.gprs[GPR_LIST_R9_INDEX + (vm_id - 1)] =
+                            remove_hkid_from_pa(merged_sept_page_pa[vm_id]).raw;
+                    local_data_ptr->vmm_regs.gprs[GPR_LIST_R9_INDEX + (vm_id - 1)] |= hint;
+                }
             }
         }
         else // vm_id > 0 and sept entry is null
@@ -508,17 +509,21 @@ api_error_type tdh_mem_page_promote(page_info_api_input_t gpa_page_info, uint64_
         }
     }
 
+
     local_data_ptr->vmm_regs.rcx = remove_hkid_from_pa(merged_sept_page_pa[0]).raw;
+
+    local_data_ptr->vmm_regs.rcx |= pamt_dec_nl_page_count_and_get_hint(merged_sept_page_pamt_nl_entry_ptr[0]);
+
+    if (get_global_data()->dynamic_pamt_enabled && (merged_sept_parent_level_entry == PT_2MB))
+    {
+        local_data_ptr->vmm_regs.r12 = removed_pages_pa[0];
+        local_data_ptr->vmm_regs.r13 = removed_pages_pa[1];
+    }
 
 EXIT:
 
-    // Release all acquired locks and free keyhole mappings
+    // free keyhole mappings
 
-    for (uint32_t j = 0; j < locked_entries; j++)
-    {
-        ia32e_sept_t* current_sept = &merged_sept_page_ptr[0]->sept[j];
-        sept_lock_release(current_sept);
-    }
 
     for (uint16_t vm_id = 0; vm_id < MAX_VMS; vm_id++)
     {
@@ -530,6 +535,11 @@ EXIT:
         if (merged_sept_page_pamt_locked_flag[vm_id])
         {
             pamt_implicit_release_lock(merged_sept_page_pamt_entry_ptr[vm_id], TDX_LOCK_EXCLUSIVE);
+        }
+
+        if (merged_sept_page_pamt_nl_entry_ptr[vm_id] != NULL)
+        {
+            free_la(merged_sept_page_pamt_nl_entry_ptr[vm_id]);
         }
 
         if (merged_sept_page_sept_entry_ptr[vm_id] != NULL)
@@ -545,7 +555,7 @@ EXIT:
 
     if (sept_locked_flag)
     {
-        release_sharex_lock_sh(&tdcs_ptr->executions_ctl_fields.secure_ept_lock);
+        release_sharex_lock_hp_ex(&tdcs_ptr->executions_ctl_fields.secure_ept_lock);
     }
 
     if (tdcs_ptr != NULL)
@@ -559,7 +569,7 @@ EXIT:
 
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_SHARED, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_ptr);
     }
 

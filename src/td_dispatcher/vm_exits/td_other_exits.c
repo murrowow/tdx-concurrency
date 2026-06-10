@@ -136,7 +136,9 @@ bool_t td_cr_access_exit(vmx_exit_qualification_t vm_exit_qualification)
                     // MOV to CR4
                     // All valid cases of accessing CR4 are controlled by the CR4 guest/host mask
                     // and CR4 read shadow fields of the TD VMCS, and do not cause a VM exit.
-                    status = (uint16_t)write_guest_cr4(value, tdcs_p, tdvps_p);
+                    status = (uint16_t)write_guest_cr4(value, tdcs_p
+                                             , tdvps_p
+                                             );
                     break;
 
                 default:
@@ -353,7 +355,7 @@ void async_tdexit_ept_violation(pa_t gpa, ept_level_t req_level, ia32e_sept_t se
     eeq_info.req_sept_level = req_level;
     eeq_info.err_sept_level = ept_level;
     eeq_info.err_sept_state = sept_get_arch_state(sept_entry);
-    eeq_info.err_sept_is_leaf = is_secure_ept_leaf_entry(&sept_entry);
+    eeq_info.err_sept_is_leaf = is_secure_ept_leaf_entry(&sept_entry, false);
 
     eeq.type = eeq_type;
     eeq.info = eeq_info.raw;

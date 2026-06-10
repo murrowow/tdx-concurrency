@@ -96,8 +96,7 @@ api_error_type tdh_vp_init(uint64_t target_tdvpr_pa, uint64_t td_vcpu_rcx)
     // TDVPS related variables
     pa_t                  tdvpr_pa = {.raw = target_tdvpr_pa};  // TDVPR physical address
     tdvps_t             * tdvps_ptr = NULL;                     // Pointer to the TDVPS structure ((Multi-page linear address)
-    pamt_block_t          tdvpr_pamt_block;                     // TDVPR PAMT block
-    pamt_entry_t        * tdvpr_pamt_entry_ptr;                 // Pointer to the TDVPR PAMT entry
+    pamt_walk_result_t    tdvpr_pamt_walk_result;
     bool_t                tdvpr_locked_flag = false;            // Indicate TDVPR is locked
 
     // TDR related variables
@@ -139,8 +138,7 @@ api_error_type tdh_vp_init(uint64_t target_tdvpr_pa, uint64_t td_vcpu_rcx)
                                                          OPERAND_ID_RCX,
                                                          TDX_LOCK_EXCLUSIVE,
                                                          PT_TDVPR,
-                                                         &tdvpr_pamt_block,
-                                                         &tdvpr_pamt_entry_ptr,
+                                                         &tdvpr_pamt_walk_result,
                                                          &tdvpr_locked_flag);
     if (return_val != TDX_SUCCESS)
     {
@@ -151,7 +149,7 @@ api_error_type tdh_vp_init(uint64_t target_tdvpr_pa, uint64_t td_vcpu_rcx)
     lock_type_t tdr_lock_type = (leaf_opcode.version > 0) ? TDX_LOCK_EXCLUSIVE : TDX_LOCK_SHARED;
 
     // Lock and map the TDR page
-    return_val = lock_and_map_implicit_tdr(get_pamt_entry_owner(tdvpr_pamt_entry_ptr),
+    return_val = lock_and_map_implicit_tdr(get_pamt_entry_owner(tdvpr_pamt_walk_result.pamt_entry_p),
                                            OPERAND_ID_TDR,
                                            TDX_RANGE_RO,
                                            tdr_lock_type,
@@ -319,7 +317,7 @@ EXIT:
     }
     if (tdvpr_locked_flag)
     {
-        pamt_unwalk(tdvpr_pa, tdvpr_pamt_block, tdvpr_pamt_entry_ptr, TDX_LOCK_EXCLUSIVE, PT_4KB);
+        pamt_unwalk(&tdvpr_pamt_walk_result);
         if (tdvps_ptr != NULL)
         {
             free_la(tdvps_ptr);

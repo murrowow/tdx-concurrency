@@ -45,6 +45,7 @@ api_error_type tdh_sys_update(void)
     bool_t global_locked_flag = false;
     api_error_type ret_val = TDX_OPERAND_INVALID;
 
+
     // Acquire an exclusive lock to the whole TDX-SEAM module
     if (acquire_sharex_lock_ex(&global_data->global_lock) != LOCK_RET_SUCCESS)
     {
@@ -85,6 +86,7 @@ api_error_type tdh_sys_update(void)
     retrieve_handoff_data(hv, size, handoff_data_bytes);
 
     complete_cpuid_handling(global_data);
+
 
     // Clean handoff data
     handoff_data_hdr->valid = false;

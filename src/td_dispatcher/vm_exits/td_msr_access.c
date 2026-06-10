@@ -427,7 +427,7 @@ _STATIC_INLINE_ td_msr_access_status_t wrmsr_ia32_perfevtsel(tdcs_t *tdcs_p, tdv
 
         /* For the value written to the MSR, clear the ENABLE bit (22) to 0 but keep the other bits.
            This ensures that the IA32_PERF_GLOBAL_INUSE MSR returns the in-use status bit for this
-           counter as if it is being used, since the bit is set if and only if IA32_PERFEVTSELx�
+           counter as if it is being used, since the bit is set if and only if IA32_PERFEVTSELx
            EVENT_SELECT bits (7:0) are not 0. */
         perfevtsel_value.en = 0;
 
@@ -503,7 +503,7 @@ static td_msr_access_status_t rdmsr_ia32_arch_capabilities(tdvps_t* tdvps_p, tdc
     if (is_not_gnr_a0_stepping())
     {
         // Return the value calculated on TDH.MNG.INIT or TDH.IMPORT.STATE.IMMUTABLE in EDX:EAX
-        rdmsr_set_value_in_tdvps(tdvps_p, tdcs_p->virt_msrs.virtual_ia32_arch_capabilities);
+    rdmsr_set_value_in_tdvps(tdvps_p, tdcs_p->virt_msrs.virtual_ia32_arch_capabilities);
     }
 
     return TD_MSR_ACCESS_SUCCESS;

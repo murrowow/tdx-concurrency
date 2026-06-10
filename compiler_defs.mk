@@ -25,8 +25,8 @@
 include proj_defs.mk
 
 # Compiler
-CC = clang-12
-CXX = clang++-12
+CC = clang-16
+CXX = clang++-16
 CCVERSION = $(shell $(CC) --version | grep 'clang version' | cut -f1 -d"." | sed 's/^.* //g' )
 
 CC_WITHOUT_CODE_COVERAGE := $(CC)
@@ -40,12 +40,12 @@ STD_FLAGS = -MD -MP -m64 -Wall -Wextra -fPIC -fno-builtin-memset -fvisibility=hi
 OPT_FLAGS = -Os
 
 # SecV mandatory flags
-SECV_FLAGS = -Wdouble-promotion -Wshadow -Wconversion -Wmissing-prototypes -Wpointer-arith -Wuninitialized -Wunreachable-code -Wunused-function -Werror -D_FORTIFY_SOURCE=2 -fno-zero-initialized-in-bss -fstack-protector-strong
+SECV_FLAGS = -Wdouble-promotion -Wshadow -Wconversion -Wmissing-prototypes -Wpointer-arith -Wuninitialized -Wunreachable-code -Wunused-function -Werror -D_FORTIFY_SOURCE=2 -fno-zero-initialized-in-bss -fstack-protector-strong -Wformat -Wformat-security -Werror=format-security
 
 CET_FLAGS = -mshstk -fcf-protection
 
 # Combined flags
-CFLAGS = $(STD_FLAGS) $(PROJ_FLAGS) $(OPT_FLAGS) $(SECV_FLAGS) $(CET_FLAGS) $(PRODUCTION_FLAGS) 
+CFLAGS = $(STD_FLAGS) $(PROJ_FLAGS) $(OPT_FLAGS) $(SECV_FLAGS) $(CET_FLAGS) $(PRODUCTION_FLAGS)
 
 # Entry pointer for the linker
 MODULE_ENTRY_POINT = tdx_seamcall_entry_point

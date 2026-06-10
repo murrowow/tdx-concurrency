@@ -141,6 +141,8 @@ _STATIC_INLINE_ bool_t check_allowed1_vmx_ctls(uint64_t* dest,
     return true;
 }
 
+
+
 _STATIC_INLINE_ bool_t is_smrr_mask_valid_for_tdx(smrr_base_t smrr_base, smrr_mask_t smrr_mask)
 {
     // Create a bit mask from the first LSB which is 1 in the mask, until the uppermost bit 31
@@ -1291,11 +1293,15 @@ _STATIC_INLINE_ void tdx_init_global_data(tdx_module_global_t* tdx_global_data_p
     tdx_global_data_ptr->xbuf.xsave_header.xcomp_bv = BIT(63);
     basic_memset_to_zero(&tdx_global_data_ptr->xbuf.xsave_header.reserved, sizeof(tdx_global_data_ptr->xbuf.xsave_header.reserved));
 
+
     // VMCS host fields
     save_vmcs_non_lp_host_fields(&tdx_global_data_ptr->seam_vmcs_host_values);
 
     tdx_global_data_ptr->num_rdseed_retries = 6;
     tdx_global_data_ptr->num_rdseed_pauses = 32;
+
+    uint32_t freq = (uint32_t)get_tsc_ratio();
+    tdx_global_data_ptr->twenty_usec_in_tsc = translate_usec_to_tsc(USECOND * 20, freq);
 }
 
 _STATIC_INLINE_ api_error_type tdx_init_stack_canary(void)
@@ -1359,9 +1365,9 @@ _STATIC_INLINE_ api_error_type check_module_build_time_defs(tdx_module_global_t*
     tdx_global_data_ptr->no_downgrade      = sysinfo_table->no_downgrade;
     tdx_global_data_ptr->num_handoff_pages = sysinfo_table->num_handoff_pages;
 
-    if ((tdx_global_data_ptr->module_hv != TDX_MODULE_HV) ||
-        (tdx_global_data_ptr->min_update_hv < TDX_MIN_UPDATE_HV) ||
-        ((tdx_global_data_ptr->no_downgrade == 0) && (TDX_NO_DOWNGRADE == 1)) ||
+    if ((tdx_global_data_ptr->module_hv != GLOBAL_TDX_MODULE_HV) ||
+        (tdx_global_data_ptr->min_update_hv < GLOBAL_TDX_MIN_UPDATE_HV) ||
+        ((tdx_global_data_ptr->no_downgrade == 0) && (GLOBAL_TDX_NO_DOWNGRADE == 1)) ||
         ((tdx_global_data_ptr->num_handoff_pages + 1) < TDX_MIN_HANDOFF_PAGES))
     {
         TDX_ERROR("Incompatible TD preserving defs\n");
@@ -1385,7 +1391,7 @@ _STATIC_INLINE_ api_error_type configure_fatal_info_diagnostics(bool_t enable_co
             TDX_ERROR("Reserved fields are not 0\n");
             return TDX_OPERAND_INVALID;
         }
-        
+
         // check whether info logging should be configured
         if (fatal_error_config.fatal_info_hpa != HPA_CODE_NO_LOGGING_REQUIRED)
         {
@@ -1402,7 +1408,7 @@ _STATIC_INLINE_ api_error_type configure_fatal_info_diagnostics(bool_t enable_co
                 return TDX_OPERAND_INVALID;
             }
         }
-        
+
         // check whether a notification interrupt should be configured
         if (fatal_error_config.notification_intr)
         {

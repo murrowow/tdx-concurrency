@@ -42,15 +42,13 @@ api_error_type tdh_mng_add_cx(uint64_t target_tdcx_pa, uint64_t target_tdr_pa)
     // TDCX related variables
     pa_t                  tdcx_pa;                   // TDCX physical address
     void                * tdcx_ptr;                  // Pointer to the TDCX page (linear address)
-    pamt_block_t          tdcx_pamt_block;           // TDCX PAMT block
-    pamt_entry_t        * tdcx_pamt_entry_ptr;       // Pointer to the TDCX PAMT entry
+    pamt_walk_result_t    tdcx_pamt_walk_result;
     bool_t                tdcx_locked_flag = false;  // Indicate TDCX is locked
 
     // TDR related variables
     pa_t                  tdr_pa;                    // TDR physical address
     tdr_t               * tdr_ptr;                   // Pointer to the TDR page (linear address)
-    pamt_block_t          tdr_pamt_block;            // TDR PAMT block
-    pamt_entry_t        * tdr_pamt_entry_ptr;        // Pointer to the TDR PAMT entry
+    pamt_walk_result_t    tdr_pamt_walk_result;
     bool_t                tdr_locked_flag = false;   // Indicate TDR is locked
     tdcs_t              * tdcs_p = NULL;
 
@@ -67,8 +65,7 @@ api_error_type tdh_mng_add_cx(uint64_t target_tdcx_pa, uint64_t target_tdr_pa)
                                                  TDX_RANGE_RW,
                                                  TDX_LOCK_EXCLUSIVE,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_ptr);
     if (return_val != TDX_SUCCESS)
@@ -108,8 +105,7 @@ api_error_type tdh_mng_add_cx(uint64_t target_tdcx_pa, uint64_t target_tdr_pa)
                                                             TDX_RANGE_RW,
                                                             TDX_LOCK_EXCLUSIVE,
                                                             PT_NDA,
-                                                            &tdcx_pamt_block,
-                                                            &tdcx_pamt_entry_ptr,
+                                                            &tdcx_pamt_walk_result,
                                                             &tdcx_locked_flag,
                                                             (void**)&tdcx_ptr);
     if (return_val != TDX_SUCCESS)
@@ -171,7 +167,7 @@ api_error_type tdh_mng_add_cx(uint64_t target_tdcx_pa, uint64_t target_tdr_pa)
             if (!op_state_is_seamcall_allowed(TDH_MNG_ADDCX_LEAF, tdcs_p->management_fields.op_state, false))
             {
                 TDX_ERROR("Current OP state is incorrect %d\n", tdcs_p->management_fields.op_state);
-                return_val = TDX_OP_STATE_INCORRECT;
+                return_val = api_error_with_operand_id(TDX_OP_STATE_INCORRECT,(uint64_t)tdcs_p->management_fields.op_state);
                 goto EXIT;
             }
         }
@@ -185,8 +181,10 @@ api_error_type tdh_mng_add_cx(uint64_t target_tdcx_pa, uint64_t target_tdr_pa)
     tdr_ptr->management_fields.chldcnt++;
 
     // Set the new TDCS page PAMT fields
-    tdcx_pamt_entry_ptr->pt = PT_TDCX;
-    set_pamt_entry_owner(tdcx_pamt_entry_ptr, tdr_pa);
+    tdcx_pamt_walk_result.pamt_entry_p->pt = PT_TDCX;
+    set_pamt_entry_owner(tdcx_pamt_walk_result.pamt_entry_p, tdr_pa);
+
+    pamt_inc_nl_page_count(tdcx_pamt_walk_result.pamt_walk_path_nl[PT_2MB]);
 
 EXIT:
     if (tdcs_p)
@@ -196,13 +194,13 @@ EXIT:
     // Release all acquired locks and free keyhole mappings
     if (tdcx_locked_flag)
     {
-        pamt_unwalk(tdcx_pa, tdcx_pamt_block, tdcx_pamt_entry_ptr, TDX_LOCK_EXCLUSIVE, PT_4KB);
+        pamt_unwalk(&tdcx_pamt_walk_result);
         free_la(tdcx_ptr);
     }
 
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_EXCLUSIVE, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_ptr);
     }
 

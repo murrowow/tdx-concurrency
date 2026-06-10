@@ -54,6 +54,7 @@ typedef struct PACKED sysinfo_table_s
             bool_t smrr2_not_supported;
             bool_t tdx_without_integrity;
             uint8_t reserved_2[62];         /**< Reserved */
+
         } mcheck_fields;
         struct
         {

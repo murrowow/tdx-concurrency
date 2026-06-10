@@ -348,16 +348,19 @@ typedef union page_list_entry_u
 {
     struct
     {
-        uint64_t reserved_11_0  : 12;  // Bits 11:0
-        uint64_t hpa            : 40;  // Bits 51:12
-        uint64_t reserved_62_52 : 11;  // Bits 62:52
-        uint64_t invalid        : 1;   // Bit 63
+        uint64_t reserved_11_0     : 12;  // Bits 11:0
+        uint64_t hpa               : 40;  // Bits 51:12
+        uint64_t reserved_60_52    : 9;   // Bits 60:52
+        uint64_t removed           : 1;   // Bit 61
+        uint64_t pamt_removal_hint : 1;   // Bit 62
+        uint64_t invalid           : 1;   // Bit 63
     };
     uint64_t raw;
 } page_list_entry_t;
 tdx_static_assert(sizeof(page_list_entry_t) == 8, page_list_entry_t);
 
 #define MAC_LIST_ENTRIES_IN_PAGE        256
+
 
 /** Initialize a MIGSC:  must be done once per migration session before the MIGSC is used
     Caller needs to use aes_gcm_reset() to set the IV as required. */
@@ -436,4 +439,4 @@ bool_t check_and_get_gpa_from_entry(gpa_list_entry_t gpa_entry, bool_t gpaw, pa_
 void copy_mbmd(mbmd_t* mbmd_dst, mbmd_t* mbmd_src);
 
 
-#endif // TD_PART_MIGRATION_SUPPORTED
+#endif /* SRC_COMMON_HELPERS_MIGRATION_H_ */

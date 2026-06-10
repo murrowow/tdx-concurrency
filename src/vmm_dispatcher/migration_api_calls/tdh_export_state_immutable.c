@@ -240,6 +240,7 @@ static api_error_type handle_continues_export(api_error_type* return_val, bool_t
         // Start the in-order export phase
         tdcs_p->management_fields.op_state = OP_STATE_LIVE_EXPORT;
 
+
         *continue_loop = false;
     }
     else // There is more metadata to be exported
@@ -261,7 +262,8 @@ static api_error_type handle_continues_export(api_error_type* return_val, bool_t
         }
 
         // Check for a pending interrupt
-        if (is_interrupt_pending_host_side())
+        api_error_type tmp_return_val = check_host_interrupt_and_hp_bit(&tdcs_p->executions_ctl_fields.secure_ept_lock,true);
+        if (TDX_SUCCESS != tmp_return_val)
         {
             // There is a pending interrupt.  Save the state for the next invocation.
             migsc_p->interrupted_state.valid = true;
@@ -276,9 +278,9 @@ static api_error_type handle_continues_export(api_error_type* return_val, bool_t
             migsc_p->interrupted_state.num_processed = page_list_i;
 
             *continue_loop = false;
-
-            return TDX_INTERRUPTED_RESUMABLE;
+            return tmp_return_val;
         }
+
         else
         {
             // Move to the next field ID
@@ -298,8 +300,7 @@ api_error_type tdh_export_state_immutable(uint64_t target_tdr_pa, uint64_t hpa_a
     // TDR and TDCS
     tdr_t* tdr_p = NULL;              // Pointer to the owner TDR page
     pa_t                 tdr_pa;                    // Physical address of the owner TDR page
-    pamt_block_t         tdr_pamt_block;            // TDR PAMT block
-    pamt_entry_t* tdr_pamt_entry_ptr = NULL;
+    pamt_walk_result_t   tdr_pamt_walk_result;
     tdcs_t* tdcs_p = NULL;             // Pointer to the TDCS structure
     bool_t               tdr_locked_flag = false;
     bool_t               op_state_locked_flag = false;
@@ -350,8 +351,7 @@ api_error_type tdh_export_state_immutable(uint64_t target_tdr_pa, uint64_t hpa_a
                                                  TDX_RANGE_RO,
                                                  TDX_LOCK_SHARED,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_p);
 
@@ -397,6 +397,7 @@ api_error_type tdh_export_state_immutable(uint64_t target_tdr_pa, uint64_t hpa_a
         return_val = TDX_MIN_MIGS_NOT_CREATED;
         goto EXIT;
     }
+
 
     // Check and map the MBMD buffer in shared memory, and write out the MBMD
     if (mbmd_hpa_and_size.size < sizeof(mbmd_immutable_td_state_t))
@@ -513,7 +514,9 @@ api_error_type tdh_export_state_immutable(uint64_t target_tdr_pa, uint64_t hpa_a
 
         return_val = handle_continues_export(&return_val, &sys_exported, &next_field_id, &mbmd_hpa_and_size, migsc_p,
                                              &mbmd_p, tdcs_p, &continue_loop, page_list_i, page_list_info, &field_id);
-        if (TDX_SUCCESS != return_val && TDX_INTERRUPTED_RESUMABLE != return_val)
+    if (TDX_SUCCESS                 != return_val && 
+        TDX_INTERRUPTED_RESUMABLE   != return_val &&
+        TDX_INTERRUPTED_BUSY        != return_val)
         {
             // exit only on error
             goto EXIT;
@@ -541,7 +544,7 @@ EXIT:
 
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_SHARED, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_p);
     }
 

@@ -51,12 +51,14 @@ endif # TDX_MODULE_INTERNAL_VER
 ifdef TDX_MODULE_SEAM_MINOR_SVN
  PROJ_FLAGS += -DTDX_MINOR_SEAM_SVN=$(TDX_MODULE_SEAM_MINOR_SVN)
 else # TDX_MODULE_SEAM_MINOR_SVN
- PROJ_FLAGS += -DTDX_MINOR_SEAM_SVN=0
+ PROJ_FLAGS += -DTDX_MINOR_SEAM_SVN=12
 endif # TDX_MODULE_SEAM_MINOR_SVN
 
-PROJ_FLAGS += -DTDX_MODULE_MAJOR_VER=1
-PROJ_FLAGS += -DTDX_MODULE_MINOR_VER=5
-PROJ_FLAGS += -DTDX_MODULE_UPDATE_VER=16
+ ########################################
+ PROJ_FLAGS += -DTDX_MODULE_MAJOR_VER=1
+ PROJ_FLAGS += -DTDX_MODULE_MINOR_VER=5
+ PROJ_FLAGS += -DTDX_MODULE_UPDATE_VER=20
+ ########################################
 
 ################################################################
 
@@ -65,8 +67,11 @@ PROJ_FLAGS += -DTDX_MODULE_UPDATE_VER=16
 
 # Default features
 PROJ_FLAGS += -DNO_SPEC_CTRL_VIRT_SUPPORT
+PROJ_FLAGS += -DDYNAMIC_PAMT_SUPPORT
+PROJ_FLAGS += -DHSD_18042345067_WA # https://hsdes.intel.com/appstore/article/#/18042345067
 PROJ_FLAGS += -DTD_MIGRATION_SUPPORTED
 PROJ_FLAGS += -DTD_PART_MIGRATION_SUPPORTED
+
 
 ifdef TDX_MODULE_HV
 PROJ_FLAGS += -DTDX_MODULE_HV=$(TDX_MODULE_HV)
@@ -91,44 +96,39 @@ endif # TDX_NO_DOWNGRADE
 ################################################################
 ## Debug features
 
+
 ifdef DBG_TRACE
 PROJ_FLAGS += -DDEBUGFEATURE_TDX_DBG_TRACE
 endif # DBG_TRACE
+
 
 ################################################################
 
 ################################################################
 ## Miscelaneous features
 
+
 PROJ_FLAGS += -D_NO_IPP_DEPRECATED
 
 ################################################################
 
 ################################################################
-## Production-only features
-
-ifdef PRODUCTION_SIGN
-ifndef RELEASE
-  $(error Cannot create production-signed TDX module in non-RELEASE build)
-endif # RELEASE
-PRODUCTION_FLAGS = -DPRODUCTION_SIGN
-else # PRODUCTION_SIGN
 PRODUCTION_FLAGS =
-endif # PRODUCTION_SIGN
-
 ################################################################
 
 
 #Architecture git data
-COMMIT_ID = 7197e9de
-ARCHITECTURE_BRANCH_NAME = TDX_Module_1.5.16_v0.95
-CPUID_EXCEL_VERSION_SUPPORTED = 10
-MSR_EXCEL_VERSION_SUPPORTED = 6
-TDVPS_EXCEL_VERSION_SUPPORTED = 28
-TDR_TDCS_EXCEL_VERSION_SUPPORTED = 25
-TD_VMCS_EXCEL_VERSION_SUPPORTED = 26
-GLOBAL_SYS_EXCEL_VERSION_SUPPORTED = 2
-ERRORS_VERSION_SUPPORTED = 5
-OP_STATE_VERSION_SUPPORTED = 2
-SEPT_STATE_VERSION_SUPPORTED = 6
-L2_VMCS_VERSION_SUPPORTED = 25
+################################################################
+    COMMIT_ID = 75c7f773
+    ARCHITECTURE_BRANCH_NAME = TDX_Module_1.5.20_v0.96
+    CPUID_EXCEL_VERSION_SUPPORTED = 10
+    MSR_EXCEL_VERSION_SUPPORTED = 6
+    TDVPS_EXCEL_VERSION_SUPPORTED = 28
+    TDR_TDCS_EXCEL_VERSION_SUPPORTED = 25
+    TD_VMCS_EXCEL_VERSION_SUPPORTED = 26
+    GLOBAL_SYS_EXCEL_VERSION_SUPPORTED = 2
+    ERRORS_VERSION_SUPPORTED = 5
+    OP_STATE_VERSION_SUPPORTED = 2
+    SEPT_STATE_VERSION_SUPPORTED = 9
+    L2_VMCS_VERSION_SUPPORTED = 25
+################################################################

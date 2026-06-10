@@ -38,14 +38,16 @@
 
 api_error_type tdh_export_blockw(gpa_list_info_t gpa_list_info, uint64_t target_tdr_pa)
 {
+    api_error_type          return_val = TDX_OPERAND_INVALID;
+
+
     // Local data for return values
     tdx_module_local_t  * local_data_ptr = get_local_data();
 
     // TDR and TDCS
     tdr_t                  *tdr_p = NULL;         // Pointer to the owner TDR page
     pa_t                    tdr_pa;               // Physical address of the owner TDR page
-    pamt_block_t            tdr_pamt_block;       // TDR PAMT block
-    pamt_entry_t           *tdr_pamt_entry_ptr = NULL; // Pointer to the TDR PAMT entry
+    pamt_walk_result_t      tdr_pamt_walk_result;
     tdcs_t                 *tdcs_p = NULL;        // Pointer to the TDCS structure
     bool_t                  tdr_locked_flag = false; // Indicate TDR is locked
 
@@ -65,8 +67,6 @@ api_error_type tdh_export_blockw(gpa_list_info_t gpa_list_info, uint64_t target_
     ept_level_t             sept_entry_level = LVL_PT;
     bool_t                  septe_locked_flag = false;  // Indicate SEPTE is locked
 
-    api_error_type          return_val = TDX_OPERAND_INVALID;
-
     // Input register operands
     tdr_pa.raw = target_tdr_pa;
     // Check, lock and map the owner TDR page
@@ -75,8 +75,7 @@ api_error_type tdh_export_blockw(gpa_list_info_t gpa_list_info, uint64_t target_
                                                  TDX_RANGE_RO,
                                                  TDX_LOCK_SHARED,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_p);
 
@@ -97,7 +96,7 @@ api_error_type tdh_export_blockw(gpa_list_info_t gpa_list_info, uint64_t target_
     op_state_locked_flag = true;
 
     // Acquire Secure-EPT lock as shared
-    if (acquire_sharex_lock(&tdcs_p->executions_ctl_fields.secure_ept_lock, TDX_LOCK_SHARED) != LOCK_RET_SUCCESS)
+    if (acquire_sharex_lock_hp(&tdcs_p->executions_ctl_fields.secure_ept_lock, TDX_LOCK_SHARED, false) != TDX_SUCCESS)
     {
         return_val = api_error_with_operand_id(TDX_OPERAND_BUSY, OPERAND_ID_SEPT_TREE);
         TDX_ERROR("Failed to acquire SEPT tree lock");
@@ -157,7 +156,7 @@ api_error_type tdh_export_blockw(gpa_list_info_t gpa_list_info, uint64_t target_
             sept_entry_level = LVL_PT;
             // Walk the Secure-EPT to locate the parent entry for the new TD page
             return_val = walk_private_gpa(tdcs_p, gpa, tdr_p->key_management_fields.hkid,
-                                          &sept_entry_ptr, &sept_entry_level, &sept_entry_copy);
+                                          &sept_entry_ptr, &sept_entry_level, &sept_entry_copy, false);
 
             if (return_val != TDX_SUCCESS)
             {
@@ -180,8 +179,7 @@ api_error_type tdh_export_blockw(gpa_list_info_t gpa_list_info, uint64_t target_
             // Verify if BLOCKW is allowed for the SEPT entry state.
             if (!sept_state_is_seamcall_leaf_allowed(TDH_EXPORT_BLOCKW_LEAF, sept_entry_copy))
             {
-                TDX_ERROR("SEAMCALL laeaf 'TDH_EXPORT_BLOCKW_LEAF' is not allowed in this SEPT state (0x%X)\n",
-                          SEPT_CONVERT_TO_ENCODING(sept_entry_copy));
+                TDX_ERROR("SEAMCALL laeaf 'TDH_EXPORT_BLOCKW_LEAF' is not allowed in this SEPT state (0x%X)\n", get_sept_state_lut_index(sept_entry_copy));
                 err_status = GPA_ENTRY_STATUS_SEPT_ENTRY_STATE_INCORRECT; break;
             }
 
@@ -195,16 +193,16 @@ api_error_type tdh_export_blockw(gpa_list_info_t gpa_list_info, uint64_t target_
             switch (new_sept_entry.raw & SEPT_STATE_ENCODING_MASK)
             {
                 case SEPT_STATE_MAPPED_MASK:
-                    sept_update_state(&new_sept_entry, SEPT_STATE_BLOCKEDW_MASK);
+                    sept_update_state(&new_sept_entry, SEPT_STATE_BLOCKEDW_MASK, false, false);
                     break;
                 case SEPT_STATE_EXP_DIRTY_MASK:
-                    sept_update_state(&new_sept_entry, SEPT_STATE_EXP_DIRTY_BLOCKEDW_MASK);
+                    sept_update_state(&new_sept_entry, SEPT_STATE_EXP_DIRTY_BLOCKEDW_MASK, false, false);
                     break;
                 case SEPT_STATE_PEND_MASK:
-                    sept_update_state(&new_sept_entry, SEPT_STATE_PEND_BLOCKEDW_MASK);
+                    sept_update_state(&new_sept_entry, SEPT_STATE_PEND_BLOCKEDW_MASK, false, false);
                     break;
                 case SEPT_STATE_PEND_EXP_DIRTY_MASK:
-                    sept_update_state(&new_sept_entry, SEPT_STATE_PEND_EXP_DIRTY_BLOCKEDW_MASK);
+                    sept_update_state(&new_sept_entry, SEPT_STATE_PEND_EXP_DIRTY_BLOCKEDW_MASK, false, false);
                     break;
                 default:
                 {
@@ -213,8 +211,7 @@ api_error_type tdh_export_blockw(gpa_list_info_t gpa_list_info, uint64_t target_
                 }
             }
 
-            // Update the SEPT entry in memory
-            atomic_mem_write_64b(&sept_entry_ptr->raw, new_sept_entry.raw);
+            atomically_update_sept_state_keep_tdhp(sept_entry_ptr, new_sept_entry.raw);
 
             // If the page is guest accessible (MAPPED or EXPORTED_DIRTY),
             // then block any L2 aliases for writing.
@@ -279,14 +276,12 @@ api_error_type tdh_export_blockw(gpa_list_info_t gpa_list_info, uint64_t target_
         if (entry_num < gpa_list_info.last_entry)
         {
             // If we are not on the last entry, then check pending interrupts
-            if (is_interrupt_pending_host_side())
+            return_val = check_host_interrupt_and_hp_bit(&tdcs_p->executions_ctl_fields.secure_ept_lock,true);
+            if (TDX_SUCCESS != return_val)
             {
                 // increment the entry_num to the index of NEXT entry before
                 // breaking the loop and returning to the VMM
                 entry_num++;
-
-                // Updated GPA_LIST_INFO is returned in RCX.
-                return_val = TDX_INTERRUPTED_RESUMABLE;
                 break;
             }
         }
@@ -311,7 +306,7 @@ EXIT:
 
     if (sept_locked_flag)
     {
-        release_sharex_lock_sh(&tdcs_p->executions_ctl_fields.secure_ept_lock);
+        release_sharex_lock_hp_sh(&tdcs_p->executions_ctl_fields.secure_ept_lock);
     }
 
     if (op_state_locked_flag)
@@ -326,7 +321,7 @@ EXIT:
 
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_SHARED, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_p);
     }
 

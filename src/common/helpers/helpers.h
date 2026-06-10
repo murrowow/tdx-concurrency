@@ -333,7 +333,7 @@ void basic_memset(uint64_t dst, uint64_t dst_bytes, uint8_t val, uint64_t nbytes
 void basic_memset_to_zero(void * dst, uint64_t nbytes);
 #if (!defined(__cplusplus))
 void* memset(void *str, int c, uint32_t n);
-#endif // __cplusplus
+#endif // (!defined(__cplusplus))
 
 /**
  * @brief Copies source to destination using movdir64b
@@ -439,15 +439,16 @@ _STATIC_INLINE_ void zero_cacheline(void* dst)
 
 _STATIC_INLINE_ void tdx_memcpy(void * dst, uint64_t dst_bytes, void * src, uint64_t nbytes)
 {
-    volatile uint64_t junk_a, junk_b;
+    volatile uint64_t junk_a, junk_b, junk_c;
 
     tdx_sanity_check (dst_bytes >= nbytes, FATAL_ERROR_ID_183, 1);
 
     _ASM_VOLATILE_ ("rep; movsb;"
-                    :"=S"(junk_a), "=D"(junk_b)
+                    :"=S"(junk_a), "=D"(junk_b), "=c"(junk_c)
                     :"c"(nbytes), "S"(src), "D"(dst)
                     :"memory");
 }
+
 
 _STATIC_INLINE_ bool_t tdx_memcmp_safe(const void * a, const void * b, uint64_t nbytes)
 {
@@ -466,11 +467,11 @@ _STATIC_INLINE_ bool_t tdx_memcmp_safe(const void * a, const void * b, uint64_t 
 _STATIC_INLINE_ bool_t tdx_memcmp(void * a, void * b, uint64_t nbytes)
 {
     ia32_rflags_t rflags;
-    uint64_t junk_a, junk_b;
+    uint64_t junk_a, junk_b, junk_c;
     _ASM_VOLATILE_ ("repe; cmpsb;"
                     "pushfq\n"
                     "popq %0"
-                    : "=r"(rflags.raw), "=S"(junk_a), "=D"(junk_b)
+                    : "=r"(rflags.raw), "=S"(junk_a), "=D"(junk_b), "=c"(junk_c)
                     :"c"(nbytes), "S"(b), "D"(a)
                     :"memory");
     if (rflags.zf == 0)
@@ -544,11 +545,13 @@ _STATIC_INLINE_ void invalidate_cache_lines(uint64_t start_addr, uint64_t size)
  * @param hpa - HPA that needs to be checked
  * @param lock_type - What type of lock to take on the PAMT leaf entry
  * @param expected_pt - Check the found PAMT entry against that type
- * @param pamt_block - Returns the the pamt_block virtual structure that covers the HPA
- * @param pamt_entry - Returns the linear pointer to the pamt_entry that belongs to the HPA
- * @param leaf_size  - Returns the PAMT leaf size of the HPA entry
- * @param walk_to_leaf_size - If it is true, leaf_size is used as an input too, and PAMT walk stops at that level
+ * @param target_size - Stops at target size if walk_to_leaf_size is true
+ * @param walk_to_leaf_size - If true, PAMT walk stops at target_size
  * @param is_guest - Indicated whether the PAMT walk/lock request came from the TD guest
+ * @param pamt_block - Returns the the pamt_block virtual structure that covers the HPA
+ * @param pamt_walk_result - Returns the linear pointers of all PAMT entries reached during the walk.
+ *                           Returns the reached level.
+ *                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
  *
  * @return Error code that states the reason of failure
  */
@@ -556,11 +559,11 @@ api_error_code_e non_shared_hpa_metadata_check_and_lock(
         pa_t hpa,
         lock_type_t lock_type,
         page_type_t expected_pt,
+        page_size_t target_size,
+        bool_t walk_to_target_size,
+        bool_t is_guest,
         pamt_block_t* pamt_block,
-        pamt_entry_t** pamt_entry,
-        page_size_t*   leaf_size,
-        bool_t walk_to_leaf_size,
-        bool_t is_guest
+        pamt_walk_result_t* pamt_walk_result
         );
 
 /**
@@ -627,8 +630,9 @@ api_error_code_e hpa_check_with_pwr_2_alignment(pa_t hpa, uint64_t size);
  * @param lock_type - What type of lock to take on the PAMT leaf entry
  * @param expected_pt - Check the found PAMT entry against that type - should be either PT_NDA during
  *                      TDR creation, or PT_TDR for everything else.
- * @param pamt_block - Returns the virtual pamt_block structure that covers the HPA
- * @param pamt_entry - Returns the pointer to the pamt_entry that belongs to the HPA
+ * @param pamt_walk_result - Returns the linear pointers of all PAMT entries reached during the walk.
+ *                           Returns the reached level.
+ *                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
  * @param is_locked  - Returns TRUE if the lock on PAMT was taken
  * @param tdr_p      - Returns the linear pointer to the TDR page. Should be freed after use.
  *
@@ -640,8 +644,7 @@ api_error_type check_lock_and_map_explicit_tdr(
         mapping_type_t mapping_type,
         lock_type_t lock_type,
         page_type_t expected_pt,
-        pamt_block_t* pamt_block,
-        pamt_entry_t** pamt_entry,
+        pamt_walk_result_t* pamt_walk_result,
         bool_t* is_locked,
         tdr_t** tdr_p
         );
@@ -656,8 +659,9 @@ api_error_type check_lock_and_map_explicit_tdr(
  * @param lock_type - What type of lock to take on the PAMT leaf entry
  * @param expected_pt - Check the found PAMT entry against that type - should be either PT_NDA during
  *                      TDR creation, or PT_TDR for everything else.
- * @param pamt_block - Returns the virtual pamt_block structure that covers the HPA
- * @param pamt_entry - Returns the pointer to the pamt_entry that belongs to the HPA
+ * @param pamt_walk_result - Returns the linear pointers of all PAMT entries reached during the walk.
+ *                           Returns the reached level.
+ *                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
  * @param is_locked  - Returns TRUE if the lock on PAMT was taken
  * @param tdr_p      - Returns the linear pointer to the TDR page. Should be freed after use.
  *
@@ -669,8 +673,7 @@ api_error_type othertd_check_lock_and_map_explicit_tdr(
         mapping_type_t mapping_type,
         lock_type_t lock_type,
         page_type_t expected_pt,
-        pamt_block_t* pamt_block,
-        pamt_entry_t** pamt_entry,
+        pamt_walk_result_t* pamt_walk_result,
         bool_t* is_locked,
         tdr_t** tdr_p
         );
@@ -687,8 +690,9 @@ api_error_type othertd_check_lock_and_map_explicit_tdr(
  * @param mapping_type - If write access is required
  * @param lock_type - What type of lock to take on the PAMT leaf entry
  * @param expected_pt - Check the found PAMT entry against that type
- * @param pamt_block - Returns the virtual pamt_block structure that covers the HPA
- * @param pamt_entry - Returns the linear pointer to the pamt_entry that belongs to the HPA
+ * @param pamt_walk_result - Returns the linear pointers of all PAMT entries reached during the walk.
+ *                           Returns the reached level.
+ *                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
  * @param is_locked  - Returns TRUE if the lock on PAMT was taken
  * @param la         - Returns mapped linear address of the HPA. Should be freed after use.
  *
@@ -701,11 +705,9 @@ api_error_type check_lock_and_map_explicit_private_4k_hpa(
         mapping_type_t mapping_type,
         lock_type_t lock_type,
         page_type_t expected_pt,
-        pamt_block_t* pamt_block,
-        pamt_entry_t** pamt_entry,
+        pamt_walk_result_t* pamt_walk_result,
         bool_t* is_locked,
-        void**         la
-        );
+        void**         la);
 
 /**
  * @brief Check an explicit page operand for non-shared access semantics, given it HPA, get and
@@ -716,10 +718,12 @@ api_error_type check_lock_and_map_explicit_private_4k_hpa(
  * @param alignment - the hpa alignment
  * @param lock_type - What type of lock to take on the PAMT leaf entry
  * @param expected_pt - Check the found PAMT entry against that type
+ * @param target_size  - Returns the PAMT leaf size of the HPA entry
+ * @param walk_to_target_size - If it is true, leaf_size is used as an input too, and PAMT walk stops at that level
  * @param pamt_block - Returns the virtual pamt_block structure that covers the HPA
- * @param pamt_entry - Returns the linear pointer to the pamt_entry that belongs to the HPA
- * @param leaf_size  - Returns the PAMT leaf size of the HPA entry
- * @param walk_to_leaf_size - If it is true, leaf_size is used as an input too, and PAMT walk stops at that level
+ * @param pamt_walk_result - Returns the linear pointers of all PAMT entries reached during the walk.
+ *                           Returns the reached level.
+ *                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
  * @param is_locked  - Returns TRUE if the lock on PAMT was taken
  *
  * @return Error code that states the reason of failure
@@ -730,10 +734,10 @@ api_error_type check_and_lock_explicit_private_hpa(
         uint64_t alignment,
         lock_type_t lock_type,
         page_type_t expected_pt,
+        page_size_t target_size,
+        bool_t walk_to_target_size,
         pamt_block_t* pamt_block,
-        pamt_entry_t** pamt_entry,
-        page_size_t* leaf_size,
-        bool_t walk_to_leaf_size,
+        pamt_walk_result_t* pamt_walk_result,
         bool_t* is_locked
         );
 
@@ -745,8 +749,9 @@ api_error_type check_and_lock_explicit_private_hpa(
  * @param operand_id - Operand ID number
  * @param lock_type - What type of lock to take on the PAMT leaf entry
  * @param expected_pt - Check the found PAMT entry against that type
- * @param pamt_block - Returns the virtual pamt_block structure that covers the HPA
- * @param pamt_entry - Returns the linear pointer to the pamt_entry that belongs to the HPA
+ * @param pamt_walk_result - Returns the linear pointers of all PAMT entries reached during the walk.
+ *                           Returns the reached level.
+ *                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
  * @param is_locked  - Returns TRUE if the lock on PAMT was taken
  *
  * @return Error code that states the reason of failure
@@ -756,8 +761,7 @@ api_error_type check_and_lock_explicit_4k_private_hpa(
         uint64_t operand_id,
         lock_type_t lock_type,
         page_type_t expected_pt,
-        pamt_block_t* pamt_block,
-        pamt_entry_t** pamt_entry,
+        pamt_walk_result_t* pamt_walk_result,
         bool_t* is_locked
         );
 
@@ -769,8 +773,9 @@ api_error_type check_and_lock_explicit_4k_private_hpa(
  * @param operand_id - Operand ID number
  * @param lock_type - What type of lock to take on the PAMT leaf entry
  * @param range_size - Desired range size to check and lock. Should be only 4KB or 2MB.
- * @param pamt_block - Returns the virtual pamt_block structure that covers the HPA
- * @param pamt_entry - Returns the linear pointer to the pamt_entry that belongs to the HPA
+ * @param pamt_walk_result - Returns the linear pointers of all PAMT entries reached during the walk.
+ *                           Returns the reached level.
+ *                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
  * @param is_locked  - Returns TRUE if the lock on PAMT was taken
  *
  * @return Error code that states the reason of failure
@@ -780,8 +785,7 @@ api_error_type check_and_lock_free_range_hpa(
         uint64_t operand_id,
         lock_type_t lock_type,
         page_size_t range_size,
-        pamt_block_t* pamt_block,
-        pamt_entry_t** pamt_entry,
+        pamt_walk_result_t* pamt_walk_result,
         bool_t* is_locked
         );
 
@@ -828,8 +832,9 @@ api_error_type lock_sept_check_and_walk_private_gpa(
         ia32e_sept_t** sept_entry,
         ept_level_t* level,
         ia32e_sept_t* cached_sept_entry,
-        bool_t* is_sept_locked
-        );
+        bool_t* is_sept_locked,
+        bool_t set_d_bit);
+
 
 /**
  * @brief Same as lock_sept_check_and_walk_private_gpa, but walks until reaches any leaf,
@@ -895,6 +900,7 @@ api_error_type lock_sept_check_and_walk_private_gpa_to_leaf(
  */
 bool_t verify_page_info_input(page_info_api_input_t gpa_page_info, ept_level_t min_level, ept_level_t max_level);
 
+
 /**
  * @brief Translates the GPA and returns requested EPT entry, and the reached walking level.
  *
@@ -908,6 +914,7 @@ bool_t verify_page_info_input(page_info_api_input_t gpa_page_info, ept_level_t m
  *                the walk failed from any reason and couldn't reach the requested level.
  * @param cached_ept_entry - Pointer to a EPT entry parameter. On return contains cached value
  *               of the last sampled EPT entry (even on failure).
+ * @set_d_bit - mark the non-leaf entry as dirty if needed
  *
  * @return Error code that states the reason of failure
  */
@@ -917,8 +924,8 @@ api_error_type walk_private_gpa(
         uint16_t hkid,
         ia32e_sept_t** sept_entry,
         ept_level_t* level,
-        ia32e_sept_t* cached_sept_entry
-        );
+        ia32e_sept_t* cached_sept_entry,
+        bool_t set_d_bit);
 
 /**
  * @brief Checks a GPA to be valid, if shared bit is 1, walks the shared EPT (taken from the TD VMCS)
@@ -1444,6 +1451,7 @@ _STATIC_INLINE_ bool_t is_idt_vectoring_info_valid(void)
     return idt_vectoring_info.valid;
 }
 
+
 _STATIC_INLINE_ uint64_t get_gpa_alignment(const page_info_api_input_t gpa_mapping)
 {
     return (1ULL) << (12 + (gpa_mapping.level * 9));
@@ -1501,7 +1509,9 @@ bool_t is_guest_cr4_allowed_by_td_config(ia32_cr4_t cr4, tdcs_t* tdcs_p, ia32_xc
  *
  * @return Success status or a #GP/#VE indicator
  */
-cr_write_status_e write_guest_cr4(uint64_t value, tdcs_t* tdcs_p, tdvps_t* tdvps_p);
+cr_write_status_e write_guest_cr4(uint64_t value, tdcs_t* tdcs_p
+    , tdvps_t* tdvps_p
+    );
 
 /**
  * @brief Checks the validity the TD attributes that will be set in the TDCS
@@ -1630,6 +1640,7 @@ _STATIC_INLINE_ bool_t op_state_is_export_in_order(op_state_e op_state)
     return state_flags_lookup[op_state].export_in_order;
 }
 
+
 _STATIC_INLINE_ bool_t op_state_is_import_in_order(op_state_e op_state)
 {
     tdx_debug_assert(op_state < NUM_OP_STATES);
@@ -1641,6 +1652,7 @@ _STATIC_INLINE_ bool_t op_state_is_import_in_progress(op_state_e op_state)
     tdx_debug_assert(op_state < NUM_OP_STATES);
     return state_flags_lookup[op_state].import_in_progress;
 }
+
 
 _STATIC_INLINE_ bool_t op_state_is_seamcall_allowed(seamcall_leaf_opcode_t current_leaf,
                                                     op_state_e op_state, bool_t other_td)
@@ -1950,6 +1962,7 @@ void complete_cpuid_handling(tdx_module_global_t* tdx_global_data_ptr);
  * @return True or false
  */
 bool_t is_voe_in_exception_bitmap( void );
+
 
 _STATIC_INLINE_ void reset_to_next_iv(migsc_t *migsc, uint64_t iv_counter, uint16_t migs_index)
 {
@@ -2279,13 +2292,15 @@ api_error_type l2_sept_walk_guest_side(
  *
  * @return bool_t
  */
-_STATIC_INLINE_ bool_t is_gpa_attr_legal(const gpa_attr_single_vm_t gpa_attr_single_vm)
+_STATIC_INLINE_ bool_t is_gpa_attr_legal(const gpa_attr_single_vm_t gpa_attr_single_vm
+)
 {
     if ((!gpa_attr_single_vm.valid && gpa_attr_single_vm.raw) ||
          gpa_attr_single_vm.reserved_14_8 ||
         (gpa_attr_single_vm.w && (!gpa_attr_single_vm.r)) ||
         (gpa_attr_single_vm.pwa && (!gpa_attr_single_vm.r)) ||
-         gpa_attr_single_vm.sve)
+         gpa_attr_single_vm.sve
+        )
     {
         TDX_ERROR("Illegal attributes - 0x%llx\n", gpa_attr_single_vm.raw)
         return false;
@@ -2420,6 +2435,7 @@ _STATIC_INLINE_ void restore_td_xcr0_if_required(tdx_module_local_t* local_data_
  */
 void set_xbuff_offsets_and_size(tdcs_t* tdcs_ptr, uint64_t xfam);
 
+
 // TODO: remove define once WA is removed
 #define GNR_A0_CPUID 0xA06D0
 #define GNR_D_A0_CPUID 0xA06E0
@@ -2464,6 +2480,8 @@ _STATIC_INLINE_ uint64_t GET_TDX_MODULE_IA32_SPEC_CTRL(void)
     return res;
 }
 
+
+
 _STATIC_INLINE_ bool_t get_qword_bm(
     uint64_t *bm_arr_ptr,
     uint64_t idx)
@@ -2497,9 +2515,14 @@ _STATIC_INLINE_ bool_t is_event_allowed(tdcs_t* tdcs_p, uint16_t evt, uint16_t e
     return false;
 }
 
+api_error_type check_host_interrupt_and_hp_bit(sharex_hp_lock_t* lock, bool_t is_resumeable);
+
 /**
  * @brief Stores host's XCR0 state before usage of AVX and marks AVX regs as 'used'
  */
 void prepare_state_for_avx_usage(void);
+
+tdx_features_enum0_t get_tdx_features_enum0(void);
+
 
 #endif /* SRC_COMMON_HELPERS_HELPERS_H_ */

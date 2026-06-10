@@ -24,13 +24,9 @@
  * @brief TDH_IMPORT_MEM API handler
  */
 #include "tdx_vmm_api_handlers.h"
-#include "tdx_basic_defs.h"
 #include OP_STATE_LOOKUP_HEADER
 #include SEPT_STATE_LOOKUP_HEADER
 #include TDX_ERROR_CODES_DEFS_HEADER
-#include "x86_defs/x86_defs.h"
-#include "accessors/ia32_accessors.h"
-#include "accessors/data_accessors.h"
 #include "helpers/helpers.h"
 #include "helpers/migration.h"
 #include "metadata_handlers/metadata_generic.h"
@@ -44,6 +40,30 @@ typedef enum gpa_list_error_type_e
     GPA_LIST_ERROR_TYPE_LIST_ABORT,
     GPA_LIST_ERROR_TYPE_LIST_ABORT_IN_ORDER
 } gpa_list_error_type_t;
+
+static void start_per_page_crypto(migsc_t* migsc_p, uint16_t migs_i, gpa_list_entry_t gpa_list_entry,
+                                  gpa_attr_t* l2_attr_list_p, uint64_t entry_num, gpa_attr_t* l2_attr_list_entry)
+{
+    // Prepare the IV for the next page
+    migsc_p->iv_counter++;
+
+    reset_to_next_iv(migsc_p, migsc_p->iv_counter, migs_i);
+    if (aes_gcm_process_aad(&migsc_p->aes_gcm_context, (const uint8_t*)&(gpa_list_entry),
+        sizeof(gpa_list_entry)) != AES_GCM_NO_ERROR)
+    {
+        fatal_error(FATAL_ERROR_ID_48, FATAL_INFO_FORMAT_BASIC_INFO, NULL);
+    }
+
+    if (l2_attr_list_p)
+    {
+        // If an L2 attributes list has been provided, decrypt L2 attributes list entry
+        if (aes_gcm_decrypt(&migsc_p->aes_gcm_context, (uint8_t*)&l2_attr_list_p[entry_num],
+                (uint8_t*)l2_attr_list_entry, sizeof(*l2_attr_list_entry)) != AES_GCM_NO_ERROR)
+        {
+            fatal_error(FATAL_ERROR_ID_307, FATAL_INFO_FORMAT_BASIC_INFO, NULL);
+        }
+    }
+}
 
 static api_error_type handle_new_command(gpa_list_info_t gpa_list_info, tdcs_t* tdcs_p,
                                          migsc_t* migsc_p, uint16_t migs_i,
@@ -138,7 +158,9 @@ static api_error_type handle_new_command(gpa_list_info_t gpa_list_info, tdcs_t* 
 }
 
 static api_error_type handle_resumed_command(gpa_list_info_t gpa_list_info, tdcs_t* tdcs_p, migsc_t* migsc_p, uint16_t migs_i,
-                                             pa_t mig_buff_list_pa, pa_t* mac_list_pa, pa_t new_page_list_pa, pa_t l2_attr_list_pa)
+                                             pa_t mig_buff_list_pa, pa_t* mac_list_pa, pa_t new_page_list_pa
+                                             , pa_t l2_attr_list_pa
+                                             )
 {
     tdx_module_local_t* local_data_ptr = get_local_data();
 
@@ -179,7 +201,9 @@ static api_error_type handle_resumed_command(gpa_list_info_t gpa_list_info, tdcs
 
 static api_error_type check_mbmd(migs_index_and_cmd_t migs_i_and_cmd, gpa_list_info_t gpa_list_info, tdcs_t* tdcs_p,
                                  migsc_t* migsc_p, uint16_t migs_i, mbmd_t* mbmd, uint8_t* mac, uint8_t mac_size,
-                                 pa_t mig_buff_list_pa, pa_t* mac_list_pa, pa_t new_page_list_pa, pa_t l2_attr_list_pa)
+                                 pa_t mig_buff_list_pa, pa_t* mac_list_pa, pa_t new_page_list_pa
+                                 , pa_t l2_attr_list_pa
+                                 )
 {
     api_error_type return_val = TDX_SUCCESS;
 
@@ -190,7 +214,9 @@ static api_error_type check_mbmd(migs_index_and_cmd_t migs_i_and_cmd, gpa_list_i
     else // migs_i_and_cmd.command == MIGS_INDEX_COMMAND_RESUME
     {
         return_val = handle_resumed_command(gpa_list_info, tdcs_p, migsc_p, migs_i, mig_buff_list_pa,
-                                            mac_list_pa, new_page_list_pa, l2_attr_list_pa);
+                                            mac_list_pa, new_page_list_pa
+                                            , l2_attr_list_pa
+                                            );
     }
 
     return return_val;
@@ -364,14 +390,17 @@ static api_error_type handle_rare_errors(gpa_list_entry_status_t err_status, gpa
 
 static api_error_type finish_entry_processing(uint64_t* entry_num, gpa_list_info_t gpa_list_info,
                                               migsc_t* migsc_p, pa_t mig_buff_list_pa, pa_t* mac_list_pa,
-                                              pa_t new_page_list_pa, tdcs_t* tdcs_p, uint32_t problem_ops_count, pa_t l2_attr_list_pa)
+                                              pa_t new_page_list_pa, tdcs_t* tdcs_p, uint32_t problem_ops_count
+                                              , pa_t l2_attr_list_pa
+                                              )
 {
     api_error_type return_val = TDX_SUCCESS;
 
     if (*entry_num < gpa_list_info.last_entry)
     {
         // If we are not on the last entry, then check pending interrupts
-        if (is_interrupt_pending_host_side())
+        return_val = check_host_interrupt_and_hp_bit(&tdcs_p->executions_ctl_fields.secure_ept_lock,true);
+        if (TDX_SUCCESS != return_val)
         {
             // increment the entry_num to the index of NEXT entry before
             // breaking the loop and returning to the VMM
@@ -389,10 +418,8 @@ static api_error_type finish_entry_processing(uint64_t* entry_num, gpa_list_info
             migsc_p->interrupted_state.l2_attr_list_pa.raw = l2_attr_list_pa.raw;
             migsc_p->interrupted_state.new_page_list_pa.raw = new_page_list_pa.raw;
             migsc_p->mbmd.mem.header.mig_epoch = tdcs_p->migration_fields.mig_epoch;
-
-            // Updated GPA_LIST_INFO is returned in RCX.
-            return_val = TDX_INTERRUPTED_RESUMABLE;
         }
+
     }
     else
     {
@@ -419,8 +446,7 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
     // TDR and TDCS
     tdr_t* tdr_p = NULL;         // Pointer to the owner TDR page
     pa_t                    tdr_pa;               // Physical address of the owner TDR page
-    pamt_block_t            tdr_pamt_block;       // TDR PAMT block
-    pamt_entry_t* tdr_pamt_entry_ptr;
+    pamt_walk_result_t      tdr_pamt_walk_result;
     tdcs_t* tdcs_p = NULL;        // Pointer to the TDCS structure
     bool_t                  tdr_locked_flag = false;
     bool_t                  op_state_locked_flag = false;
@@ -441,11 +467,12 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
 
     // TD Private Page
     pa_t                    td_page_pa;
-    pamt_block_t            td_page_pamt_block_desc;
     bool_t                  td_page_pamt_block_locked_flag = false;
-    void* td_page_p = NULL;
-    pamt_entry_t* td_page_pamt_entry_p = NULL;
-    bool_t                  td_page_pamt_entry_locked_flag = false;
+    void*                   td_page_p = NULL;
+    pamt_walk_result_t      td_page_pamt_walk_result;
+    pamt_entry_t*           td_page_pamt_entry_p = NULL;
+    pamt_non_leaf_entry_t*  td_page_pamt_nl_entry_p = NULL;
+
     bool_t                  mig_locked_flag = false;
 
     // MBMD
@@ -462,9 +489,9 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
     uint8_t                 buff_4k[_4KB];
 
     // New TD Pages
-    pa_t                    new_page_list_pa;
-    page_list_entry_t* new_page_list_p = NULL;
-    volatile page_list_entry_t       new_page_list_entry;
+    pa_t                       new_page_list_pa;
+    page_list_entry_t*         new_page_list_p = NULL;
+    volatile page_list_entry_t new_page_list_entry;
 
     // MAC list
     pa_t                    mac_list_pa[2];
@@ -486,9 +513,11 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
     gpa_list_error_type_t gpa_list_error_type = GPA_LIST_ERROR_TYPE_SUCCESS;
 
     pa_t                    l2_attr_list_pa;
-    gpa_attr_t*             l2_attr_list_p = NULL;
-    gpa_attr_t              l2_attr_list_entry;
     ia32e_sept_t*           l2_septe_p[MAX_VMS] = { 0 }; // First index is not used
+    gpa_attr_t*             l2_attr_list_p = NULL;
+    gpa_attr_t              l2_attr_list_entry = { .raw = 0 };
+
+    bool_t interrupted = false;
 
     // Input register operands
     tdr_pa.raw = target_tdr_pa;
@@ -507,8 +536,7 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                                                  TDX_RANGE_RW,
                                                  TDX_LOCK_SHARED,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_p);
 
@@ -578,7 +606,7 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
 
     migsc_p = (migsc_t*)map_pa_with_hkid(migsc_pa.raw_void, tdr_p->key_management_fields.hkid, TDX_RANGE_RW);
 
-    if (acquire_sharex_lock(&tdcs_p->executions_ctl_fields.secure_ept_lock, TDX_LOCK_SHARED) != LOCK_RET_SUCCESS)
+    if (acquire_sharex_lock_hp(&tdcs_p->executions_ctl_fields.secure_ept_lock, TDX_LOCK_SHARED, false) != TDX_SUCCESS)
     {
         return_val = api_error_with_operand_id(TDX_OPERAND_BUSY, OPERAND_ID_SEPT_TREE);
         TDX_ERROR("Failed to acquire SEPT tree lock\n");
@@ -684,7 +712,10 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
 
     if (TDX_SUCCESS != (return_val = check_mbmd(migs_i_and_cmd, gpa_list_info, tdcs_p, migsc_p,
                                                 migs_i, &mbmd, mac, sizeof(mac), mig_buff_list_pa,
-                                                mac_list_pa, new_page_list_pa, l2_attr_list_pa)))
+                                                mac_list_pa, new_page_list_pa
+
+                                                , l2_attr_list_pa
+                                                )))
     {
         goto EXIT;
     }
@@ -699,6 +730,7 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
     /*---------------------------------------------------------
                    Loop over the GPA list
     ---------------------------------------------------------*/
+
     for (entry_num = gpa_list_info.first_entry; entry_num <= gpa_list_info.last_entry; entry_num++)
     {
         gpa_list_entry_status_t err_status = GPA_ENTRY_STATUS_SUCCESS;
@@ -715,24 +747,9 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
 
         septe_locked_flag = false;
 
-        // Prepare the IV for the next page
-        migsc_p->iv_counter++;
-
-        reset_to_next_iv(migsc_p, migsc_p->iv_counter, migs_i);
-        if (aes_gcm_process_aad(&migsc_p->aes_gcm_context, (const uint8_t*)&(gpa_list_entry),
-            sizeof(gpa_list_entry)) != AES_GCM_NO_ERROR)
+        if (gpa_list_entry.operation == GPA_ENTRY_OP_NOP)
         {
-            fatal_error(FATAL_ERROR_ID_48, FATAL_INFO_FORMAT_BASIC_INFO, NULL);
-        }
-
-        if (l2_attr_list_p)
-        {
-            // If an L2 attributes list has been provided, decrypt L2 attributes list entry
-            if (aes_gcm_decrypt(&migsc_p->aes_gcm_context, (uint8_t*)&l2_attr_list_p[entry_num],
-                               (uint8_t*)&l2_attr_list_entry, sizeof(l2_attr_list_entry)) != AES_GCM_NO_ERROR)
-            {
-                fatal_error(FATAL_ERROR_ID_307, FATAL_INFO_FORMAT_BASIC_INFO, NULL);
-            }
+            start_per_page_crypto(migsc_p, migs_i, gpa_list_entry, l2_attr_list_p, entry_num, &l2_attr_list_entry);
         }
 
         if (gpa_list_entry.operation == GPA_ENTRY_OP_NOP)
@@ -780,7 +797,7 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
         /* Walk the Secure-EPT to locate the parent entry for the new TD page
          *On failure, abort the import session only if in the in-order phase.  In the out-of-order phase,
          *the page might have been promoted so SEPT walk may fail. */
-        return_val = walk_private_gpa(tdcs_p, page_gpa, tdr_p->key_management_fields.hkid, &sept_entry_ptr, &sept_entry_level, &sept_entry_copy);
+        return_val = walk_private_gpa(tdcs_p, page_gpa, tdr_p->key_management_fields.hkid, &sept_entry_ptr, &sept_entry_level, &sept_entry_copy, true);
 
         if (return_val != TDX_SUCCESS)
         {
@@ -816,7 +833,7 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
         if (!op_state_is_import_in_order(tdcs_p->management_fields.op_state) && (gpa_list_entry.operation != GPA_ENTRY_OP_MIGRATE))
         {
             gpa_list_error_type = GPA_LIST_ERROR_TYPE_LIST_ABORT;
-            return_val = TDX_OP_STATE_INCORRECT;
+            return_val = api_error_with_operand_id(TDX_OP_STATE_INCORRECT,(uint64_t)tdcs_p->management_fields.op_state);
             err_status = GPA_ENTRY_STATUS_OP_STATE_INCORRECT;
             goto FINALIZE_ENTRY;
         }
@@ -857,6 +874,54 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                 err_status = GPA_ENTRY_STATUS_DISALLOWED_IMPORT_OVER_REMOVED; break;
             }
 
+            uint8_t* buff_4k_p = buff_4k;
+            page_list_entry_t new_page_list_entry_tmp = {.raw = new_page_list_entry.raw};
+            page_list_entry_t mig_buff_list_entry_tmp = {.raw = mig_buff_list_entry.raw};
+            if (TDX_SUCCESS != (return_val = handle_import(new_page_list_p, new_page_list_entry_tmp,
+                                                           mig_buff_list_entry_tmp, &gpa_list_error_type,
+                                                           &err_status, gpa_list_entry, &mig_buff_mapped,
+                                                           &buff_4k_p, &mig_buff_p, &td_page_pa)))
+            {
+                break;
+            }
+
+            // Check and lock the new TD page in PAMT
+            return_val = check_and_lock_explicit_4k_private_hpa(
+                                td_page_pa,
+                                OPERAND_ID_NEW_PAGE_LIST_ENTRY,
+                                TDX_LOCK_EXCLUSIVE, PT_NDA,
+                                &td_page_pamt_walk_result,
+                                &td_page_pamt_block_locked_flag
+                            );
+
+            td_page_pamt_entry_p = td_page_pamt_walk_result.pamt_entry_p;
+
+            // Handle the case of a missing PAMT page pair to map the imported page
+            // Note that at this point crypto operation for this page hasn't started yet, so we can abort now and the host
+            // VMM can fix the problem and resume the operation.
+            // Don't update the GPA list and page list entries; the behavior is as if they have not been processed yet.
+            // This is handled similarly to a h/w interrupt.
+
+            if (return_val == api_error_with_operand_id(TDX_MISSING_PAMT_PAGE_PAIR, OPERAND_ID_NEW_PAGE_LIST_ENTRY))
+            {
+                tdx_debug_assert(get_global_data()->dynamic_pamt_enabled);
+                interrupted = true;
+                return_val = api_error_with_operand_id(TDX_INTERRUPTED_PAMT, entry_num);
+                goto EXIT;
+            }
+
+            if (return_val != TDX_SUCCESS)
+            {
+                TDX_ERROR("Check and lock for hpa 0x%llx failed with return_val 0x%llx\n", td_page_pa.raw, return_val);
+                gpa_list_error_type = GPA_LIST_ERROR_TYPE_LIST_ABORT_IN_ORDER;
+                err_status = GPA_ENTRY_STATUS_NEW_PAGE_NOT_AVAILABLE; break;
+            }
+
+            td_page_p = map_pa_with_hkid(td_page_pa.raw_void, tdr_p->key_management_fields.hkid, TDX_RANGE_RW);
+
+            start_per_page_crypto(migsc_p, migs_i, gpa_list_entry,
+                                  l2_attr_list_p, entry_num, &l2_attr_list_entry);
+
             bool_t is_termination_required = false;
             // Get the SEPT entry for each L2 page alias.
             // In the in-order phase, if not found we abort the import since we must not lose any imported bundle.
@@ -876,7 +941,8 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                     }
                     
                     // Sanity check on the attributes
-                    if (!is_gpa_attr_legal(l2_attr_list_entry.attr_arr[vm_id]))
+                    if (!is_gpa_attr_legal(l2_attr_list_entry.attr_arr[vm_id]
+                    ))
                     {
                         gpa_list_error_type = GPA_LIST_ERROR_TYPE_LIST_ABORT;
                         return_val = api_error_with_operand_id(TDX_OPERAND_INVALID, OPERAND_ID_GPA_LIST_ENTRY);
@@ -908,35 +974,6 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                 break;
             }
 
-            uint8_t* buff_4k_p = buff_4k;
-            page_list_entry_t new_page_list_entry_tmp = {.raw = new_page_list_entry.raw};
-            page_list_entry_t mig_buff_list_entry_tmp = {.raw = mig_buff_list_entry.raw};
-            if (TDX_SUCCESS != (return_val = handle_import(new_page_list_p, new_page_list_entry_tmp,
-                                                           mig_buff_list_entry_tmp, &gpa_list_error_type,
-                                                           &err_status, gpa_list_entry, &mig_buff_mapped,
-                                                           &buff_4k_p, &mig_buff_p, &td_page_pa)))
-            {
-                break;
-            }
-
-            // Check and lock the new TD page in PAMT
-            page_size_t leaf_size = PT_4KB;
-            return_val = check_and_lock_explicit_private_hpa(td_page_pa, OPERAND_ID_NEW_PAGE_LIST_ENTRY,
-                                                             _4KB, TDX_LOCK_EXCLUSIVE, PT_NDA,
-                                                             &td_page_pamt_block_desc,
-                                                             &td_page_pamt_entry_p,
-                                                             &leaf_size,
-                                                             true,   // walk_to_leaf_size,
-                                                             &td_page_pamt_block_locked_flag);
-            if (return_val != TDX_SUCCESS)
-            {
-                TDX_ERROR("Check and lock for hpa 0x%llx failed with return_val 0x%llx\n", td_page_pa.raw, return_val);
-                gpa_list_error_type = GPA_LIST_ERROR_TYPE_LIST_ABORT_IN_ORDER;
-                err_status = GPA_ENTRY_STATUS_NEW_PAGE_NOT_AVAILABLE; break;
-            }
-
-            td_page_p = map_pa_with_hkid(td_page_pa.raw_void, tdr_p->key_management_fields.hkid, TDX_RANGE_RW);
-
             if (!gpa_list_entry.pending)
             {
                 /* Decrypt the input 4KB page into a the TD page.
@@ -962,6 +999,7 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                 break;
             }
 
+
             // Atomically increment TDR child count
             (void)_lock_xadd_64b(&tdr_p->management_fields.chldcnt, 1);
 
@@ -971,11 +1009,13 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
             td_page_pamt_entry_p->bepoch.mig_flag = 1;
             td_page_pamt_entry_p->bepoch.export_count = tdcs_p->migration_fields.export_count;
             td_page_pamt_entry_p->bepoch.mig_epoch = tdcs_p->migration_fields.mig_epoch;
+            pamt_inc_nl_page_count(td_page_pamt_walk_result.pamt_walk_path_nl[PT_2MB]);
 
             // Release the PAMT locks
-            pamt_unwalk(td_page_pa, td_page_pamt_block_desc, td_page_pamt_entry_p, TDX_LOCK_EXCLUSIVE, PT_4KB);
+            pamt_unwalk(&td_page_pamt_walk_result);
             td_page_pamt_block_locked_flag = false;
             td_page_pamt_entry_p = NULL;
+
 
             // The TD may be running, so we do the SEPT updates as follows:
             //   1. Write the L1 SEPT entry as blocked
@@ -986,19 +1026,23 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
             uint64_t attributes = gpa_list_entry.pending ? SEPT_PERMISSIONS_NONE : SEPT_PERMISSIONS_RWX;
             uint64_t state_encoding = gpa_list_entry.pending ? SEPT_STATE_PEND_BLOCKED_MASK : SEPT_STATE_BLOCKED_MASK;
             sept_set_leaf_and_keep_lock_given_hpa_and_hkid(&sept_entry_copy,
-                                        attributes,
-                                        td_page_pa,
-                                        tdr_p->key_management_fields.hkid,
-                                        state_encoding);
+                attributes,
+                td_page_pa,
+                tdr_p->key_management_fields.hkid,
+                state_encoding,
+                false,
+                false);
 
-            sept_entry_ptr->raw = sept_entry_copy.raw;
+            atomically_update_sept_state_keep_tdhp(sept_entry_ptr, sept_entry_copy.raw);
 
             for (uint16_t vm_id = 1; vm_id <= tdcs_p->management_fields.num_l2_vms; vm_id++)
             {
                 if (l2_attr_list_entry.attr_arr[vm_id].valid)
                 {
                     // Attributes were checked for validity above
-                    sept_l2_set_leaf_given_hpa_with_hkid(l2_septe_p[vm_id], l2_attr_list_entry.attr_arr[vm_id], set_hkid_to_pa(td_page_pa, tdr_p->key_management_fields.hkid), gpa_list_entry.pending);
+                    sept_l2_set_leaf_given_hpa_with_hkid(l2_septe_p[vm_id], l2_attr_list_entry.attr_arr[vm_id], set_hkid_to_pa(td_page_pa, tdr_p->key_management_fields.hkid),
+                        gpa_list_entry.pending
+                    );
 
                     // Set the alias indication in the L1 SEPT entry
                     sept_set_aliased(&sept_entry_copy, vm_id);
@@ -1008,10 +1052,9 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                 }
             }
 
-            sept_unblock(&sept_entry_copy);
             sept_lock_release_local(&sept_entry_copy);
-            sept_entry_ptr->raw = sept_entry_copy.raw;
-
+            sept_unblock(&sept_entry_copy);
+            atomically_update_sept_state_keep_tdhp(sept_entry_ptr, sept_entry_copy.raw);
             septe_locked_flag = false;
 
             break;
@@ -1050,6 +1093,16 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
 
             // Map the 4KB TD private page
             td_page_p = map_pa(td_page_pa.raw_void, TDX_RANGE_RW);
+
+            // REMIGRATE never uses the new page, if provided.
+            // Set the INVALID flag in the new page list entry to indicate that the page was not used.
+            if ((new_page_list_p != NULL) && (new_page_list_entry.invalid == 0))
+            {
+                new_page_list_p[entry_num].invalid = 1;
+            }
+
+            start_per_page_crypto(migsc_p, migs_i, gpa_list_entry,
+                                  l2_attr_list_p, entry_num, &l2_attr_list_entry);
 
             if (gpa_list_entry.pending)
             {
@@ -1103,7 +1156,9 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                 &sept_entry_copy,
                 attributes,
                 td_page_pa,
-                state_encoding);
+                state_encoding,
+                false,
+                false);
 
             bool_t is_termination_required = false;
             // Go over all possible L2 aliases and update them
@@ -1133,7 +1188,8 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                     }
                     
                     // Sanity check on the attributes
-                    if (!is_gpa_attr_legal(l2_attr_list_entry.attr_arr[vm_id]))
+                    if (!is_gpa_attr_legal(l2_attr_list_entry.attr_arr[vm_id]
+                    ))
                     {
                         gpa_list_error_type = GPA_LIST_ERROR_TYPE_LIST_ABORT;
                         return_val = api_error_with_operand_id(TDX_OPERAND_INVALID, OPERAND_ID_GPA_LIST_ENTRY);
@@ -1153,7 +1209,7 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                                    entry page before calling TDH.IMPORT.MEM.  In this case we abort the import (we are in the in-order phase). */
                         if (l2_attr_list_entry.attr_arr[vm_id].valid)
                         {
-                            // Cases 3 or 4: import indicates that an alias is needed
+                            // Case 3: There is no existing alias (not even L2 SEPT page) but import indicates that an alias is needed
                             gpa_list_error_type = GPA_LIST_ERROR_TYPE_LIST_ABORT;
                             return_val = api_error_with_l2_details(TDX_L2_SEPT_WALK_FAILED, vm_id, (uint16_t)sept_entry_level);
                             err_status = GPA_ENTRY_STATUS_L2_SEPT_WALK_FAILED;
@@ -1161,26 +1217,25 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                             break;
                         }
 
-                        // The L1 alias bit can not be set if L2 SEPT entry doesn't exist
+                        // The L1 alias bit must not be set if L2 SEPT entry doesn't exist
                         extended_fatal_info_t extended_fatal_info = prepare_extended_fatal_info_sept_eptp(
                             tdcs_p->executions_ctl_fields.eptp.raw, (uint8_t)sept_entry_level, page_gpa.raw, sept_entry_copy);
-                        fatal_error(FATAL_ERROR_ID_50, FATAL_INFO_FORMAT_SEPT_EPTP_INFO, &extended_fatal_info);
+                        fatal_error(FATAL_ERROR_ID_352, FATAL_INFO_FORMAT_SEPT_EPTP_INFO, &extended_fatal_info);
                     }
                     else
                     {
                         // L2 SEPT entry found
 
-                        // Can't be non-leaf, page size is 4KB
-                        tdx_debug_assert(is_secure_ept_leaf_entry(l2_septe_p[vm_id]));
-
                         if (l2_attr_list_entry.attr_arr[vm_id].valid)
                         {
-                            // Cases 3 or 4: import indicates that an alias is needed
+                            // Cases 3 or 4: Import indicates that an alias is needed, the L2 SEPT entry may be free or not
                             // Update the L2 SEPT entry based on the L2 attributes list entry.
                             // The L2 SEPT entry is L2_BLOCKED if the imported page is PENDING.
-                            sept_l2_set_leaf_given_hpa_with_hkid(l2_septe_p[vm_id], l2_attr_list_entry.attr_arr[vm_id], set_hkid_to_pa(td_page_pa, tdr_p->key_management_fields.hkid), gpa_list_entry.pending);
+                            sept_l2_set_leaf_given_hpa_with_hkid(l2_septe_p[vm_id], l2_attr_list_entry.attr_arr[vm_id], set_hkid_to_pa(td_page_pa, tdr_p->key_management_fields.hkid),
+                                                                 gpa_list_entry.pending
+                                                                 );
 
-                            // Set the alias indication in the L1 SEPT entry (note: could have been already aliased or not)
+                            // Set the alias indication in the L1 SEPT entry (note: could have been already aliased (case 4) or not (case 3))
                             sept_set_aliased(&sept_entry_copy, vm_id);
                         }
                         else
@@ -1207,7 +1262,7 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
             td_page_pamt_entry_p->bepoch.mig_epoch = tdcs_p->migration_fields.mig_epoch;
 
             sept_lock_release_local(&sept_entry_copy);
-            sept_entry_ptr->raw = sept_entry_copy.raw;
+            atomically_update_sept_state_keep_tdhp(sept_entry_ptr, sept_entry_copy.raw);
 
             septe_locked_flag = false;
 
@@ -1221,6 +1276,9 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                 return_val = api_error_with_operand_id(TDX_EPT_ENTRY_STATE_INCORRECT, OPERAND_ID_GPA_LIST_ENTRY);
                 err_status = GPA_ENTRY_STATUS_SEPT_ENTRY_STATE_INCORRECT; break;
             }
+
+            start_per_page_crypto(migsc_p, migs_i, gpa_list_entry,
+                                  l2_attr_list_p, entry_num, &l2_attr_list_entry);
 
             // Calculate the MAC and compare with the MAC list entry
             if (aes_gcm_finalize(&migsc_p->aes_gcm_context, mac) != AES_GCM_NO_ERROR)
@@ -1239,14 +1297,13 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
             td_page_pa.raw = 0;
             td_page_pa.page_4k_num = sept_entry_copy.base;
             td_page_pa = set_hkid_to_pa(td_page_pa, tdr_p->key_management_fields.hkid);
-            td_page_pamt_entry_p = pamt_implicit_get(td_page_pa, PT_4KB);
+            td_page_pamt_entry_p = pamt_implicit_get_with_nl_entry(td_page_pa, PT_4KB, &td_page_pamt_nl_entry_p);
             if ((return_val = acquire_sharex_lock_hp_ex(&td_page_pamt_entry_p->entry_lock, false)) != TDX_SUCCESS)
             {
                 gpa_list_error_type = GPA_LIST_ERROR_TYPE_LIST_ABORT;
                 return_val = abort_import_session(tdcs_p, return_val, OPERAND_ID_GPA_LIST_ENTRY);
                 err_status = GPA_ENTRY_STATUS_TD_PAGE_BUSY_HOST_PRIORITY; break;
             }
-            td_page_pamt_entry_locked_flag = true;
 
             /* Check that the page has not been imported in the current migration epoch.
                PAMT.BEPOCH records the migration epoch of last import.  To avoid confusion
@@ -1264,7 +1321,6 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                 return_val = api_error_with_operand_id(TDX_MIGRATED_IN_CURRENT_EPOCH, OPERAND_ID_GPA_LIST_ENTRY);
                 err_status = GPA_ENTRY_STATUS_MIGRATED_IN_CURRENT_EPOCH;
                 release_sharex_lock_hp_ex(&td_page_pamt_entry_p->entry_lock);
-                td_page_pamt_entry_locked_flag = false;
                 break;
             }
 
@@ -1290,11 +1346,12 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                     l2_septe_p[vm_id] = NULL;
                 }
             }
-
+            
             // Update the SEPT entry in memory to the REMOVED state and record the migration epoch
             set_remove_and_release_locks_for_import(&sept_entry_copy, tdcs_p);
-			atomic_mem_write_64b(&sept_entry_ptr->raw, sept_entry_copy.raw);
+            atomically_update_sept_state_keep_tdhp(sept_entry_ptr, sept_entry_copy.raw);
             septe_locked_flag = false;
+
 
             // Atomically decrement TDR child count
             (void)_lock_xadd_64b(&tdr_p->management_fields.chldcnt, (uint64_t)-1);
@@ -1303,8 +1360,19 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                to PT_NDA. PT of all the PAMT entries at the levels below and above are already
                PT_NDA. */
             td_page_pamt_entry_p->pt = PT_NDA;
+
+            // CANCEL never uses the new page, if provided.
+            // If not provided, set the page list entry with the removed page information.
+            if ((new_page_list_p != NULL) && (new_page_list_entry.invalid == 1))
+            {
+                new_page_list_entry.raw = remove_hkid_from_pa((pa_t)td_page_pa).raw;
+                new_page_list_entry.removed = 1;
+                new_page_list_entry.raw |= pamt_dec_nl_page_count_and_get_hint(td_page_pamt_nl_entry_p);
+                new_page_list_entry.invalid = 0;
+                new_page_list_p[entry_num] = new_page_list_entry;
+            }
+
             release_sharex_lock_hp_ex(&td_page_pamt_entry_p->entry_lock);
-            td_page_pamt_entry_locked_flag = false;
 
             break;
         }
@@ -1347,7 +1415,7 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
                 /* Note that this is always associated with td_page_pa, not td_page_pa_with_hkid,
                     since PAMT walk is only done for the MIGRATE case, where the page HPA is provided
                     as an explict input with HKID bits set to 0. */
-                pamt_unwalk(td_page_pa, td_page_pamt_block_desc, td_page_pamt_entry_p, TDX_LOCK_EXCLUSIVE, PT_4KB);
+                pamt_unwalk(&td_page_pamt_walk_result);
             }
             else
             {
@@ -1355,6 +1423,11 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
             }
             td_page_pamt_block_locked_flag = false;
             td_page_pamt_entry_p = NULL;
+        }
+
+        if (td_page_pamt_nl_entry_p)
+        {
+            free_la(td_page_pamt_nl_entry_p);
         }
 
         if ((err_status != GPA_ENTRY_STATUS_SUCCESS) &&
@@ -1387,15 +1460,33 @@ api_error_type tdh_import_mem(gpa_list_info_t gpa_list_info, uint64_t target_tdr
         /*--------------------------------------
            Done processing one GPA list entry
         --------------------------------------*/
-        if (TDX_INTERRUPTED_RESUMABLE == (return_val = finish_entry_processing(&entry_num, gpa_list_info, migsc_p,
+        return_val = finish_entry_processing(&entry_num, gpa_list_info, migsc_p,
                                                                                mig_buff_list_pa, mac_list_pa,
-                                                                               new_page_list_pa, tdcs_p, problem_ops_count, l2_attr_list_pa)))
+                                                                               new_page_list_pa, tdcs_p, problem_ops_count
+                                                                               , l2_attr_list_pa
+                                                                               );
+        if ((return_val == TDX_INTERRUPTED_RESUMABLE) ||
+            (return_val == TDX_INTERRUPTED_BUSY))
         {
             break;
         }
     } // for
 
 EXIT:
+    if (interrupted)
+    {
+        // There is a pending interrupt.  Save the state for the next invocation.
+        migsc_p->interrupted_state.valid = true;
+        migsc_p->interrupted_state.func.raw = local_data_ptr->vmm_regs.rax;
+        migsc_p->interrupted_state.gpa_list_info.raw = gpa_list_info.raw;
+        migsc_p->interrupted_state.gpa_list_info.first_entry = entry_num;
+        migsc_p->interrupted_state.mig_buff_list_pa.raw = mig_buff_list_pa.raw;
+        migsc_p->interrupted_state.mac_list_pa[0].raw = mac_list_pa[0].raw;
+        migsc_p->interrupted_state.mac_list_pa[1].raw = mac_list_pa[1].raw;
+        migsc_p->interrupted_state.l2_attr_list_pa.raw = l2_attr_list_pa.raw;
+        migsc_p->interrupted_state.new_page_list_pa.raw = new_page_list_pa.raw;
+        migsc_p->mbmd.mem.header.mig_epoch = tdcs_p->migration_fields.mig_epoch;
+    }
 
     gpa_list_info.first_entry = entry_num;
 
@@ -1439,6 +1530,11 @@ EXIT:
         free_la(mig_buff_list_p);
     }
 
+    if (mig_buff_mapped)
+    {
+        free_la(mig_buff_p);
+    }
+
     if (migsc_locked_flag)
     {
         migsc_unlock(&tdcs_p->f_migsc_links[migs_i]);
@@ -1479,7 +1575,7 @@ EXIT:
 
     if (sept_tree_locked_flag)
     {
-        release_sharex_lock_sh(&tdcs_p->executions_ctl_fields.secure_ept_lock);
+        release_sharex_lock_hp_sh(&tdcs_p->executions_ctl_fields.secure_ept_lock);
     }
 
     if (op_state_locked_flag)
@@ -1494,7 +1590,7 @@ EXIT:
 
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_SHARED, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_p);
     }
 

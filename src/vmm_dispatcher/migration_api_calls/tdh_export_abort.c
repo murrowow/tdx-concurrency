@@ -39,8 +39,7 @@ api_error_type tdh_export_abort(uint64_t target_tdr_pa, uint64_t hpa_and_size_pa
     // TDR and TDCS
     tdr_t             *tdr_p = NULL;         // Pointer to the owner TDR page
     pa_t               tdr_pa;               // Physical address of the owner TDR page
-    pamt_block_t       tdr_pamt_block;       // TDR PAMT block
-    pamt_entry_t      *tdr_pamt_entry_ptr = NULL;
+    pamt_walk_result_t tdr_pamt_walk_result;
     tdcs_t            *tdcs_p = NULL;        // Pointer to the TDCS structure
     bool_t             tdr_locked_flag = false;
 
@@ -73,8 +72,7 @@ api_error_type tdh_export_abort(uint64_t target_tdr_pa, uint64_t hpa_and_size_pa
                                                  TDX_RANGE_RO,
                                                  TDX_LOCK_SHARED,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_p);
 
@@ -232,6 +230,7 @@ api_error_type tdh_export_abort(uint64_t target_tdr_pa, uint64_t hpa_and_size_pa
         }
     }
 
+
     /*---------------------------------------------------------------
         ALL_CHECKS_PASSED:  The function is guaranteed to succeed
     ---------------------------------------------------------------*/
@@ -265,7 +264,7 @@ EXIT:
 
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_SHARED, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_p);
     }
 

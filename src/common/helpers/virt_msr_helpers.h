@@ -499,6 +499,7 @@ void init_virt_ia32_vmx_msrs(tdcs_t* tdcs_ptr);
 // Check the native value of IA32_ARCH_CAPABILITIES MSR
 _STATIC_INLINE_ bool_t check_native_ia32_arch_capabilities(ia32_arch_capabilities_t arch_cap)
 {
+
     return (arch_cap.rdcl_no == 1) &&              // Bit 0
            (arch_cap.irbs_all == 1) &&             // Bit 1
            (arch_cap.rsba == 0) &&                 // Bit 2

@@ -88,7 +88,7 @@ _STATIC_INLINE_ lock_return_t acquire_mutex_lock_or_wait(mutex_lock_t * lock_ptr
 
     return LOCK_RET_SUCCESS;
 }
-#endif // DEBUGFEATURE_TDX_DBG_TRACE_DEBUGFEATURE_BULLSEYE_BUILD
+#endif // defined(DEBUGFEATURE_TDX_DBG_TRACE)
 
 _STATIC_INLINE_ void release_mutex_lock(mutex_lock_t * lock_ptr)
 {
@@ -313,6 +313,11 @@ typedef union ALIGN(2)
 } sharex_hp_lock_t;
 tdx_static_assert(sizeof(sharex_hp_lock_t) == 2, sharex_hp_lock_t);
 
+_STATIC_INLINE_ bool_t is_lock_hp_set(sharex_hp_lock_t* lock)
+{
+    return lock->host_prio;
+}
+
 #define SHAREX_HP_FULL_COUNTER           0x3FFF
 
 _STATIC_INLINE_ api_error_code_e acquire_sharex_lock_hp_sh(sharex_hp_lock_t * lock_ptr, bool_t is_guest)
@@ -504,6 +509,7 @@ _STATIC_INLINE_ api_error_code_e promote_sharex_lock_hp(sharex_hp_lock_t * lock_
         return TDX_OPERAND_BUSY;
     }
 }
+
 
 _STATIC_INLINE_ void release_bit_lock(uint32_t* mem_ptr, uint32_t bit_idx)
 {

@@ -76,27 +76,27 @@ static bool_t md_sys_get_elements(md_field_id_t field_id, const md_lookup_t* ent
             }
             else if (entry->field_id.field_code == MD_SYS_BUILD_DATE_FIELD_CODE)
             {
-                *element_array = TDX_MODULE_BUILD_DATE;
+                *element_array = GLOBAL_TDX_MODULE_BUILD_DATE;
             }
             else if (entry->field_id.field_code == MD_SYS_BUILD_NUM_FIELD_CODE)
             {
-                *element_array = TDX_MODULE_BUILD_NUM;
+                *element_array = GLOBAL_TDX_MODULE_BUILD_NUM;
             }
             else if (entry->field_id.field_code == MD_SYS_MINOR_VERSION_FIELD_CODE)
             {
-                *element_array = TDX_MODULE_MINOR_VER;
+                *element_array = GLOBAL_TDX_MODULE_MINOR_VER;
             }
             else if (entry->field_id.field_code == MD_SYS_MAJOR_VERSION_FIELD_CODE)
             {
-                *element_array = TDX_MODULE_MAJOR_VER;
+                *element_array = GLOBAL_TDX_MODULE_MAJOR_VER;
             }
             else if (entry->field_id.field_code == MD_SYS_UPDATE_VERSION_FIELD_CODE)
             {
-                *element_array = TDX_MODULE_UPDATE_VER;
+                *element_array = GLOBAL_TDX_MODULE_UPDATE_VER;
             }
             else if (entry->field_id.field_code == MD_SYS_INTERNAL_VERSION_FIELD_CODE)
             {
-                *element_array = TDX_MODULE_INTERNAL_VER;
+                *element_array = GLOBAL_TDX_MODULE_INTERNAL_VER;
             }
             else
             {
@@ -117,42 +117,7 @@ static bool_t md_sys_get_elements(md_field_id_t field_id, const md_lookup_t* ent
             }
             else if (entry->field_id.field_code == MD_SYS_TDX_FEATURES0_FIELD_CODE)
             {
-                tdx_features_enum0_t tdx_features_0;
-
-                tdx_features_0.raw = 0;
-                tdx_features_0.td_migration = 1;
-                tdx_features_0.service_td = 1;
-                tdx_features_0.partitioned_td_migration = 1;
-                tdx_features_0.td_preserving = 1;
-                tdx_features_0.tdg_vp_rdwr = 1;
-                tdx_features_0.relaxed_mem_mng_concurrency = 1;
-                tdx_features_0.cpuid_virt_guest_ctrl = 1;
-                tdx_features_0.local_attestation = global_data->seamverifyreport_available;
-                tdx_features_0.td_partitioning = 1;
-                tdx_features_0.td_entry_enhancements = 1;
-                tdx_features_0.host_priority_locks = 1;
-                if (is_not_gnr_a0_stepping())
-                {
-                    tdx_features_0.config_ia32_arch_cap = 1;
-                }
-                tdx_features_0.no_rbp_mod = 1;
-                tdx_features_0.pending_ept_violation_v2 = 1;
-                tdx_features_0.l2_tlb_invd_opt = 1;
-                tdx_features_0.fms_config = 1;
-                tdx_features_0.topology_enum = 1;
-                tdx_features_0.ve_reduction = 1;
-                tdx_features_0.event_filtering = 1;
-                tdx_features_0.icssd = 1;
-                tdx_features_0.fixed_ctr12_prof = 1;
-                tdx_features_0.maxpa_virt = 1;
-                tdx_features_0.maxgpa_virt = 1;
-                tdx_features_0.fatal_diagnostics = 1;
-                tdx_features_0.cpuid2_virt = 1;
-                tdx_features_0.enhanced_event_filtering = 0;
-                tdx_features_0.tdx_io = 0;
-                tdx_features_0.tdx_connect_partitioning = tdx_features_0.tdx_io;
-
-                *element_array = tdx_features_0.raw;
+                *element_array = get_tdx_features_enum0().raw;
             }
             else
             {
@@ -191,6 +156,15 @@ static bool_t md_sys_get_elements(md_field_id_t field_id, const md_lookup_t* ent
                      entry->field_id.field_code == MD_SYS_PAMT_1G_ENTRY_SIZE_FIELD_CODE)
             {
                 *element_array = sizeof(pamt_entry_t);
+            }
+            else if (entry->field_id.field_code == MD_SYS_PAMT_PAGE_BITMAP_ENTRY_BITS_FIELD_CODE)
+            {
+                *element_array = 1;
+            }
+            else if (entry->field_id.field_code == MD_SYS_MIN_DYNAMIC_PAMT_NUM_HKID_BITS_FIELD_CODE)
+            {
+                *element_array = global_data->max_pa > MAX_DYNAMIC_PAMT_HKID_START_BIT ?
+                        (global_data->max_pa - MAX_DYNAMIC_PAMT_HKID_START_BIT) : 0;
             }
             else
             {
@@ -406,15 +380,15 @@ static bool_t md_sys_get_elements(md_field_id_t field_id, const md_lookup_t* ent
         case MD_SYS_TDX_MODULE_HANDOFF_CLASS_CODE:
             if (entry->field_id.field_code == MD_SYS_MODULE_HV_FIELD_CODE)
             {
-                *element_array = TDX_MODULE_HV;
+                *element_array = GLOBAL_TDX_MODULE_HV;
             }
             else if (entry->field_id.field_code == MD_SYS_MIN_UPDATE_HV_FIELD_CODE)
             {
-                *element_array = TDX_MIN_UPDATE_HV;
+                *element_array = GLOBAL_TDX_MIN_UPDATE_HV;
             }
             else if (entry->field_id.field_code == MD_SYS_NO_DOWNGRADE_FIELD_CODE)
             {
-                *element_array = TDX_NO_DOWNGRADE;
+                *element_array = GLOBAL_TDX_NO_DOWNGRADE;
             }
             else if (entry->field_id.field_code == MD_SYS_NUM_HANDOFF_PAGES_FIELD_CODE)
             {

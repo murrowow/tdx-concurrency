@@ -228,7 +228,7 @@ static void load_vmm_state_before_td_exit(tdx_module_local_t* local_data_ptr)
 
     /*
      *  Use vmwrite to update the following SEAM-VMCS guest fields
-     *  IA32_DEBUGCTL, IA32_PERF_GLOBAL_CTRL, IA32_RTIT_CTL, IA32_LBR_CTL and DR7
+     *  IA32_DEBUGCTL, IA32_PERF_GLOBAL_CTRL, IA32_RTIT_CTL, IA32_LBR_CTL, DR7 and interruptability state
      */
     uint64_t debugctl_msr_value;
     ia32_vmread(VMX_GUEST_IA32_DEBUGCTLMSR_FULL_ENCODE, &debugctl_msr_value);
@@ -247,6 +247,19 @@ static void load_vmm_state_before_td_exit(tdx_module_local_t* local_data_ptr)
         ia32_vmwrite(VMX_GUEST_LBR_CTL_FULL_ENCODE, VMX_GUEST_LBR_CTL_INIT_VALUE);
     }
     ia32_vmwrite(VMX_GUEST_DR7_ENCODE, VMX_GUEST_DR7_INIT_VALUE);
+    
+    vmx_exit_inter_info_t vm_exit_inter_info;
+    vm_exit_inter_info.raw = local_data_ptr->vmm_regs.r9;
+    vm_vmexit_exit_reason_t vm_exit_reason;
+    vm_exit_reason.raw = local_data_ptr->vmm_regs.rax;
+    if ((vm_exit_reason.basic_reason == VMEXIT_REASON_EXCEPTION_OR_NMI) && 
+        (vm_exit_inter_info.interruption_type == VMEXIT_INTER_INFO_TYPE_NMI))
+    {
+        vmx_guest_inter_state_t guest_inter_state;
+        ia32_vmread(VMX_GUEST_INTERRUPTIBILITY_ENCODE, &guest_inter_state.raw);
+        guest_inter_state.blocking_by_nmi = 1;
+        ia32_vmwrite(VMX_GUEST_INTERRUPTIBILITY_ENCODE, guest_inter_state.raw);
+    }
 
 }
 
@@ -460,7 +473,8 @@ static void async_tdexit_internal(api_error_code_e tdexit_case,
 
     td_vmexit_to_vmm(vcpu_state, last_td_exit, scrub_mask,
                      0, (tdexit_case == TDX_NON_RECOVERABLE_TD_NON_ACCESSIBLE),
-                     ((error_code.host_recoverability_hint == 1)));
+                     ((error_code.host_recoverability_hint == 1)
+                         ));
 }
 
 void write_l2_enter_outputs(tdvps_t* tdvps_ptr, uint16_t vm_id)
@@ -561,7 +575,7 @@ void td_vmexit_to_vmm(uint8_t vcpu_state, uint8_t last_td_exit, uint64_t scrub_m
     // 4.  At this point TDR, TDCS and TDVPS will no longer be used during the flow.
     //     Release the shared lock on those control structures, which was acquired by TDHVPENTER.
     pamt_implicit_release_lock(vp_ctx->tdr_pamt_entry, TDX_LOCK_SHARED);
-    pamt_unwalk(vp_ctx->tdvpr_pa, vp_ctx->tdvpr_pamt_block, vp_ctx->tdvpr_pamt_entry, TDX_LOCK_SHARED, PT_4KB);
+    pamt_unwalk(&vp_ctx->tdvpr_pamt_walk_result);
 
     // Load host VMM state:
     set_seam_vmcs_as_active();
@@ -660,6 +674,7 @@ static void td_l2_to_l1_exit_internal(api_error_code_e tdexit_case, vm_vmexit_ex
 
     // Update L1's host state fields before entry
     update_host_state_in_td_vmcs(ld_p, tdvps_ptr, tdvps_ptr->management.curr_vm);
+
 
     // Advance L1 guest RIP to the next instruction, following the TDCALL(TDG.VP.VMCALL) which entered L2
     increment_fixed_ctr0(ld_p->vp_ctx.tdcs);

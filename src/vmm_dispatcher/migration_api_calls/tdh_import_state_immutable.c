@@ -244,8 +244,7 @@ api_error_type tdh_import_state_immutable(uint64_t target_tdr_pa, uint64_t hpa_a
     // TDR and TDCS
     tdr_t* tdr_p = NULL;         // Pointer to the owner TDR page
     pa_t                 tdr_pa;               // Physical address of the owner TDR page
-    pamt_block_t         tdr_pamt_block;       // TDR PAMT block
-    pamt_entry_t* tdr_pamt_entry_ptr = NULL;
+    pamt_walk_result_t   tdr_pamt_walk_result;
     tdcs_t* tdcs_p = NULL;        // Pointer to the TDCS structure
     bool_t               tdr_locked_flag = false;
 
@@ -307,8 +306,7 @@ api_error_type tdh_import_state_immutable(uint64_t target_tdr_pa, uint64_t hpa_a
                                                  TDX_RANGE_RW,
                                                  TDX_LOCK_EXCLUSIVE,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_p);
 
@@ -505,20 +503,23 @@ api_error_type tdh_import_state_immutable(uint64_t target_tdr_pa, uint64_t hpa_a
         page_list_i++; // Update to the index of the next page in the list
 
         // If we haven't gone through all the pages, check for a pending interrupt
-        if ((page_list_i <= page_list_info.last_entry) && is_interrupt_pending_host_side())
+        if (page_list_i <= page_list_info.last_entry)
         {
-            // There is a pending interrupt.  Save the state for the next invocation.
-            migsc_p->interrupted_state.valid = true;
-            migsc_p->interrupted_state.func.raw = local_data_ptr->vmm_regs.rax;
-            migsc_p->interrupted_state.page_list_info = page_list_info;
-            migsc_p->interrupted_state.num_processed = page_list_i;
-            migsc_p->interrupted_state.field_id = field_id;
-            migsc_p->interrupted_state.sys_migrated = sys_imported;
+            return_val = check_host_interrupt_and_hp_bit(&tdcs_p->executions_ctl_fields.secure_ept_lock,true);
+            if (TDX_SUCCESS != return_val)
+            {
+                // There is a pending interrupt.  Save the state for the next invocation.
+                migsc_p->interrupted_state.valid = true;
+                migsc_p->interrupted_state.func.raw = local_data_ptr->vmm_regs.rax;
+                migsc_p->interrupted_state.page_list_info = page_list_info;
+                migsc_p->interrupted_state.num_processed = page_list_i;
+                migsc_p->interrupted_state.field_id = field_id;
+                migsc_p->interrupted_state.sys_migrated = sys_imported;
 
-            local_data_ptr->vmm_regs.rcx = original_rcx;
-            local_data_ptr->vmm_regs.rdx = original_rdx;
-            return_val = TDX_INTERRUPTED_RESUMABLE;
-            goto EXIT;
+                local_data_ptr->vmm_regs.rcx = original_rcx;
+                local_data_ptr->vmm_regs.rdx = original_rdx;
+                goto EXIT;
+            }
         }
     } while ((uint64_t)page_list_i <= page_list_info.last_entry);
 
@@ -563,6 +564,7 @@ api_error_type tdh_import_state_immutable(uint64_t target_tdr_pa, uint64_t hpa_a
         goto EXIT;
     }
 
+
     // Update the migration stream counters and mark as non-interrupted
     tdcs_p->migration_fields.total_mb_count = 1;
 
@@ -605,7 +607,7 @@ EXIT:
 
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_EXCLUSIVE, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_p);
     }
 

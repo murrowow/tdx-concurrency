@@ -44,7 +44,7 @@ SRC_DIRS := src/common src/common/accessors src/common/crypto \
 			src/common/data_structures src/common/debug src/common/helpers src/common/memory_handlers \
 			src/common/metadata_handlers src/common/x86_defs src/td_dispatcher src/td_dispatcher/vm_exits \
 			src/td_transitions src/vmm_dispatcher src/vmm_dispatcher/api_calls \
-			src/common/exception_handling src/td_dispatcher/vm_exits_l2 include/auto_gen_1_5 src/vmm_dispatcher/migration_api_calls
+			src/common/exception_handling src/td_dispatcher/vm_exits_l2 include/auto_gen_1_5 include/ src/vmm_dispatcher/migration_api_calls
 SRC_DIRS := $(foreach dir,$(SRC_DIRS),$(PROJ_DIR)/$(dir))
 
 
@@ -53,11 +53,7 @@ VPATH := $(SRC_DIRS)
 # Source and headers files
 C_SRC_FILES = $(foreach dir,$(SRC_DIRS),$(sort $(wildcard $(dir)/*.c)))
 
-ifndef PERF_TDX
-ifndef SUPPRESS_PERF_UTILS_FILTER_OUT
  C_SRC_FILES := $(filter-out $(PROJ_DIR)/src/common/helpers/perf_meas_util.c, ${C_SRC_FILES})
-endif # SUPPRESS_PERF_UTILS_FILTER_OUT
-endif # PERF_TDX
 ASM_SRC_FILES = $(foreach dir,$(SRC_DIRS),$(sort $(wildcard $(dir)/*.S)))
 SRC_FILES = $(C_SRC_FILES) $(ASM_SRC_FILES)
 HEADER_FILES = $(foreach dir,$(SRC_DIRS),$(sort $(wildcard $(dir)/*.h)))
@@ -68,9 +64,7 @@ __ASM_OBJECTS = $(patsubst %.S, %.o, $(notdir $(ASM_SRC_FILES)))
 
 # Libraries
 CRYPTO_LIB_BUILD_FLAVOR := RELEASE
-ifndef CRYPTO_LIB_VERSION
 CRYPTO_LIB_VERSION      := 1.0.1
-endif # CRYPTO_LIB_VERSION
 CRYPTO_LIB_MAIN_DIR     := $(PROJ_DIR)/libs/ipp/cryptography-primitives-$(CRYPTO_LIB_VERSION)
 CRYPTO_LIB_SRC_DIR      := $(CRYPTO_LIB_MAIN_DIR)/sources
 CRYPTO_LIB_BUILD_PATH   := $(CRYPTO_LIB_MAIN_DIR)/_build/.build/$(CRYPTO_LIB_BUILD_FLAVOR)

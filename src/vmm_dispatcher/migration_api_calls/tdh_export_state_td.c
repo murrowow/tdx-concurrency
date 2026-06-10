@@ -44,8 +44,7 @@ api_error_type tdh_export_state_td(uint64_t target_tdr_pa, uint64_t hpa_and_size
     // TDR and TDCS
     tdr_t             *tdr_p = NULL;         // Pointer to the owner TDR page
     pa_t               tdr_pa;               // Physical address of the owner TDR page
-    pamt_block_t       tdr_pamt_block;       // TDR PAMT block
-    pamt_entry_t      *tdr_pamt_entry_ptr = NULL;
+    pamt_walk_result_t tdr_pamt_walk_result;
     tdcs_t            *tdcs_p = NULL;        // Pointer to the TDCS structure
     bool_t             tdr_locked_flag = false;
 
@@ -69,6 +68,7 @@ api_error_type tdh_export_state_td(uint64_t target_tdr_pa, uint64_t hpa_and_size
     md_field_id_t      next_field_id;
 
     api_error_type     return_val = TDX_OPERAND_INVALID;
+    api_error_type        tmp_return_val = TDX_OPERAND_INVALID;
 
     md_list_t          md_list;
 
@@ -93,8 +93,7 @@ api_error_type tdh_export_state_td(uint64_t target_tdr_pa, uint64_t hpa_and_size
                                                  TDX_RANGE_RO,
                                                  TDX_LOCK_SHARED,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_p);
 
@@ -348,7 +347,8 @@ api_error_type tdh_export_state_td(uint64_t target_tdr_pa, uint64_t hpa_and_size
             }
 
             // Check for a pending interrupt
-            if (is_interrupt_pending_host_side())
+            tmp_return_val = check_host_interrupt_and_hp_bit(&tdcs_p->executions_ctl_fields.secure_ept_lock,true);
+            if (TDX_SUCCESS != tmp_return_val)
             {
                 // There is a pending interrupt.  Save the state for the next invocation.
                 migsc_p->interrupted_state.valid = true;
@@ -358,8 +358,8 @@ api_error_type tdh_export_state_td(uint64_t target_tdr_pa, uint64_t hpa_and_size
                 migsc_p->interrupted_state.field_id.raw = next_field_id.raw;
 
                 migsc_p->interrupted_state.num_processed = page_list_i;
+                return_val = tmp_return_val;
 
-                return_val = TDX_INTERRUPTED_RESUMABLE;
             }
             else
             {
@@ -371,7 +371,8 @@ api_error_type tdh_export_state_td(uint64_t target_tdr_pa, uint64_t hpa_and_size
 
     local_data_ptr->vmm_regs.rdx = (uint64_t)page_list_i;
 
-    if (return_val != TDX_INTERRUPTED_RESUMABLE)
+    if (return_val != TDX_INTERRUPTED_RESUMABLE &&
+        return_val != TDX_INTERRUPTED_BUSY)
     {
         return_val = TDX_SUCCESS;
     }
@@ -390,7 +391,7 @@ EXIT:
 
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_SHARED, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_p);
     }
 

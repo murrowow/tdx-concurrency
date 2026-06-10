@@ -37,6 +37,9 @@
 #include "helpers/helpers.h"
 #include "metadata_handlers/metadata_generic.h"
 
+
+
+
 _STATIC_INLINE_ void mark_lp_as_busy(void)
 {
     get_local_data()->lp_is_busy = true;
@@ -63,6 +66,7 @@ void tdx_vmm_dispatcher(void)
     // Get leaf code from RAX in local data (saved on entry)
     tdx_leaf_and_version_t leaf_opcode;
     leaf_opcode.raw = local_data->vmm_regs.rax;
+
 
     ia32_core_capabilities_t core_capabilities;
 
@@ -128,6 +132,7 @@ void tdx_vmm_dispatcher(void)
         goto EXIT;
     }
 
+
     // Only a few functions have multiple versions
     if (leaf_opcode.version > 0)
     {
@@ -149,7 +154,8 @@ void tdx_vmm_dispatcher(void)
         }
     }
 
-    if (SYS_SHUTDOWN == global_data->global_state.sys_state)
+    if ((SYS_SHUTDOWN == global_data->global_state.sys_state)
+       )
     {
         if (leaf_opcode.leaf != TDH_SYS_LP_SHUTDOWN_LEAF)
         {
@@ -281,8 +287,7 @@ void tdx_vmm_dispatcher(void)
     }
     case TDH_MNG_RD_LEAF:
     {
-        local_data->vmm_regs.rax = tdh_mng_rd(local_data->vmm_regs.rcx, local_data->vmm_regs.rdx,
-                                              leaf_opcode.version);
+        local_data->vmm_regs.rax = tdh_mng_rd(local_data->vmm_regs.rcx, local_data->vmm_regs.rdx, leaf_opcode.version);
         break;
     }
     case TDH_MEM_RD_LEAF:
@@ -293,15 +298,14 @@ void tdx_vmm_dispatcher(void)
     case TDH_MNG_WR_LEAF:
     {
         local_data->vmm_regs.rax = tdh_mng_wr(local_data->vmm_regs.rcx,
-                                             local_data->vmm_regs.rdx,
-                                             local_data->vmm_regs.r8,
-                                             local_data->vmm_regs.r9);
+                                              local_data->vmm_regs.rdx,
+                                              local_data->vmm_regs.r8,
+                                              local_data->vmm_regs.r9);
         break;
     }
     case TDH_MEM_WR_LEAF:
     {
-        local_data->vmm_regs.rax = tdh_mem_wr(local_data->vmm_regs.rcx, local_data->vmm_regs.rdx,
-                                                    local_data->vmm_regs.r8);
+        local_data->vmm_regs.rax = tdh_mem_wr(local_data->vmm_regs.rcx, local_data->vmm_regs.rdx, local_data->vmm_regs.r8);
         break;
     }
     case TDH_MEM_PAGE_DEMOTE_LEAF:
@@ -311,8 +315,7 @@ void tdx_vmm_dispatcher(void)
 
         td_handle_and_flags_t target_tdr_and_flags = { .raw = local_data->vmm_regs.rdx };
 
-        local_data->vmm_regs.rax = tdh_mem_page_demote(page_info, target_tdr_and_flags,
-                                                       local_data->vmm_regs.r12, local_data->vmm_regs.r13);
+        local_data->vmm_regs.rax = tdh_mem_page_demote(page_info, target_tdr_and_flags, local_data->vmm_regs.r12, local_data->vmm_regs.r13);
         break;
     }
     case TDH_VP_ENTER_LEAF:
@@ -406,7 +409,8 @@ void tdx_vmm_dispatcher(void)
 
         local_data->vmm_regs.rax = tdh_sys_config(local_data->vmm_regs.rcx,
                                                  local_data->vmm_regs.rdx,
-                                                 sysconfig_options);
+                                                 sysconfig_options
+                                                 );
         break;
     }
     case TDH_SYS_KEY_CONFIG_LEAF:
@@ -461,7 +465,7 @@ void tdx_vmm_dispatcher(void)
     }
     case TDH_SYS_UPDATE_LEAF:
     {
-        local_data->vmm_regs.rax = tdh_sys_update();
+		local_data->vmm_regs.rax = tdh_sys_update();
         break;
     }
     case TDH_MEM_TRACK_LEAF:
@@ -494,6 +498,24 @@ void tdx_vmm_dispatcher(void)
                                              field_code,
                                              local_data->vmm_regs.r8,
                                              local_data->vmm_regs.r9);
+        break;
+    }
+    case TDH_PHYMEM_PAMT_ADD_LEAF:
+    {
+        page_size_api_input_t page_info = { .raw = local_data->vmm_regs.rcx };
+
+        local_data->vmm_regs.rax = tdh_phymem_pamt_add(page_info,
+                                             local_data->vmm_regs.rdx,
+                                             local_data->vmm_regs.r8);
+
+        break;
+    }
+    case TDH_PHYMEM_PAMT_REMOVE_LEAF:
+    {
+        page_size_api_input_t page_info = { .raw = local_data->vmm_regs.rcx };
+
+        local_data->vmm_regs.rax = tdh_phymem_pamt_remove(page_info);
+
         break;
     }
     case TDH_SERVTD_BIND_LEAF:
@@ -685,6 +707,9 @@ void tdx_vmm_dispatcher(void)
                                             local_data->vmm_regs.r13);
         break;
     }
+
+
+
     default:
     {
         TDX_ERROR("tdx_vmm_dispatcher - TDX_OPERAND_INVALID - invalid leaf = %d\n", leaf_opcode);

@@ -41,16 +41,14 @@ api_error_type tdh_mem_page_relocate(uint64_t source_page_pa,
     // TDR related variables
     pa_t                  tdr_pa;                    // TDR physical address
     tdr_t               * tdr_ptr = NULL;            // Pointer to the TDR page (linear address)
-    pamt_block_t          tdr_pamt_block;            // TDR PAMT block
-    pamt_entry_t        * tdr_pamt_entry_ptr;        // Pointer to the TDR PAMT entry
+    pamt_walk_result_t    tdr_pamt_walk_result;
     bool_t                tdr_locked_flag = false;   // Indicate TDR is locked
 
     tdcs_t              * tdcs_ptr = NULL;           // Pointer to the TDCS structure (Multi-page)
 
     // Page target
     pa_t                  target_pa;                        // Physical address of the new TD page target
-    pamt_block_t          target_page_pamt_block;           // New TD page PAMT block
-    pamt_entry_t        * target_page_pamt_entry_ptr;       // Pointer to the TD PAMT entry
+    pamt_walk_result_t    target_page_pamt_walk_result;
     bool_t                target_page_locked_flag = false;  // Indicate TD page is locked
     void*                 target_ptr = NULL;
 
@@ -63,7 +61,8 @@ api_error_type tdh_mem_page_relocate(uint64_t source_page_pa,
     bool_t                sept_locked_flag = false;                       // Indicate SEPT is locked
     bool_t                septe_locked_flag = false;                      // Indicate SEPT entry is locked
     pa_t                  source_pa = {.raw = 0};
-    pamt_entry_t*         mapped_page_pamt_ptr = NULL;                    // Currently mapped TD page PAMT block
+    pamt_entry_t*         mapped_page_pamt_ptr = NULL;
+    pamt_non_leaf_entry_t* mapped_page_nl_pamt_ptr = NULL;
     void*                 mapped_ptr = NULL;
     bool_t                merged_page_pamt_locked_flag = false;
 
@@ -82,8 +81,7 @@ api_error_type tdh_mem_page_relocate(uint64_t source_page_pa,
                                                  TDX_RANGE_RO,
                                                  TDX_LOCK_SHARED,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_ptr);
     if (return_val != TDX_SUCCESS)
@@ -120,7 +118,8 @@ api_error_type tdh_mem_page_relocate(uint64_t source_page_pa,
                                                       &mapped_page_sept_entry_ptr,
                                                       &mapped_page_level_entry,
                                                       &mapped_page_sept_entry_copy,
-                                                      &sept_locked_flag);
+                                                      &sept_locked_flag,
+                                                      false);
     if (return_val != TDX_SUCCESS)
     {
         if (return_val == api_error_with_operand_id(TDX_EPT_WALK_FAILED, OPERAND_ID_RCX))
@@ -148,7 +147,7 @@ api_error_type tdh_mem_page_relocate(uint64_t source_page_pa,
     mapped_page_sept_entry_copy = *mapped_page_sept_entry_ptr;
 
     // Verify the located entry points is a leaf entry and relocate is allowed
-    if (!is_secure_ept_leaf_entry(&mapped_page_sept_entry_copy) ||
+    if (!is_secure_ept_leaf_entry(&mapped_page_sept_entry_copy, false) ||
         !sept_state_is_seamcall_leaf_allowed(TDH_MEM_PAGE_RELOCATE, mapped_page_sept_entry_copy))
     {
         return_val = api_error_with_operand_id(TDX_EPT_ENTRY_STATE_INCORRECT, OPERAND_ID_RCX);
@@ -170,8 +169,8 @@ api_error_type tdh_mem_page_relocate(uint64_t source_page_pa,
     }
 
     // Verify the TLB tacking of the blocked page has been completed
-    if ((return_val = pamt_implicit_get_and_lock(source_pa, (page_size_t)mapped_page_level_entry,
-                      TDX_LOCK_EXCLUSIVE, &mapped_page_pamt_ptr, false)) != TDX_SUCCESS)
+    if ((return_val = pamt_implicit_get_with_nl_entry_and_lock(source_pa, (page_size_t)mapped_page_level_entry,
+                      TDX_LOCK_EXCLUSIVE, &mapped_page_pamt_ptr, &mapped_page_nl_pamt_ptr, false)) != TDX_SUCCESS)
     {
         TDX_ERROR("Can't acquire lock on mapped page pamt entry\n");
         return_val = api_error_with_operand_id(return_val, OPERAND_ID_RCX);
@@ -199,7 +198,6 @@ api_error_type tdh_mem_page_relocate(uint64_t source_page_pa,
             TDX_ERROR("TLB tracking not done\n");
             return_val = TDX_TLB_TRACKING_NOT_DONE;
         }
-
         if (return_val != TDX_SUCCESS)
         {
             return_val = api_error_with_operand_id(return_val, OPERAND_ID_RCX);
@@ -214,8 +212,7 @@ api_error_type tdh_mem_page_relocate(uint64_t source_page_pa,
                                                             TDX_RANGE_RW,
                                                             TDX_LOCK_EXCLUSIVE,
                                                             PT_NDA,
-                                                            &target_page_pamt_block,
-                                                            &target_page_pamt_entry_ptr,
+                                                            &target_page_pamt_walk_result,
                                                             &target_page_locked_flag,
                                                             (void**)&target_ptr);
     if (return_val != TDX_SUCCESS)
@@ -237,9 +234,11 @@ api_error_type tdh_mem_page_relocate(uint64_t source_page_pa,
 
     // Update the target pages PAMT entry with the PT_REG page
     // type and the TDR physical address as the OWNER
-    target_page_pamt_entry_ptr->pt = PT_REG;
-    set_pamt_entry_owner(target_page_pamt_entry_ptr, tdr_pa);
-    target_page_pamt_entry_ptr->bepoch.raw = 0;
+    target_page_pamt_walk_result.pamt_entry_p->pt = PT_REG;
+    set_pamt_entry_owner(target_page_pamt_walk_result.pamt_entry_p, tdr_pa);
+    target_page_pamt_walk_result.pamt_entry_p->bepoch.raw = 0;
+
+    pamt_inc_nl_page_count(target_page_pamt_walk_result.pamt_walk_path_nl[PT_2MB]);
 
     // Update HPA and unblock any L2 aliases
     // This is done before unblocking the L1 SEPT entry.  This way, if there's an EPT violation in an
@@ -281,19 +280,25 @@ api_error_type tdh_mem_page_relocate(uint64_t source_page_pa,
     ia32e_sept_t epte_val = {.raw = mapped_page_sept_entry_copy.raw};
     target_pa = set_hkid_to_pa(target_pa, tdr_ptr->key_management_fields.hkid);
     epte_val.base = target_pa.full_pa >> 12;
+    
     sept_unblock(&epte_val);
 
     // Write the whole 64-bit EPT entry in a single operation
-    atomic_mem_write_64b(&mapped_page_sept_entry_ptr->raw, epte_val.raw);
+    {
+        atomically_update_sept_state_keep_tdhp(mapped_page_sept_entry_ptr, epte_val.raw);
+    }
+
 
     // Update RCX with the old physical page HPA
     local_data_ptr->vmm_regs.rcx = remove_hkid_from_pa(source_pa).raw;
+
+    local_data_ptr->vmm_regs.rcx |= pamt_dec_nl_page_count_and_get_hint(mapped_page_nl_pamt_ptr);
 
 EXIT:
     // Release all acquired locks and free keyhole mappings
     if (target_page_locked_flag)
     {
-        pamt_unwalk(target_pa, target_page_pamt_block, target_page_pamt_entry_ptr, TDX_LOCK_EXCLUSIVE, PT_4KB);
+        pamt_unwalk(&target_page_pamt_walk_result);
         free_la(target_ptr);
     }
 
@@ -305,6 +310,11 @@ EXIT:
     if (merged_page_pamt_locked_flag)
     {
         pamt_implicit_release_lock(mapped_page_pamt_ptr, TDX_LOCK_EXCLUSIVE);
+
+        if (mapped_page_nl_pamt_ptr != NULL)
+        {
+            free_la(mapped_page_nl_pamt_ptr);
+        }
     }
 
     if (septe_locked_flag)
@@ -314,7 +324,7 @@ EXIT:
 
     if (sept_locked_flag)
     {
-        release_sharex_lock_sh(&tdcs_ptr->executions_ctl_fields.secure_ept_lock);
+        release_sharex_lock_hp_sh(&tdcs_ptr->executions_ctl_fields.secure_ept_lock);
         if (mapped_page_sept_entry_ptr != NULL)
         {
             free_la(mapped_page_sept_entry_ptr);
@@ -329,7 +339,7 @@ EXIT:
 
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_SHARED, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_ptr);
     }
 

@@ -106,10 +106,10 @@ api_error_type tdh_sys_info(uint64_t tdhsysinfo_output_pa,
      */
     tdhsysinfo_output_la->attributes.raw = (uint32_t)0;
     tdhsysinfo_output_la->vendor_id = 0x8086;
-    tdhsysinfo_output_la->build_date = TDX_MODULE_BUILD_DATE;
-    tdhsysinfo_output_la->build_num = TDX_MODULE_BUILD_NUM;
-    tdhsysinfo_output_la->minor_version = TDX_MODULE_MINOR_VER;
-    tdhsysinfo_output_la->major_version = TDX_MODULE_MAJOR_VER;
+    tdhsysinfo_output_la->build_date = (uint32_t)GLOBAL_TDX_MODULE_BUILD_DATE;
+    tdhsysinfo_output_la->build_num = (uint16_t)GLOBAL_TDX_MODULE_BUILD_NUM;
+    tdhsysinfo_output_la->minor_version = (uint16_t)GLOBAL_TDX_MODULE_MINOR_VER;
+    tdhsysinfo_output_la->major_version = (uint16_t)GLOBAL_TDX_MODULE_MAJOR_VER;
     tdhsysinfo_output_la->sys_rd = true; // Indicate that TDH.SYS.RD* should be used
     tdhsysinfo_output_la->max_tdmrs = MAX_TDMRS;
     tdhsysinfo_output_la->max_reserved_per_tdmr = MAX_RESERVED_AREAS; //MAX_RESERVED_PER_TDMR;

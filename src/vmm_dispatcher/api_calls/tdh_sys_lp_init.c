@@ -486,6 +486,7 @@ _STATIC_INLINE_ void tdx_local_init(tdx_module_local_t* tdx_local_data_ptr,
     tdx_local_data_ptr->guest_rcx_on_td_entry = 0;
 }
 
+
 api_error_type tdh_sys_lp_init(void)
 {
 
@@ -562,6 +563,7 @@ api_error_type tdh_sys_lp_init(void)
      * Calc LPID from local_data_ptr
      */
     tdx_local_data_ptr->lp_info.lp_id = (uint32_t)get_current_thread_num(get_sysinfo_table(), tdx_local_data_ptr);
+
 
     tdx_local_init(tdx_local_data_ptr, tdx_global_data_ptr);
 

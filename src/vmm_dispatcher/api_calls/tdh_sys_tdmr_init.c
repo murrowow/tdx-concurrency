@@ -40,7 +40,7 @@
 
 #if (((TDMR_PAMT_INIT_COUNT * 16) % 64) != 0)
     #error "TDMR_4K_PAMT_INIT_COUNT is wrong"
-#endif // (((TDMR_PAMT_INIT_CO...
+#endif // (((TDMR_PAMT_INIT_COUNT * 16) % 64) != 0)
 
 // We can initialize bigger ranges for dynamic PAMT
 #define TDMR_4K_DYNAMIC_PAMT_INIT_COUNT _4KB
@@ -117,7 +117,8 @@ api_error_type tdh_sys_tdmr_init(uint64_t tdmr_pa)
     pamt_block.pamt_4kb_p = (pamt_entry_t*) (tdmr_entry->pamt_4k_base
             + ((tdmr_entry->last_initialized - tdmr_entry->base) / _4KB * sizeof(pamt_entry_t)));
 
-    uint64_t tdmr_4k_pamt_init_count = TDMR_4K_PAMT_INIT_COUNT;
+    uint64_t tdmr_4k_pamt_init_count = tdx_global_data_ptr->dynamic_pamt_enabled ?
+                                            TDMR_4K_DYNAMIC_PAMT_INIT_COUNT : TDMR_4K_PAMT_INIT_COUNT;
 
     pamt_init(&pamt_block, tdmr_4k_pamt_init_count, tdmr_entry);
 

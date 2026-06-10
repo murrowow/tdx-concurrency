@@ -43,8 +43,7 @@ api_error_type tdh_mng_create(uint64_t target_tdr_pa, hkid_api_input_t hkid_info
     // TDR related variables
     pa_t                  tdr_pa;                   // TDR physical address
     tdr_t               * tdr_ptr;                  // Pointer to the TDR page (linear address)
-    pamt_block_t          tdr_pamt_block;           // TDR PAMT block
-    pamt_entry_t        * tdr_pamt_entry_ptr;       // Pointer to the TDR PAMT entry
+    pamt_walk_result_t    tdr_pamt_walk_result;
     bool_t                tdr_locked_flag = false;  // Indicate TDR is locked
 
     uint16_t              td_hkid;
@@ -71,8 +70,7 @@ api_error_type tdh_mng_create(uint64_t target_tdr_pa, hkid_api_input_t hkid_info
                                                  TDX_RANGE_RW,
                                                  TDX_LOCK_EXCLUSIVE,
                                                  PT_NDA,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_ptr);
     if (return_val != TDX_SUCCESS)
@@ -117,6 +115,7 @@ api_error_type tdh_mng_create(uint64_t target_tdr_pa, hkid_api_input_t hkid_info
         goto EXIT;
     }
 
+
     // ALL_CHECKS_PASSED:  The function is guaranteed to succeed
 
     // Mark the HKID entry in the KOT as assigned
@@ -135,8 +134,10 @@ api_error_type tdh_mng_create(uint64_t target_tdr_pa, hkid_api_input_t hkid_info
     tdr_ptr->td_preserving_fields.handoff_version = global_data->module_hv;
 
     // Set the new TDR page PAMT fields
-    tdr_pamt_entry_ptr->pt = PT_TDR;
-    tdr_pamt_entry_ptr->owner = 0;
+    tdr_pamt_walk_result.pamt_entry_p->pt = PT_TDR;
+    tdr_pamt_walk_result.pamt_entry_p->owner = 0;
+
+    pamt_inc_nl_page_count(tdr_pamt_walk_result.pamt_walk_path_nl[PT_2MB]);
 
 EXIT:
     // Release all acquired locks and free keyhole mappings
@@ -147,7 +148,7 @@ EXIT:
 
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_EXCLUSIVE, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_ptr);
     }
     return return_val;

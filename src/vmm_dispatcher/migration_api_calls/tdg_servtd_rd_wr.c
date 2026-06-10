@@ -53,8 +53,7 @@ static api_error_type tdg_servtd_rd_wr(servtd_binding_handle_t binding_handle, m
     tdx_module_local_t* lp = get_local_data();
 
     tdr_t               * target_tdr_ptr = NULL;            // Pointer to the TDR page (linear address)
-    pamt_block_t          target_tdr_pamt_block;            // TDR PAMT block
-    pamt_entry_t        * target_tdr_pamt_entry_ptr = NULL; // Pointer to the TDR PAMT entry
+    pamt_walk_result_t    target_tdr_pamt_walk_result = { .valid = false };
     bool_t                target_tdr_locked_flag = false;   // Indicate TDR is locked
 
     tdcs_t              * target_tdcs_ptr = NULL;           // Pointer to the TDCS structure (Multi-page)
@@ -102,8 +101,7 @@ static api_error_type tdg_servtd_rd_wr(servtd_binding_handle_t binding_handle, m
                                                  write ? TDX_RANGE_RW : TDX_RANGE_RO,
                                                  TDX_LOCK_SHARED,
                                                  PT_TDR,
-                                                 &target_tdr_pamt_block,
-                                                 &target_tdr_pamt_entry_ptr,
+                                                 &target_tdr_pamt_walk_result,
                                                  &target_tdr_locked_flag,
                                                  &target_tdr_ptr);
     if (return_val != TDX_SUCCESS)
@@ -283,7 +281,7 @@ EXIT:
 
     if (target_tdr_locked_flag)
     {
-        pamt_unwalk(target_tdr_pa, target_tdr_pamt_block, target_tdr_pamt_entry_ptr, TDX_LOCK_SHARED, PT_4KB);
+        pamt_unwalk(&target_tdr_pamt_walk_result);
         free_la(target_tdr_ptr);
     }
 

@@ -32,15 +32,13 @@
 #include "accessors/data_accessors.h"
 #include "helpers/helpers.h"
 #include "helpers/migration.h"
-//#include "metadata_handlers/metadata_generic.h"
 
 api_error_type tdh_export_pause(uint64_t target_tdr_pa)
 {
     // TDR and TDCS
-    tdr_t             *tdr_p = NULL;         // Pointer to the owner TDR page
+    tdr_t*             tdr_p = NULL;         // Pointer to the owner TDR page
     pa_t               tdr_pa;               // Physical address of the owner TDR page
-    pamt_block_t       tdr_pamt_block;       // TDR PAMT block
-    pamt_entry_t      *tdr_pamt_entry_ptr = NULL;
+    pamt_walk_result_t tdr_pamt_walk_result;
     tdcs_t            *tdcs_p = NULL;        // Pointer to the TDCS structure
     bool_t             tdr_locked_flag = false;
 
@@ -58,8 +56,7 @@ api_error_type tdh_export_pause(uint64_t target_tdr_pa)
                                                  TDX_RANGE_RO,
                                                  TDX_LOCK_EXCLUSIVE,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_p);
 
@@ -74,12 +71,13 @@ api_error_type tdh_export_pause(uint64_t target_tdr_pa)
      * No need to lock the op_state, it is implicitly locked since TDR is exclusively locked
      */
     return_val = check_state_map_tdcs_and_lock(tdr_p, TDX_RANGE_RW, TDX_LOCK_NO_LOCK,
-                                               false, TDH_EXPORT_PAUSE_LEAF, &tdcs_p);
+        false, TDH_EXPORT_PAUSE_LEAF, &tdcs_p);
     if (return_val != TDX_SUCCESS)
     {
         TDX_ERROR("State check or TDCS lock failure - error = %llx\n", return_val);
         goto EXIT;
     }
+
 
     /*------------------------------------------------------------------------------------------------
        TDX I/O Placeholder
@@ -109,10 +107,11 @@ api_error_type tdh_export_pause(uint64_t target_tdr_pa)
     return_val = TDX_SUCCESS;
 
 EXIT:
+
     // Release all acquired locks
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_EXCLUSIVE, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_p);
     }
 

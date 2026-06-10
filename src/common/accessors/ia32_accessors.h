@@ -115,24 +115,6 @@ _STATIC_INLINE_ void ia32_hlt( uint64_t leaf, uint64_t id )
 	_ASM_VOLATILE_ ("hlt" :: "a"(leaf), "b"(id): "memory") ;
 }
 
-/**
- * @brief Call UD2 instruction
- */
-_STATIC_INLINE_ void ia32_ud2( void )
-{
-    _ASM_VOLATILE_ ("ud2" ::: "memory") ;
-}
-
-/**
- * @brief Induce GP exception
- */
-_STATIC_INLINE_ void ia32_gp(void)
-{
-    _ASM_VOLATILE_(
-        "movq $0x8000000000000000, %%rax\n"
-        "movq $0, (%%rax)\n"
-        ::: "memory", "rax");
-}
 
 /**
  * @brief Induce SEAM shutdown by jumping to linear address 0 (long mode)
@@ -246,6 +228,29 @@ _STATIC_INLINE_ bool_t ia32_is_timeout_expired(uint64_t endtime)
 {
     return (int64_t)(endtime - ia32_rdtsc()) < 0;
 }
+
+_STATIC_INLINE_ uint64_t get_tsc_ratio(void)
+{
+    uint32_t eax, ebx, ecx, edx;
+    ia32_cpuid(CPUID_TSC_ATTRIBUTES_LEAF, 0,
+               &eax, &ebx,
+               &ecx, &edx);
+
+    tdx_sanity_check(eax != 0, FATAL_ERROR_ID_62, 0);
+    uint64_t ratio = ((ebx / eax) * ecx);
+
+    if (ratio == 0)
+    {
+        ia32_cpuid(PROCESSOR_FREQUENCY_INFORMATION_LEAF, 0,
+                   &eax, &ebx,
+                   &ecx, &edx);
+        ratio = eax;
+    }
+
+    // Convert from megahertz to herz
+    return (ratio / 1000000);
+}
+
 
 /**
  * Extended State operations
@@ -496,6 +501,12 @@ _STATIC_INLINE_ uint32_t _xchg_32b(uint32_t *mem, uint32_t quantum)
     return quantum;
 }
 
+_STATIC_INLINE_ uint8_t _lock_xadd_8b(uint8_t* mem, uint8_t quantum)
+{
+    _ASM_VOLATILE_("lock; xaddb %2, %0" : "=m" (*mem), "=a"(quantum) : "a"(quantum) : "memory", "cc");
+    return quantum;
+}
+
 _STATIC_INLINE_ uint16_t _lock_xadd_16b(uint16_t *mem, uint16_t quantum)
 {
     _ASM_VOLATILE_ ("lock; xaddw %2, %0" : "=m" ( *mem ), "=a"(quantum) : "a"(quantum) : "memory", "cc");
@@ -517,6 +528,11 @@ _STATIC_INLINE_ uint64_t _lock_xadd_64b(uint64_t *mem, uint64_t quantum)
 _STATIC_INLINE_ void _lock_or_16b(uint16_t *mem, uint16_t quantum)
 {
     _ASM_VOLATILE_ ("lock; orw %1, %0" : "=m" ( *mem ) : "a"(quantum) : "memory");
+}
+
+_STATIC_INLINE_ void _lock_or_64b(uint64_t *mem, uint64_t quantum)
+{
+    _ASM_VOLATILE_ ("lock; orq %1, %0" : "=m" ( *mem ) : "a"(quantum) : "memory");
 }
 
 _STATIC_INLINE_ void _lock_and_8b(uint8_t *mem, uint8_t quantum)

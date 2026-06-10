@@ -840,6 +840,7 @@ api_error_type tdh_export_restore(gpa_list_info_t gpa_list_info, uint64_t target
  */
 api_error_type tdh_export_unblockw(uint64_t page_pa, uint64_t target_tdr_pa);
 
+
 /**
  * @brief Shuts down the system and prepared handoff data buffer for the next module
  *
@@ -850,11 +851,16 @@ api_error_type tdh_export_unblockw(uint64_t page_pa, uint64_t target_tdr_pa);
 api_error_type tdh_sys_shutdown(uint64_t hv_input);
 
 /**
- * @brief Finished updating TDX module by retrieving and loading handoff data from the
- *        previous module
+ * @brief Finished updating TDX module by retrieving and loading handoff data from the previous module
  *
  * @return Success or Error type
  */
 api_error_type tdh_sys_update(void);
+
+api_error_type tdh_phymem_pamt_add(page_size_api_input_t page_info,
+                                   uint64_t pamt_hpa0,
+                                   uint64_t pamt_hpa1);
+
+api_error_type tdh_phymem_pamt_remove(page_size_api_input_t page_info);
 
 #endif // __TDX_VMM_API_HANDLERS_H_INCLUDED__

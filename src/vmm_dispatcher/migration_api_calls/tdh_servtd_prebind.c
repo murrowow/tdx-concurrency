@@ -37,8 +37,7 @@ api_error_type tdh_servtd_prebind(uint64_t target_tdr_pa, uint64_t servtd_info_h
     // TDR and TDCS
     tdr_t             *tdr_p = NULL;         // Pointer to the owner TDR page
     pa_t               tdr_pa;               // Physical address of the owner TDR page
-    pamt_block_t       tdr_pamt_block;       // TDR PAMT block
-    pamt_entry_t      *tdr_pamt_entry_ptr = NULL;
+    pamt_walk_result_t tdr_pamt_walk_result;
     tdcs_t            *tdcs_p = NULL;        // Pointer to the TDCS structure
     bool_t             tdr_locked_flag = false;
 
@@ -63,8 +62,7 @@ api_error_type tdh_servtd_prebind(uint64_t target_tdr_pa, uint64_t servtd_info_h
                                                  TDX_RANGE_RO,
                                                  TDX_LOCK_SHARED,
                                                  PT_TDR,
-                                                 &tdr_pamt_block,
-                                                 &tdr_pamt_entry_ptr,
+                                                 &tdr_pamt_walk_result,
                                                  &tdr_locked_flag,
                                                  &tdr_p);
 
@@ -139,7 +137,7 @@ api_error_type tdh_servtd_prebind(uint64_t target_tdr_pa, uint64_t servtd_info_h
             }
         }
     }
-#endif // (MAX_SERVTDS>1)
+#endif // (MAX_SERVTDS > 1)
 
     if (tdcs_p->service_td_fields.servtd_bindings_table[servtd_slot].state == SERVTD_BOUND)
     {
@@ -183,7 +181,7 @@ EXIT:
 
     if (tdr_locked_flag)
     {
-        pamt_unwalk(tdr_pa, tdr_pamt_block, tdr_pamt_entry_ptr, TDX_LOCK_SHARED, PT_4KB);
+        pamt_unwalk(&tdr_pamt_walk_result);
         free_la(tdr_p);
     }
     return return_val;

@@ -43,7 +43,7 @@
 #define VMX_GUEST_LBR_CTL_INIT_VALUE                  0x0
 #define VMX_GUEST_DR7_INIT_VALUE                      0x00000400
 
-#define NUM_OF_PRESERVED_KEYHOLES              2
+#define NUM_OF_PRESERVED_KEYHOLES              5
 
 typedef enum
 {
