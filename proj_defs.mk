@@ -58,7 +58,7 @@ endif # TDX_MODULE_SEAM_MINOR_SVN
  ########################################
  PROJ_FLAGS += -DTDX_MODULE_MAJOR_VER=1
  PROJ_FLAGS += -DTDX_MODULE_MINOR_VER=5
- PROJ_FLAGS += -DTDX_MODULE_UPDATE_VER=24
+ PROJ_FLAGS += -DTDX_MODULE_UPDATE_VER=25
  ########################################
 
 ################################################################

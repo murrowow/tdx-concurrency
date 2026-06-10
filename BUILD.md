@@ -74,16 +74,16 @@ NOTE: In order to run on Windows, replace the mount line with: -v "%CD%":$HOME/t
 
 
 ## Make targets
-Binary's generation includes the date it was compiled at, build number, module's update version and module's internal version.
+Binary's generation includes the date it was compiled at, build number and module's update version.  
 
 Build date, build number and update version could be extracted from the production binary, please use TDH.SYS.RD SEAMCALL (leaf #34) with MD_SYS_TDX_MODULE_VERSION_CLASS_CODE(8) as a class_code and MD_SYS_BUILD_DATE_FIELD_CODE(1)/MD_SYS_BUILD_NUM_FIELD_CODE(2)/MD_SYS_UPDATE_VERSION_FIELD_CODE(5) as field codes. The date format should be YYYYMMDD.  
 
-Current TDX version was built with: TDX_MODULE_BUILD_DATE=20250531 TDX_MODULE_BUILD_NUM=920 TDX_MODULE_UPDATE_VER=20 TDX_MODULE_INTERNAL_VER=8
+Current TDX version was built with: TDX_MODULE_BUILD_DATE=20250902 TDX_MODULE_BUILD_NUM=954 TDX_MODULE_UPDATE_VER=25  
 
 1) In order to reproduce the exact binary, it is required to specify the original date, build number and update version:
 
 	```bash
-	make RELEASE=1 TDX_MODULE_BUILD_DATE=20250531 TDX_MODULE_BUILD_NUM=920 TDX_MODULE_UPDATE_VER=20 TDX_MODULE_INTERNAL_VER=8
+	make RELEASE=1 TDX_MODULE_BUILD_DATE=20250902 TDX_MODULE_BUILD_NUM=954 TDX_MODULE_UPDATE_VER=25
 	```
 
 	In case binary reproduction is not required, "make RELEASE=1" will suffice.
@@ -102,4 +102,4 @@ Current TDX version was built with: TDX_MODULE_BUILD_DATE=20250531 TDX_MODULE_BU
 
 
 ## Expected module hash (MRSEAM)
-0xD0D80C085166BA78CCC69AF268E5753CF0F3394523CB4FF7C50B08D9265C82489C099C377BE6A400E4D2B57DA924012C
+0xFCA4FF221293807E3D247416299CA39A236872DF4EB414567CA96072D3FDE7DEAD740F807EEFE2F7D938499C03CC8ABA
