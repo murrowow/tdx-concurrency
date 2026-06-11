@@ -29,6 +29,61 @@ HARDWARE_STRUCTURES = [
     "REPORTMACSTRUCT",
 ]
 
+LOCK_TERMS = [
+    # Lock types / structs
+    "mutex_lock_t",
+    "sharex_lock_t",
+    "sharex_hp_lock_t",
+    "lock_type_t",
+    "lock_return_t",
+
+    # Generic lock APIs
+    "acquire_mutex_lock",
+    "release_mutex_lock",
+    "acquire_sharex_lock",
+    "release_sharex_lock",
+    "promote_sharex_lock",
+    "demote_sharex_lock",
+    "acquire_sharex_lock_hp",
+    "release_sharex_lock_hp",
+    "promote_sharex_lock_hp",
+    "release_bit_lock",
+
+    # SEPT locking APIs
+    "sept_lock_acquire_host",
+    "sept_lock_acquire_guest",
+    "sept_lock_release",
+    "sept_lock_release_local",
+
+    # PAMT locking APIs / lock-carrying structs
+    "pamt_walk",
+    "pamt_unwalk",
+    "pamt_implicit_get_and_lock",
+    "pamt_implicit_release_lock",
+    "pamt_walk_result_t",
+    "pamt_entry_t",
+    "pamt_non_leaf_entry_t",
+    "entry_lock",
+
+    # Common lock fields / state names
+    "global_lock",
+    "kot.lock",
+    "tdmr_lock",
+    "entry_lock",
+    "SHAREX_FREE",
+    "SHAREX_EXCLUSIVE_LOCK",
+    "SHAREX_HP_FREE",
+    "SHAREX_HP_EXCLUSIVE_LOCK",
+    "MUTEX_FREE",
+    "MUTEX_LOCK",
+
+    # Lock/map helper naming patterns used throughout leaves
+    "check_lock_and_map_explicit_tdr",
+    "lock_and_map",
+    "map_pa",
+    "free_la",
+]
+
 SOURCE_EXTENSIONS = {
     ".c", ".h", ".S", ".asm", ".inc", ".txt", ".md"
 }
@@ -46,7 +101,7 @@ def build_patterns(structures):
     return patterns
 
 def scan_tree(root):
-    patterns = build_patterns(HARDWARE_STRUCTURES)
+    patterns = build_patterns(HARDWARE_STRUCTURES + LOCK_TERMS)
     results = defaultdict(list)
 
     for dirpath, _, filenames in os.walk(root):

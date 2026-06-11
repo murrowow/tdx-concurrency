@@ -888,6 +888,19 @@ MSR,common/metadata_handlers/metadata_vp.c,1501,// The MSR bitmaps value is a bi
 MSR,common/metadata_handlers/metadata_vp.c,1502,// Map the TD's MSR bitmaps page (it is typically unmapped).
 MSR,common/metadata_handlers/metadata_td.c,169,// - Record CPUID_FLAGS that will be used for MSR virtualization and TD entry / exit.
 MSR,common/metadata_handlers/metadata_td.c,266,"// To support HLE, IA32_TSX_CTRL MSR must exist"
+MUTEX_FREE,common/helpers/tdx_locks.h,57,"MUTEX_FREE = 0, MUTEX_LOCK = 1"
+MUTEX_FREE,common/helpers/tdx_locks.h,67,"retval = _lock_cmpxchg_8bit(MUTEX_FREE, MUTEX_LOCK, lock_ptr);"
+MUTEX_FREE,common/helpers/tdx_locks.h,69,return (retval == MUTEX_FREE) ? LOCK_RET_SUCCESS : LOCK_RET_FAIL;
+MUTEX_FREE,common/helpers/tdx_locks.h,79,while (retval != MUTEX_FREE)
+MUTEX_FREE,common/helpers/tdx_locks.h,81,"retval = _lock_cmpxchg_8bit(MUTEX_FREE, MUTEX_LOCK, lock_ptr);"
+MUTEX_FREE,common/helpers/tdx_locks.h,83,if (retval != MUTEX_FREE)
+MUTEX_FREE,common/helpers/tdx_locks.h,99,"retval = _lock_cmpxchg_8bit(MUTEX_LOCK, MUTEX_FREE, lock_ptr);"
+MUTEX_LOCK,common/helpers/tdx_locks.h,57,"MUTEX_FREE = 0, MUTEX_LOCK = 1"
+MUTEX_LOCK,common/helpers/tdx_locks.h,67,"retval = _lock_cmpxchg_8bit(MUTEX_FREE, MUTEX_LOCK, lock_ptr);"
+MUTEX_LOCK,common/helpers/tdx_locks.h,75,mutex_lock_t retval = MUTEX_LOCK;
+MUTEX_LOCK,common/helpers/tdx_locks.h,81,"retval = _lock_cmpxchg_8bit(MUTEX_FREE, MUTEX_LOCK, lock_ptr);"
+MUTEX_LOCK,common/helpers/tdx_locks.h,99,"retval = _lock_cmpxchg_8bit(MUTEX_LOCK, MUTEX_FREE, lock_ptr);"
+MUTEX_LOCK,common/helpers/tdx_locks.h,102,"tdx_sanity_check((retval == MUTEX_LOCK), FATAL_ERROR_ID_188, 0);"
 PAMT,td_transitions/tdh_vp_enter.c,661,pamt_entry_t        * tdr_pamt_entry_ptr;          // Pointer to the TDR PAMT entry
 PAMT,td_dispatcher/tdx_td_dispatcher.c,150,"// Check that we have no mapped keyholes left, beside the 2 that we store for TDR/TDVPR PAMT entries"
 PAMT,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,54,pamt_entry_t         *tdr_pamt_p = NULL;    // Pinter to owner tdr pamt entry
@@ -1710,6 +1723,24 @@ SEPT,common/helpers/helpers.h,2212,"- Assumes the L1 SEPT entry has been locked 
 SEPT,common/helpers/helpers.h,2217,* @param vm_id - on which L2 VM SEPT the walk will done
 SEPT,common/helpers/helpers.h,2220,* @param cached_l2_sept_entry - Cached SEPT entry - on walk failure will contain the last reached entry
 SEPT,common/helpers/helpers.h,2221,* @param l2_septe_ptr - Return the pointer to the SEPT entry. Should be freed after usage.
+SHAREX_EXCLUSIVE_LOCK,common/helpers/tdx_locks.h,108,"SHAREX_FREE = 0, SHAREX_SINGLE_READER = BIT(1), SHAREX_EXCLUSIVE_LOCK = BIT(0)"
+SHAREX_EXCLUSIVE_LOCK,common/helpers/tdx_locks.h,155,"retval.raw = _lock_cmpxchg_16b(SHAREX_FREE, SHAREX_EXCLUSIVE_LOCK, &lock_ptr->raw);"
+SHAREX_EXCLUSIVE_LOCK,common/helpers/tdx_locks.h,223,"retval.raw = _lock_cmpxchg_16b(SHAREX_SINGLE_READER, SHAREX_EXCLUSIVE_LOCK, &lock_ptr->raw);"
+SHAREX_FREE,common/helpers/tdx_locks.h,108,"SHAREX_FREE = 0, SHAREX_SINGLE_READER = BIT(1), SHAREX_EXCLUSIVE_LOCK = BIT(0)"
+SHAREX_FREE,common/helpers/tdx_locks.h,155,"retval.raw = _lock_cmpxchg_16b(SHAREX_FREE, SHAREX_EXCLUSIVE_LOCK, &lock_ptr->raw);"
+SHAREX_FREE,common/helpers/tdx_locks.h,157,return (retval.raw == SHAREX_FREE) ? LOCK_RET_SUCCESS : LOCK_RET_FAIL;
+SHAREX_FREE,common/helpers/tdx_locks.h,195,"retval.raw = _xchg_16b(&lock_ptr->raw, SHAREX_FREE);"
+SHAREX_FREE,common/helpers/tdx_locks.h,226,"tdx_sanity_check(!(retval.exclusive == 1 || retval.raw == SHAREX_FREE), FATAL_ERROR_ID_194, 6);"
+SHAREX_HP_EXCLUSIVE_LOCK,common/helpers/tdx_locks.h,115,"SHAREX_HP_EXCLUSIVE_LOCK = BIT(0),"
+SHAREX_HP_EXCLUSIVE_LOCK,common/helpers/tdx_locks.h,383,"retval.raw = _lock_cmpxchg_16b(SHAREX_HP_FREE, SHAREX_HP_EXCLUSIVE_LOCK, &lock_ptr->raw); // Set EXCLUSIVE to 1"
+SHAREX_HP_EXCLUSIVE_LOCK,common/helpers/tdx_locks.h,399,"retval.raw = _lock_cmpxchg_16b(SHAREX_HP_HOST_PRIORITY, SHAREX_HP_EXCLUSIVE_LOCK, &lock_ptr->raw);"
+SHAREX_HP_EXCLUSIVE_LOCK,common/helpers/tdx_locks.h,480,"retval.raw = _lock_cmpxchg_16b(SHAREX_HP_SINGLE_READER, SHAREX_HP_EXCLUSIVE_LOCK, &lock_ptr->raw);"
+SHAREX_HP_EXCLUSIVE_LOCK,common/helpers/tdx_locks.h,492,"SHAREX_HP_EXCLUSIVE_LOCK, &lock_ptr->raw);"
+SHAREX_HP_FREE,common/helpers/tdx_locks.h,114,"SHAREX_HP_FREE = 0,"
+SHAREX_HP_FREE,common/helpers/tdx_locks.h,383,"retval.raw = _lock_cmpxchg_16b(SHAREX_HP_FREE, SHAREX_HP_EXCLUSIVE_LOCK, &lock_ptr->raw); // Set EXCLUSIVE to 1"
+SHAREX_HP_FREE,common/helpers/tdx_locks.h,385,if (retval.raw == SHAREX_HP_FREE)
+SHAREX_HP_FREE,common/helpers/tdx_locks.h,483,"tdx_sanity_check(!(retval.exclusive == 1 || retval.raw == SHAREX_HP_FREE), FATAL_ERROR_ID_203, 16);"
+SHAREX_HP_FREE,common/helpers/tdx_locks.h,495,"tdx_sanity_check(!(retval.exclusive == 1 || retval.raw == SHAREX_HP_FREE), FATAL_ERROR_ID_204, 17);"
 TD VMCS,td_transitions/td_exit.c,119,* Scrub CPU state that is not restored from TD VMCS host state by VM exit
 TD VMCS,td_transitions/td_exit.c,575,// TDX-SEAM advances the guest TD RIP (in TD VMCS) to the instruction following TDCALL.
 TD VMCS,td_transitions/tdh_vp_enter.c,669,bool_t                td_vmcs_loaded = false;      // Indicates whether TD VMCS was loaded
@@ -3328,3 +3359,1059 @@ XFAM,common/metadata_handlers/metadata_td.c,412,if ((!xfam.amx_xtilecfg || !xfam
 XFAM,common/metadata_handlers/metadata_td.c,1209,ia32_xcr0_t xfam;
 XFAM,common/metadata_handlers/metadata_td.c,1210,xfam.raw = value[0] & combined_wr_mask;
 XFAM,common/metadata_handlers/metadata_td.c,1211,if (!check_xfam(xfam))
+acquire_mutex_lock,vmm_dispatcher/api_calls/tdh_sys_tdmr_init.c,89,if (acquire_mutex_lock(&tdmr_entry->lock) != LOCK_RET_SUCCESS)
+acquire_mutex_lock,vmm_dispatcher/api_calls/tdh_phymem_cache_wb.c,70,if (acquire_mutex_lock(&global_data_ptr->wbt_entries[cachewb_index].entry_lock) != LOCK_RET_SUCCESS)
+acquire_mutex_lock,common/helpers/helpers.c,1298,// Accomplished by acquire_mutex_lock/release_mutex_lock
+acquire_mutex_lock,common/helpers/tdx_locks.h,61,_STATIC_INLINE_ lock_return_t acquire_mutex_lock(mutex_lock_t * lock_ptr)
+acquire_sharex_lock,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,592,"if (acquire_sharex_lock(&tdcs_p->migration_fields.mig_lock, TDX_LOCK_SHARED) != LOCK_RET_SUCCESS)"
+acquire_sharex_lock,vmm_dispatcher/migration_api_calls/tdh_mig_stream_create.c,88,"if (acquire_sharex_lock(&tdcs_p->migration_fields.mig_lock, TDX_LOCK_EXCLUSIVE) != LOCK_RET_SUCCESS)"
+acquire_sharex_lock,vmm_dispatcher/migration_api_calls/tdh_export_track.c,94,"if (acquire_sharex_lock(&tdcs_p->migration_fields.mig_lock, TDX_LOCK_EXCLUSIVE) != LOCK_RET_SUCCESS)"
+acquire_sharex_lock,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,560,"if (acquire_sharex_lock(&tdcs_p->migration_fields.mig_lock, TDX_LOCK_SHARED) != LOCK_RET_SUCCESS)"
+acquire_sharex_lock,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,393,"if (acquire_sharex_lock(&tdcs_p->migration_fields.mig_lock, TDX_LOCK_EXCLUSIVE) != LOCK_RET_SUCCESS)"
+acquire_sharex_lock,vmm_dispatcher/migration_api_calls/tdh_export_abort.c,96,"if (acquire_sharex_lock(&tdcs_p->migration_fields.mig_lock, TDX_LOCK_EXCLUSIVE) != LOCK_RET_SUCCESS)"
+acquire_sharex_lock,common/helpers/tdx_locks.h,160,"_STATIC_INLINE_ lock_return_t acquire_sharex_lock(sharex_lock_t * lock_ptr, lock_type_t lock_type)"
+acquire_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,641,"if (acquire_sharex_lock_hp(&tdcs_p->executions_ctl_fields.secure_ept_lock, TDX_LOCK_SHARED, false) != TDX_SUCCESS)"
+acquire_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,98,"if (acquire_sharex_lock_hp(&tdcs_p->executions_ctl_fields.secure_ept_lock, TDX_LOCK_SHARED, false) != TDX_SUCCESS)"
+acquire_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdg_servtd_rd_wr.c,169,"if ((return_val = acquire_sharex_lock_hp(&(target_tdcs_ptr->service_td_fields.servtd_bindings_lock),"
+acquire_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_servtd_prebind.c,121,"if ((return_val = acquire_sharex_lock_hp(&tdcs_p->service_td_fields.servtd_bindings_lock,"
+acquire_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,609,"if (acquire_sharex_lock_hp(&tdcs_p->executions_ctl_fields.secure_ept_lock, TDX_LOCK_SHARED, false) != TDX_SUCCESS)"
+acquire_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_servtd_bind.c,160,"if ((return_val = acquire_sharex_lock_hp(&tdcs_p->service_td_fields.servtd_bindings_lock,"
+acquire_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_export_blockw.c,99,"if (acquire_sharex_lock_hp(&tdcs_p->executions_ctl_fields.secure_ept_lock, TDX_LOCK_SHARED, false) != TDX_SUCCESS)"
+acquire_sharex_lock_hp,vmm_dispatcher/api_calls/tdh_mem_rd_wr.c,116,"if (acquire_sharex_lock_hp(&tdcs_ptr->executions_ctl_fields.secure_ept_lock, TDX_LOCK_SHARED, false) != TDX_SUCCESS)"
+acquire_sharex_lock_hp,common/memory_handlers/pamt_manager.c,385,"if ((retval = acquire_sharex_lock_hp(&pamt_1gb->entry_lock, TDX_LOCK_SHARED, is_guest)) != TDX_SUCCESS)"
+acquire_sharex_lock_hp,common/memory_handlers/pamt_manager.c,409,"if ((retval = acquire_sharex_lock_hp(&pamt_2mb->entry_lock, TDX_LOCK_SHARED, is_guest)) != TDX_SUCCESS)"
+acquire_sharex_lock_hp,common/memory_handlers/pamt_manager.c,451,"if ((retval = acquire_sharex_lock_hp(&pamt_4kb->entry_lock, leaf_lock_type, is_guest)) != TDX_SUCCESS)"
+acquire_sharex_lock_hp,common/memory_handlers/pamt_manager.c,632,"if ((errc = acquire_sharex_lock_hp(&tmp_pamt_entry->entry_lock, leaf_lock_type, is_guest)) != TDX_SUCCESS)"
+acquire_sharex_lock_hp,common/helpers/helpers.c,579,"if ((errc = acquire_sharex_lock_hp(&(tmp_tdcs_p->management_fields.op_state_lock),"
+acquire_sharex_lock_hp,common/helpers/helpers.c,761,"if (acquire_sharex_lock_hp(&tdcs_p->executions_ctl_fields.secure_ept_lock, lock_type, false) != TDX_SUCCESS)"
+acquire_sharex_lock_hp,common/helpers/tdx_locks.h,418,"_STATIC_INLINE_ api_error_code_e acquire_sharex_lock_hp(sharex_hp_lock_t * lock_ptr, lock_type_t lock_type,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,566,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,91,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,72,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_import_end.c,47,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,91,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_export_pause.c,54,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_import_commit.c,47,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_servtd_prebind.c,60,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_mig_stream_create.c,62,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_import_track.c,65,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_export_track.c,68,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_export_unblockw.c,74,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,534,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,367,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_export_abort.c,70,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_import_abort.c,64,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_servtd_bind.c,84,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_servtd_bind.c,110,"return_val = check_lock_and_map_explicit_tdr(servtd_tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,316,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/migration_api_calls/tdh_export_blockw.c,73,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_track.c,58,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_vp_create.c,61,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,74,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_range_unblock.c,75,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_rd_wr.c,78,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_page_aug.c,78,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mr_extend.c,76,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mng_key_freeid.c,58,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,214,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mr_finalize.c,56,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mng_create.c,68,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mng_rd_wr.c,79,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,92,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_range_block.c,152,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mng_init.c,698,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mng_key_config.c,60,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_sept_rd.c,76,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_page_add.c,87,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,353,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mng_add_cx.c,63,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mng_vpflushdone.c,60,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,79,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,129,"return_val = check_lock_and_map_explicit_tdr(tdr_pa,"
+check_lock_and_map_explicit_tdr,common/helpers/helpers.c,332,api_error_type check_lock_and_map_explicit_tdr(
+check_lock_and_map_explicit_tdr,common/helpers/helpers.h,629,api_error_type check_lock_and_map_explicit_tdr(
+check_lock_and_map_explicit_tdr,common/helpers/helpers.h,641,"* @brief Identical to check_lock_and_map_explicit_tdr, but intended to be used by ServTD guest-side API's"
+demote_sharex_lock,common/helpers/tdx_locks.h,231,_STATIC_INLINE_ lock_return_t demote_sharex_lock(sharex_lock_t * lock_ptr)
+entry_lock,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1301,"if ((return_val = acquire_sharex_lock_hp_ex(&td_page_pamt_entry_p->entry_lock, false)) != TDX_SUCCESS)"
+entry_lock,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1323,release_sharex_lock_hp_ex(&td_page_pamt_entry_p->entry_lock);
+entry_lock,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1375,release_sharex_lock_hp_ex(&td_page_pamt_entry_p->entry_lock);
+entry_lock,vmm_dispatcher/api_calls/tdh_phymem_cache_wb.c,70,if (acquire_mutex_lock(&global_data_ptr->wbt_entries[cachewb_index].entry_lock) != LOCK_RET_SUCCESS)
+entry_lock,vmm_dispatcher/api_calls/tdh_phymem_cache_wb.c,203,release_mutex_lock(&global_data_ptr->wbt_entries[cachewb_index].entry_lock);
+entry_lock,common/data_structures/tdx_global_data.h,154,mutex_lock_t entry_lock; /**< mutex to control concurrent execution of TDWBINVD */
+entry_lock,common/memory_handlers/pamt_manager.c,306,sharex_hp_lock_t entry_lock; // 2 byte (16 bit)
+entry_lock,common/memory_handlers/pamt_manager.c,385,"if ((retval = acquire_sharex_lock_hp(&pamt_1gb->entry_lock, TDX_LOCK_SHARED, is_guest)) != TDX_SUCCESS)"
+entry_lock,common/memory_handlers/pamt_manager.c,395,((retval = promote_sharex_lock_hp(&pamt_1gb->entry_lock)) != TDX_SUCCESS))
+entry_lock,common/memory_handlers/pamt_manager.c,409,"if ((retval = acquire_sharex_lock_hp(&pamt_2mb->entry_lock, TDX_LOCK_SHARED, is_guest)) != TDX_SUCCESS)"
+entry_lock,common/memory_handlers/pamt_manager.c,421,((retval = promote_sharex_lock_hp(&pamt_2mb->entry_lock)) != TDX_SUCCESS))
+entry_lock,common/memory_handlers/pamt_manager.c,451,"if ((retval = acquire_sharex_lock_hp(&pamt_4kb->entry_lock, leaf_lock_type, is_guest)) != TDX_SUCCESS)"
+entry_lock,common/memory_handlers/pamt_manager.c,463,release_sharex_lock_hp_sh(&pamt_2mb->entry_lock);
+entry_lock,common/memory_handlers/pamt_manager.c,466,release_sharex_lock_hp_sh(&pamt_1gb->entry_lock);
+entry_lock,common/memory_handlers/pamt_manager.c,506,"release_sharex_lock_hp(&pamt_walk_result->pamt_walk_path[PT_4KB]->entry_lock, lock_type);"
+entry_lock,common/memory_handlers/pamt_manager.c,513,"release_sharex_lock_hp(&pamt_walk_result->pamt_walk_path[PT_2MB]->entry_lock, lock_type);"
+entry_lock,common/memory_handlers/pamt_manager.c,520,"release_sharex_lock_hp(&pamt_walk_result->pamt_walk_path[PT_1GB]->entry_lock, lock_type);"
+entry_lock,common/memory_handlers/pamt_manager.c,632,"if ((errc = acquire_sharex_lock_hp(&tmp_pamt_entry->entry_lock, leaf_lock_type, is_guest)) != TDX_SUCCESS)"
+entry_lock,common/memory_handlers/pamt_manager.c,667,"release_sharex_lock_hp(&pamt_entry->entry_lock, leaf_lock_type);"
+entry_lock,common/memory_handlers/pamt_manager.c,781,"if ((retval = acquire_sharex_lock_hp_ex(&promoted_pamt_entry->entry_lock, false)) != TDX_SUCCESS)"
+entry_lock,common/memory_handlers/pamt_manager.c,844,release_sharex_lock_hp_ex(&promoted_pamt_entry->entry_lock);
+entry_lock,common/memory_handlers/pamt_manager.c,905,"if ((retval = acquire_sharex_lock_hp_ex(&demoted_pamt_entry->entry_lock, false)) != TDX_SUCCESS)"
+entry_lock,common/memory_handlers/pamt_manager.c,1064,release_sharex_lock_hp_ex(&demoted_pamt_entry->entry_lock);
+entry_lock,common/memory_handlers/pamt_manager.h,99,sharex_hp_lock_t entry_lock; // 2 byte (16 bit)
+entry_lock,common/memory_handlers/pamt_manager.h,124,sharex_hp_lock_t entry_lock; // 2-byte
+free_la,td_transitions/td_exit.c,499,free_la(guest_state);
+free_la,td_transitions/tdh_vp_enter.c,1063,free_la(tdcs_ptr);
+free_la,td_transitions/tdh_vp_enter.c,1069,free_la(tdr_ptr);
+free_la,td_transitions/tdh_vp_enter.c,1077,free_la(tdvps_ptr);
+free_la,td_transitions/tdg_vp_enter.c,204,free_la(guest_state_p);
+free_la,td_dispatcher/vm_exits/tdg_mem_page_attr_rd.c,94,free_la(page_sept_entry_ptr);
+free_la,td_dispatcher/vm_exits/tdg_mem_page_attr_rd.c,136,free_la(l2_septe_ptr);
+free_la,td_dispatcher/vm_exits/tdg_mem_page_attr_rd.c,160,free_la(page_sept_entry_ptr);
+free_la,td_dispatcher/vm_exits/tdg_mem_page_attr_wr.c,149,free_la(l2_septe_ptr[j]);
+free_la,td_dispatcher/vm_exits/tdg_mem_page_attr_wr.c,153,free_la(l1_sept_entry_ptr);
+free_la,td_dispatcher/vm_exits/tdg_mem_page_attr_wr.c,392,free_la(l2_septe_ptr[vm_id]);
+free_la,td_dispatcher/vm_exits/tdg_mem_page_attr_wr.c,403,free_la(page_sept_entry_ptr);
+free_la,td_dispatcher/vm_exits/tdg_mr_verifyreport.c,107,free_la(report_mac);
+free_la,td_dispatcher/vm_exits/tdg_mr_report.c,170,free_la(tdg_mr_report_data_ptr);
+free_la,td_dispatcher/vm_exits/tdg_mr_report.c,200,free_la(tdg_mr_report_data_ptr);
+free_la,td_dispatcher/vm_exits/tdg_mr_report.c,204,free_la(tdg_mr_report_ptr);
+free_la,td_dispatcher/vm_exits/tdg_vp_invvpid.c,180,free_la(gla_list_p);
+free_la,td_dispatcher/vm_exits/tdg_sys_rdall.c,97,free_la(md_list_hdr_p);
+free_la,td_dispatcher/vm_exits/tdg_mem_page_accept.c,141,free_la(page_to_accept_la);
+free_la,td_dispatcher/vm_exits/tdg_mem_page_accept.c,302,free_la(l2_sept_entry_ptr);
+free_la,td_dispatcher/vm_exits/tdg_mem_page_accept.c,326,free_la(sept_entry_ptr);
+free_la,td_dispatcher/vm_exits/td_ept_violation.c,119,free_la(sept_entry_ptr);
+free_la,td_dispatcher/vm_exits/tdg_mr_rtmr_extend.c,153,free_la(second_hash_extended_mr);
+free_la,td_dispatcher/vm_exits/td_other_exits.c,315,free_la(ve_info_p);
+free_la,td_dispatcher/vm_exits/td_other_exits.c,372,free_la(sept_entry_ptr);
+free_la,td_dispatcher/vm_exits_l2/td_l2_interrupt.c,81,free_la(pid_p); // Not needed anymore;
+free_la,td_dispatcher/vm_exits_l2/td_l2_ept_violation.c,94,free_la(l1_sept_entry_ptr);
+free_la,td_dispatcher/vm_exits_l2/td_l2_ept_violation.c,108,free_la(l1_sept_entry_ptr);
+free_la,td_dispatcher/vm_exits_l2/td_l2_ept_violation.c,120,free_la(l1_sept_entry_ptr);
+free_la,td_dispatcher/vm_exits_l2/td_l2_ept_violation.c,150,free_la(l1_sept_entry_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,398,free_la(*td_page_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,864,free_la(l2_septe_ptrs[vm_id]);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,935,free_la(mig_buff_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,961,free_la(sept_entry_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,991,free_la(mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,996,free_la(td_page_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1001,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1006,free_la(mac_list_p[0]);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1011,free_la(mac_list_p[1]);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1016,free_la(mig_buff_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1031,free_la(sept_entry_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1036,free_la(gpa_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1041,free_la(l2_attr_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1065,free_la(l2_septe_ptrs[vm]);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1068,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1074,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,327,free_la(enc_md_list_hdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,473,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,478,free_la(page_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,483,free_la(enc_md_list_hdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,498,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,503,free_la(tdvps_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,508,free_la(mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,513,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,324,free_la(md_list_hdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,461,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,466,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,471,free_la(page_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,476,free_la(md_list_hdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,481,free_la(mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,486,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,219,free_la(l2_septe_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,258,free_la(sept_entry_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,290,free_la(gpa_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,305,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,311,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_end.c,89,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_end.c,95,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,275,free_la(enc_md_list_hdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,411,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,416,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,421,free_la(page_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,426,free_la(enc_md_list_hdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,431,free_la(mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,436,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_pause.c,115,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_pause.c,120,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,432,free_la(md_list_hdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,615,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,625,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,630,free_la(page_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,635,free_la(md_list_hdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,640,free_la(mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,645,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,650,free_la(tdvps_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_commit.c,85,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_commit.c,91,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdg_servtd_rd_wr.c,279,free_la(target_tdcs_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdg_servtd_rd_wr.c,285,free_la(target_tdr_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdh_servtd_prebind.c,172,free_la(servtd_info_hash_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_servtd_prebind.c,182,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_servtd_prebind.c,188,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_mig_stream_create.c,153,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_mig_stream_create.c,168,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_mig_stream_create.c,174,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_track.c,219,free_la(mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_track.c,224,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_track.c,234,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_track.c,240,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_track.c,245,free_la(mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_track.c,250,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_track.c,270,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_track.c,276,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_unblockw.c,227,free_la(l2_septe_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_unblockw.c,258,free_la(page_sept_entry_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_unblockw.c,269,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_unblockw.c,275,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,306,free_la(*mig_buff_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,795,free_la(sept_entry_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1050,free_la((void*)l2_septe_p[vm_id]);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1251,free_la((void*)l2_septe_p[vm_id]);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1345,free_la((void*)l2_septe_p[vm_id]);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1393,free_la(l2_septe_p[vm_id]);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1400,free_la(mig_buff_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1407,free_la(td_page_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1422,free_la(td_page_pamt_entry_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1430,free_la(td_page_pamt_nl_entry_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1500,free_la(mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1505,free_la(td_page_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1510,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1515,free_la(mac_list_p[0]);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1520,free_la(mac_list_p[1]);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1525,free_la(new_page_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1530,free_la(mig_buff_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1535,free_la(mig_buff_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1555,free_la(sept_entry_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1560,free_la(l2_attr_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1567,free_la(l2_septe_p[vm_id]);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1573,free_la(gpa_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1588,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1594,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,233,free_la(*mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,502,free_la(enc_md_list_hdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,566,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,571,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,576,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,581,free_la(page_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,586,free_la(enc_md_list_hdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,591,free_la(mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_abort.c,275,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_abort.c,280,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_abort.c,285,free_la(mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_abort.c,290,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_abort.c,196,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_abort.c,201,free_la(mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_abort.c,211,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_abort.c,217,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_servtd_bind.c,288,free_la(servtd_tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_servtd_bind.c,298,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_servtd_bind.c,303,free_la(servtd_tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_servtd_bind.c,309,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,438,free_la(md_list_hdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,600,free_la(mbmd_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,605,free_la(page_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,615,free_la(migsc_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,620,free_la(md_list_hdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,625,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,631,free_la(tdr_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_blockw.c,238,free_la(l2_septe_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_blockw.c,272,free_la(sept_entry_ptr);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_blockw.c,304,free_la(gpa_list_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_blockw.c,319,free_la(tdcs_p);
+free_la,vmm_dispatcher/migration_api_calls/tdh_export_blockw.c,325,free_la(tdr_p);
+free_la,vmm_dispatcher/api_calls/tdh_sys_config.c,858,free_la(tdmr_info_p);
+free_la,vmm_dispatcher/api_calls/tdh_sys_config.c,893,free_la(tdmr_pa_array);
+free_la,vmm_dispatcher/api_calls/tdh_mem_track.c,128,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_track.c,134,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_addcx.c,183,free_la(tdvps_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_addcx.c,189,free_la(tdcx_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_addcx.c,194,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_addcx.c,199,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_create.c,129,free_la(tdvps_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_create.c,135,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_create.c,141,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,220,free_la(l2_sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,251,free_la(removed_page_nl_pamt_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,265,free_la(page_sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,272,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,278,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_range_unblock.c,223,free_la(l2_sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_range_unblock.c,248,free_la(unblocked_page_pamt_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_range_unblock.c,261,free_la(sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_range_unblock.c,268,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_range_unblock.c,274,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_rd_wr.c,202,free_la(sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_rd_wr.c,209,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_rd_wr.c,215,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_rd_wr.c,220,free_la(data_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_sys_rdall.c,89,free_la(md_list_hdr_p);
+free_la,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,198,free_la(pamt_page_la[0]);
+free_la,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,199,free_la(pamt_page_la[1]);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_aug.c,209,free_la(page_sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_aug.c,215,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_aug.c,220,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mr_extend.c,204,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mr_extend.c,208,free_la(page_sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mr_extend.c,212,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mr_extend.c,216,free_la(page_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mng_key_freeid.c,116,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,532,free_la(merged_sept_page_ptr[vm_id]);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,542,free_la(merged_sept_page_pamt_nl_entry_ptr[vm_id]);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,547,free_la(merged_sept_page_sept_entry_ptr[vm_id]);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,567,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,573,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mr_finalize.c,139,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mr_finalize.c,143,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mng_create.c,152,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mng_rd_wr.c,167,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mng_rd_wr.c,173,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,329,free_la(sept_entry_ptr[vm_id]);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,339,free_la(removed_page_pamt_nl_entry_ptr[vm_id]);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,345,free_la(removed_page_sept_page_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,356,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,362,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_range_block.c,272,free_la(l2_sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_range_block.c,303,free_la(td_page_pamt_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_range_block.c,316,free_la(page_sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_range_block.c,323,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_range_block.c,329,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_phymem_page_wbinvd.c,88,free_la(page_wbinvd_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mng_init.c,808,free_la(event_filters_p);
+free_la,vmm_dispatcher/api_calls/tdh_mng_init.c,887,free_la(event_filters_p);
+free_la,vmm_dispatcher/api_calls/tdh_mng_init.c,891,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mng_init.c,896,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mng_init.c,900,free_la(td_params_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_phymem_page_reclaim.c,197,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mng_key_config.c,126,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_rd.c,177,free_la(l2_sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_rd.c,200,free_la(sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_rd.c,207,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_rd.c,213,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_phymem_pamt_remove.c,109,free_la(pamt_entries_la);
+free_la,vmm_dispatcher/api_calls/tdh_phymem_pamt_remove.c,116,free_la(pamt_entries_la);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_add.c,254,free_la(td_page_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_add.c,258,free_la(page_sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_add.c,262,free_la(source_page_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_add.c,266,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_add.c,271,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,60,free_la(sept_page_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,503,free_la(page_sept_entry_ptr[vm_id]);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,515,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,521,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mng_add_cx.c,192,free_la(tdcs_p);
+free_la,vmm_dispatcher/api_calls/tdh_mng_add_cx.c,198,free_la(tdcx_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mng_add_cx.c,204,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mng_vpflushdone.c,158,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mng_vpflushdone.c,162,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_flush.c,156,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_flush.c,163,free_la(tdvps_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_flush.c,168,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,275,free_la(l2_sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,302,free_la(target_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,307,free_la(mapped_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,316,free_la(mapped_page_nl_pamt_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,330,free_la(mapped_page_sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,337,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,343,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_sys_info.c,178,free_la(tdhsysinfo_output_la);
+free_la,vmm_dispatcher/api_calls/tdh_sys_info.c,183,free_la(cmr_info_la_start);
+free_la,vmm_dispatcher/api_calls/tdh_vp_init.c,311,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_init.c,316,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_init.c,323,free_la(tdvps_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_rd_wr.c,215,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_rd_wr.c,221,free_la(tdr_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_vp_rd_wr.c,229,free_la(tdvps_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,68,free_la(sept_page_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,385,free_la(l2_sept_page_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,471,free_la(l2_sept_entry_ptr[vm_id]);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,485,free_la(split_page_sept_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,491,free_la(split_page_pamt_entry_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,497,free_la(tdcs_ptr);
+free_la,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,503,free_la(tdr_ptr);
+free_la,common/data_structures/tdx_local_data.h,126,* Incremented on map_pa and decremented on free_la
+free_la,common/memory_handlers/keyhole_manager.c,358,void free_la(void* la)
+free_la,common/memory_handlers/pamt_manager.c,46,free_la(qword_la);
+free_la,common/memory_handlers/pamt_manager.c,63,free_la(qword_la);
+free_la,common/memory_handlers/pamt_manager.c,80,free_la(qword_la);
+free_la,common/memory_handlers/pamt_manager.c,249,free_la(pamt_entry);
+free_la,common/memory_handlers/pamt_manager.c,299,free_la(starting_byte_la);
+free_la,common/memory_handlers/pamt_manager.c,337,free_la(pamt_entry);
+free_la,common/memory_handlers/pamt_manager.c,483,free_la(pamt_1gb);
+free_la,common/memory_handlers/pamt_manager.c,486,free_la(pamt_2mb);
+free_la,common/memory_handlers/pamt_manager.c,490,free_la(pamt_4kb);
+free_la,common/memory_handlers/pamt_manager.c,507,free_la(pamt_walk_result->pamt_walk_path[PT_4KB]);
+free_la,common/memory_handlers/pamt_manager.c,514,free_la(pamt_walk_result->pamt_walk_path[PT_2MB]);
+free_la,common/memory_handlers/pamt_manager.c,521,free_la(pamt_walk_result->pamt_walk_path[PT_1GB]);
+free_la,common/memory_handlers/pamt_manager.c,529,free_la(pamt_walk_result->pamt_entry_p);
+free_la,common/memory_handlers/pamt_manager.c,588,free_la(pamt_2mb_node);
+free_la,common/memory_handlers/pamt_manager.c,634,free_la(tmp_pamt_entry);
+free_la,common/memory_handlers/pamt_manager.c,639,free_la(*pamt_nl_entry);
+free_la,common/memory_handlers/pamt_manager.c,669,free_la(pamt_entry);
+free_la,common/memory_handlers/pamt_manager.c,693,free_la(qword_la);
+free_la,common/memory_handlers/pamt_manager.c,698,free_la(qword_la);
+free_la,common/memory_handlers/pamt_manager.c,719,free_la(pamt_entry_children_la);
+free_la,common/memory_handlers/pamt_manager.c,723,free_la(pamt_entry_children_la);
+free_la,common/memory_handlers/pamt_manager.c,824,free_la(pamt_entry_children_la);
+free_la,common/memory_handlers/pamt_manager.c,849,free_la(promoted_pamt_entry);
+free_la,common/memory_handlers/pamt_manager.c,1016,free_la(pamt_entry_children_la);
+free_la,common/memory_handlers/pamt_manager.c,1040,free_la(pamt_entry_children_la);
+free_la,common/memory_handlers/pamt_manager.c,1067,free_la(demoted_pamt_entry);
+free_la,common/memory_handlers/keyhole_manager.h,108,void free_la(void* la);
+free_la,common/memory_handlers/sept_manager.c,292,free_la(pt);
+free_la,common/memory_handlers/sept_manager.c,299,free_la(pt);
+free_la,common/memory_handlers/sept_manager.c,308,free_la(pt);
+free_la,common/memory_handlers/sept_manager.c,323,free_la(pt); // Not needed at that point
+free_la,common/memory_handlers/sept_manager.c,329,free_la(pt); // Not needed at that point
+free_la,common/memory_handlers/sept_manager.c,413,free_la(pt); // Not needed at that point
+free_la,common/helpers/helpers.c,582,free_la(tmp_tdcs_p);
+free_la,common/helpers/helpers.c,608,free_la(tmp_tdcs_p);
+free_la,common/helpers/helpers.c,658,free_la(tdvpr_lp);
+free_la,common/helpers/helpers.c,784,free_la(*sept_entry_ptr);
+free_la,common/helpers/helpers.c,2152,free_la(td_vmcs_p);
+free_la,common/helpers/helpers.c,2861,free_la(*l2_septe_ptr);
+free_la,common/helpers/helpers.c,3273,free_la(vapic);
+free_la,common/debug/tdx_debug.c,114,free_la(vmm_buf_ptr);
+free_la,common/debug/tdx_debug.c,130,free_la(vmm_buf_ptr);
+free_la,common/debug/tdx_debug.c,149,free_la(vmm_buf_ptr);
+free_la,common/debug/tdx_debug.c,275,free_la(print_buffer_info);
+global_lock,vmm_dispatcher/api_calls/tdh_sys_config.c,764,if (acquire_sharex_lock_ex(&tdx_global_data_ptr->global_lock) != LOCK_RET_SUCCESS)
+global_lock,vmm_dispatcher/api_calls/tdh_sys_config.c,888,release_sharex_lock_ex(&tdx_global_data_ptr->global_lock);
+global_lock,vmm_dispatcher/api_calls/tdh_sys_shutdown.c,61,if (acquire_sharex_lock_ex(&global_data->global_lock) != LOCK_RET_SUCCESS)
+global_lock,vmm_dispatcher/api_calls/tdh_sys_shutdown.c,139,release_sharex_lock_ex(&global_data->global_lock);
+global_lock,vmm_dispatcher/api_calls/tdh_sys_key_config.c,43,if (acquire_sharex_lock_ex(&tdx_global_data_ptr->global_lock) != LOCK_RET_SUCCESS)
+global_lock,vmm_dispatcher/api_calls/tdh_sys_key_config.c,95,release_sharex_lock_ex(&tdx_global_data_ptr->global_lock);
+global_lock,vmm_dispatcher/api_calls/tdh_sys_update.c,49,if (acquire_sharex_lock_ex(&global_data->global_lock) != LOCK_RET_SUCCESS)
+global_lock,vmm_dispatcher/api_calls/tdh_sys_update.c,135,release_sharex_lock_ex(&global_data->global_lock);
+global_lock,vmm_dispatcher/api_calls/tdh_sys_lp_init.c,500,if (acquire_sharex_lock_sh(&tdx_global_data_ptr->global_lock) != LOCK_RET_SUCCESS)
+global_lock,vmm_dispatcher/api_calls/tdh_sys_lp_init.c,574,release_sharex_lock_sh(&tdx_global_data_ptr->global_lock);
+global_lock,vmm_dispatcher/api_calls/tdh_sys_init.c,1512,if (acquire_sharex_lock_ex(&tdx_global_data_ptr->global_lock) != LOCK_RET_SUCCESS)
+global_lock,vmm_dispatcher/api_calls/tdh_sys_init.c,1622,release_sharex_lock_ex(&tdx_global_data_ptr->global_lock);
+global_lock,common/data_structures/tdx_global_data.h,298,sharex_lock_t global_lock;
+global_lock,common/data_structures/tdx_global_data.h,429,"tdx_static_assert(offsetof(tdx_module_global_t, global_lock) % 2 == 0, global_lock);"
+kot.lock,vmm_dispatcher/api_calls/tdh_mng_key_freeid.c,81,if (acquire_sharex_lock_ex(&global_data_ptr->kot.lock) != LOCK_RET_SUCCESS)
+kot.lock,vmm_dispatcher/api_calls/tdh_mng_key_freeid.c,111,release_sharex_lock_ex(&global_data_ptr->kot.lock);
+kot.lock,vmm_dispatcher/api_calls/tdh_phymem_cache_wb.c,79,if (acquire_sharex_lock_sh(&global_data_ptr->kot.lock) != LOCK_RET_SUCCESS)
+kot.lock,vmm_dispatcher/api_calls/tdh_phymem_cache_wb.c,199,release_sharex_lock_sh(&global_data_ptr->kot.lock);
+kot.lock,vmm_dispatcher/api_calls/tdh_mng_create.c,83,if(acquire_sharex_lock_ex(&global_data->kot.lock) != LOCK_RET_SUCCESS)
+kot.lock,vmm_dispatcher/api_calls/tdh_mng_create.c,146,release_sharex_lock_ex(&global_data->kot.lock);
+kot.lock,vmm_dispatcher/api_calls/tdh_mng_vpflushdone.c,75,if (acquire_sharex_lock_ex(&global_data_ptr->kot.lock) != LOCK_RET_SUCCESS)
+kot.lock,vmm_dispatcher/api_calls/tdh_mng_vpflushdone.c,153,release_sharex_lock_ex(&global_data_ptr->kot.lock);
+lock_return_t,common/helpers/tdx_locks.h,51,} lock_return_t;
+lock_return_t,common/helpers/tdx_locks.h,61,_STATIC_INLINE_ lock_return_t acquire_mutex_lock(mutex_lock_t * lock_ptr)
+lock_return_t,common/helpers/tdx_locks.h,73,_STATIC_INLINE_ lock_return_t acquire_mutex_lock_or_wait(mutex_lock_t * lock_ptr)
+lock_return_t,common/helpers/tdx_locks.h,135,_STATIC_INLINE_ lock_return_t acquire_sharex_lock_sh(sharex_lock_t * lock_ptr)
+lock_return_t,common/helpers/tdx_locks.h,149,_STATIC_INLINE_ lock_return_t acquire_sharex_lock_ex(sharex_lock_t * lock_ptr)
+lock_return_t,common/helpers/tdx_locks.h,160,"_STATIC_INLINE_ lock_return_t acquire_sharex_lock(sharex_lock_t * lock_ptr, lock_type_t lock_type)"
+lock_return_t,common/helpers/tdx_locks.h,217,_STATIC_INLINE_ lock_return_t promote_sharex_lock(sharex_lock_t * lock_ptr)
+lock_return_t,common/helpers/tdx_locks.h,231,_STATIC_INLINE_ lock_return_t demote_sharex_lock(sharex_lock_t * lock_ptr)
+lock_type_t,vmm_dispatcher/api_calls/tdh_vp_init.c,149,lock_type_t tdr_lock_type = (leaf_opcode.version > 0) ? TDX_LOCK_EXCLUSIVE : TDX_LOCK_SHARED;
+lock_type_t,common/memory_handlers/pamt_manager.c,360,"api_error_code_e pamt_walk(pa_t pa, pamt_block_t pamt_block, lock_type_t leaf_lock_type,"
+lock_type_t,common/memory_handlers/pamt_manager.c,501,lock_type_t lock_type = pamt_walk_result->leaf_lock_type;
+lock_type_t,common/memory_handlers/pamt_manager.c,624,"static api_error_code_e pamt_implicit_get_and_lock_internal(pa_t pa, page_size_t leaf_size, lock_type_t leaf_lock_type,"
+lock_type_t,common/memory_handlers/pamt_manager.c,650,"api_error_code_e pamt_implicit_get_and_lock(pa_t pa, page_size_t leaf_size, lock_type_t leaf_lock_type,"
+lock_type_t,common/memory_handlers/pamt_manager.c,658,"pa_t pa, page_size_t leaf_size, lock_type_t leaf_lock_type,"
+lock_type_t,common/memory_handlers/pamt_manager.c,665,"void pamt_implicit_release_lock(pamt_entry_t* pamt_entry, lock_type_t leaf_lock_type)"
+lock_type_t,common/memory_handlers/pamt_manager.h,214,lock_type_t leaf_lock_type;
+lock_type_t,common/memory_handlers/pamt_manager.h,326,"api_error_code_e pamt_walk(pa_t pa, pamt_block_t pamt_block, lock_type_t leaf_lock_type,"
+lock_type_t,common/memory_handlers/pamt_manager.h,377,"api_error_code_e pamt_implicit_get_and_lock(pa_t pa, page_size_t leaf_size, lock_type_t leaf_lock_type,"
+lock_type_t,common/memory_handlers/pamt_manager.h,396,"pa_t pa, page_size_t leaf_size, lock_type_t leaf_lock_type,"
+lock_type_t,common/memory_handlers/pamt_manager.h,404,"void pamt_implicit_release_lock(pamt_entry_t* pamt_entry, lock_type_t leaf_lock_type);"
+lock_type_t,common/memory_handlers/pamt_manager.h,411,"void pamt_implicit_release_lock(pamt_entry_t* pamt_entry, lock_type_t leaf_lock_type);"
+lock_type_t,common/helpers/helpers.c,158,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.c,310,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.c,336,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.c,351,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.c,389,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.c,423,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.c,449,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.c,490,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.c,553,"lock_type_t op_state_lock_type,"
+lock_type_t,common/helpers/helpers.c,621,"lock_type_t op_state_lock_type,"
+lock_type_t,common/helpers/helpers.c,634,"lock_type_t op_state_lock_type,"
+lock_type_t,common/helpers/helpers.c,739,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.c,802,"lock_type_t lock_type,"
+lock_type_t,common/helpers/tdx_locks.h,46,} lock_type_t;
+lock_type_t,common/helpers/tdx_locks.h,160,"_STATIC_INLINE_ lock_return_t acquire_sharex_lock(sharex_lock_t * lock_ptr, lock_type_t lock_type)"
+lock_type_t,common/helpers/tdx_locks.h,201,"_STATIC_INLINE_ void release_sharex_lock(sharex_lock_t * lock_ptr, lock_type_t lock_type)"
+lock_type_t,common/helpers/tdx_locks.h,418,"_STATIC_INLINE_ api_error_code_e acquire_sharex_lock_hp(sharex_hp_lock_t * lock_ptr, lock_type_t lock_type,"
+lock_type_t,common/helpers/tdx_locks.h,458,"_STATIC_INLINE_ void release_sharex_lock_hp(sharex_hp_lock_t * lock_ptr, lock_type_t lock_type)"
+lock_type_t,common/helpers/helpers.h,548,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.h,633,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.h,662,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.h,694,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.h,723,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.h,750,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.h,774,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.h,819,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.h,930,"lock_type_t lock_type,"
+lock_type_t,common/helpers/helpers.h,980,"lock_type_t op_state_lock_type,"
+lock_type_t,common/helpers/helpers.h,1005,"lock_type_t op_state_lock_type,"
+map_pa,td_transitions/td_exit.c,484,"l2_enter_guest_state_t* guest_state = map_pa((void*)tdvps_ptr->management.l2_enter_guest_state_hpa[vm_id], TDX_RANGE_RW);"
+map_pa,td_transitions/tdg_vp_enter.c,199,"guest_state_p = (l2_enter_guest_state_t *)map_pa((void*)tdvps_p->management.l2_enter_guest_state_hpa[vm_id], TDX_RANGE_RW);"
+map_pa,td_dispatcher/vm_exits_l2/td_l2_interrupt.c,50,"pid_p = map_pa((void*)tdvps_p->management.shadow_pid_hpa[0], TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,402,"*td_page_p = map_pa(td_page_pa->raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,412,"*mig_buff_p = map_pa(mig_buff_list_entry_pa.raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,665,"l2_attr_list_p = map_pa(l2_attr_list_pa.raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,686,"mig_buff_list_p = (page_list_entry_t*)map_pa(mig_buff_list_pa.raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,698,"mac_list_p[0] = (mac_list_entry_t*)map_pa(mac_list_pa[0].raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,709,"mac_list_p[1] = (mac_list_entry_t*)map_pa(mac_list_pa[1].raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,732,"mbmd_p = (mbmd_t*)map_pa(mbmd_hpa_and_size_pa.raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,296,"page_list_p = (pa_t *)map_pa(page_list_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,329,"enc_md_list_hdr_p = (md_list_header_t *)map_pa((void*)enc_md_list_pa.raw, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,391,"mbmd_p = (mbmd_t *)map_pa((void*)mbmd_hpa_and_size.raw, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,185,"mbmd_p = (mbmd_t *)map_pa(mbmd_hpa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,292,"page_list_p = (pa_t *)map_pa(page_list_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,326,"md_list_hdr_p = (md_list_header_t *)map_pa(md_list_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,244,"page_list_p = (pa_t *)map_pa(page_list_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,277,"enc_md_list_hdr_p = (md_list_header_t *)map_pa(enc_md_list_pa.raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,333,"mbmd_p = (mbmd_t *)map_pa((void*)mbmd_hpa_and_size.raw, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,249,"mbmd_p = (mbmd_t*)map_pa(mbmd_hpa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,400,"page_list_p = (pa_t *)map_pa(page_list_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,434,"md_list_hdr_p = (md_list_header_t *)map_pa(md_list_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_servtd_prebind.c,94,"servtd_info_hash_p = map_pa(servtd_info_hash_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_track.c,138,"mbmd_p = (mbmd_t*)map_pa(mbmd_hpa_and_size_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_track.c,197,"mbmd_p = (mbmd_t*)map_pa(mbmd_hpa_and_size_pa.raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,268,"*mig_buff_p = map_pa(mig_buff_list_entry_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,633,"l2_attr_list_p = map_pa(l2_attr_list_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,649,"mig_buff_list_p = (page_list_entry_t*)map_pa(mig_buff_list_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,661,"mac_list_p[0] = (mac_list_entry_t*)map_pa(mac_list_pa[0].raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,672,"mac_list_p[1] = (mac_list_entry_t*)map_pa(mac_list_pa[1].raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,687,"new_page_list_p = map_pa(new_page_list_pa.raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,710,"mbmd_p = (mbmd_t*)map_pa(mbmd_hpa_and_size_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1095,"td_page_p = map_pa(td_page_pa.raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,235,"*mbmd_p = (mbmd_t*)map_pa((void*)mbmd_hpa_and_size->raw, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,470,"page_list_p = (pa_t*)map_pa(page_list_pa.raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,504,"enc_md_list_hdr_p = (md_list_header_t*)map_pa(enc_md_list_pa.raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_export_abort.c,136,"mbmd_p = (mbmd_t*)map_pa((void*)mbmd_hpa_and_size.raw, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_abort.c,135,"mbmd_p = (mbmd_t*)map_pa(mbmd_hpa.raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,134,"*mbmd_p = (mbmd_t*)map_pa((void*)mbmd_hpa_and_size->raw, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,407,"page_list_p = (hpa_and_last_t*)map_pa(page_list_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,440,"md_list_hdr_p = (md_list_header_t*)map_pa(md_list_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/api_calls/tdh_sys_config.c,834,"tdmr_pa_array = map_pa(tdmr_info_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/api_calls/tdh_sys_config.c,856,"tdmr_info_p = (tdmr_info_entry_t*)map_pa(tdmr_entry.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/api_calls/tdh_vp_addcx.c,111,"tdvps_ptr = (tdvps_t*)map_pa((void*)(set_hkid_to_pa(tdvpr_pa, td_hkid).full_pa), TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/api_calls/tdh_mem_rd_wr.c,177,"data_ptr = map_pa((void*)data_pa.raw, write ? TDX_RANGE_RW : TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/api_calls/tdh_sys_rdall.c,71,"md_list_hdr_p = (md_list_header_t*)map_pa((void*)md_list_hpa, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,222,"removed_page_sept_page_ptr = map_pa(removed_page_pa[0].raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/api_calls/tdh_mng_init.c,732,"td_params_ptr = (td_params_t *)map_pa((void*)td_params_pa.raw, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/api_calls/tdh_mng_init.c,777,"event_filters_p = (event_filter_t*)map_pa((void*)(event_filters_info.raw & ~BITS(11, 0)), TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/api_calls/tdh_sys_lp_init.c,441,"local_data->fatal_info_p = (uint64_t*)map_pa((void*)global_data->fatal_info_config_hpa, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/api_calls/tdh_mem_page_add.c,184,"source_page_ptr = map_pa((void*)source_pa.raw, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,228,"mapped_ptr = map_pa(source_pa.raw_void, TDX_RANGE_RO);"
+map_pa,vmm_dispatcher/api_calls/tdh_sys_info.c,82,"tdhsysinfo_output_la = (td_sys_info_t *) map_pa(tdhsysinfo_pa.raw_void, TDX_RANGE_RW);"
+map_pa,vmm_dispatcher/api_calls/tdh_sys_info.c,100,"cmr_info_la = (cmr_info_entry_t*) map_pa(cmr_info_pa.raw_void, TDX_RANGE_RW);"
+map_pa,common/data_structures/tdx_local_data.h,126,* Incremented on map_pa and decremented on free_la
+map_pa,common/memory_handlers/keyhole_manager.c,353,"void* map_pa(void* pa, mapping_type_t mapping_type)"
+map_pa,common/memory_handlers/keyhole_manager.h,90,"void* map_pa(void* pa, mapping_type_t mapping_type);"
+map_pa,common/memory_handlers/keyhole_manager.h,93,"* @brief Same functionality as map_pa, but maps the PA with UC memtype in the keyhole page table entry"
+map_pa,common/memory_handlers/sept_manager.c,282,"pt = map_pa((void*)(pt_pa.full_pa), TDX_RANGE_RO);"
+map_pa,common/memory_handlers/sept_manager.c,373,"pt = map_pa((void*)(pt_pa.full_pa), TDX_RANGE_RW);"
+map_pa,common/helpers/helpers.c,327,"*la = map_pa((void*)hpa_with_hkid.full_pa, mapping_type);"
+map_pa,common/helpers/helpers.c,380,"*tdr_p = map_pa((void*)hpa_with_hkid.full_pa, mapping_type);"
+map_pa,common/helpers/helpers.c,1005,"*la = map_pa(page_hpa.raw_void, mapping_type);"
+map_pa,common/helpers/helpers.c,2139,"td_vmcs_p = (vmcs_header_t *)map_pa(tdvps_vmcs_pa.raw_void, TDX_RANGE_RW);"
+map_pa,common/helpers/helpers.c,3259,"tdvps_vapic_t* vapic = map_pa((void*)tdvps_p->management.l2_vapic_hpa[vm_id], TDX_RANGE_RO);"
+map_pa,common/helpers/helpers.h,272,"return map_pa((void*) pa_with_hkid.raw, mapping_type);"
+map_pa,common/helpers/migration.c,87,"*gpa_list_p = (gpa_list_entry_t*)map_pa(gpa_list_pa.raw_void, TDX_RANGE_RW);"
+map_pa,common/debug/tdx_debug.c,108,"char* vmm_buf_ptr = map_pa((void*)hpa, TDX_RANGE_RW);"
+map_pa,common/debug/tdx_debug.c,115,"vmm_buf_ptr = map_pa((void*)(hpa + i), TDX_RANGE_RW);"
+map_pa,common/debug/tdx_debug.c,131,"vmm_buf_ptr = map_pa((void*)(hpa + i), TDX_RANGE_RW);"
+map_pa,common/debug/tdx_debug.c,271,"print_buffer_info_t* print_buffer_info = map_pa(&p_ctl->trace_buffer[0], TDX_RANGE_RW);"
+mutex_lock_t,common/data_structures/tdx_global_data.h,154,mutex_lock_t entry_lock; /**< mutex to control concurrent execution of TDWBINVD */
+mutex_lock_t,common/data_structures/tdx_global_data.h,185,mutex_lock_t lock; /**< mutex for the initialization process of this TDMR region */
+mutex_lock_t,common/helpers/tdx_locks.h,53,typedef uint8_t mutex_lock_t;
+mutex_lock_t,common/helpers/tdx_locks.h,61,_STATIC_INLINE_ lock_return_t acquire_mutex_lock(mutex_lock_t * lock_ptr)
+mutex_lock_t,common/helpers/tdx_locks.h,63,mutex_lock_t retval;
+mutex_lock_t,common/helpers/tdx_locks.h,73,_STATIC_INLINE_ lock_return_t acquire_mutex_lock_or_wait(mutex_lock_t * lock_ptr)
+mutex_lock_t,common/helpers/tdx_locks.h,75,mutex_lock_t retval = MUTEX_LOCK;
+mutex_lock_t,common/helpers/tdx_locks.h,93,_STATIC_INLINE_ void release_mutex_lock(mutex_lock_t * lock_ptr)
+mutex_lock_t,common/helpers/tdx_locks.h,95,mutex_lock_t retval;
+pamt_entry_t,td_transitions/tdh_vp_enter.c,661,pamt_entry_t        * tdr_pamt_entry_ptr;          // Pointer to the TDR PAMT entry
+pamt_entry_t,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,54,pamt_entry_t         *tdr_pamt_p = NULL;    // Pinter to owner tdr pamt entry
+pamt_entry_t,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,78,pamt_entry_t         *tdr_pamt_p = NULL;    // Pinter to owner tdr pamt entry
+pamt_entry_t,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,473,pamt_entry_t*           td_page_pamt_entry_p = NULL;
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_sys_config.c,185,uint64_t required_size = ((tdmr_size / entry_size) * sizeof(pamt_entry_t));
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_sys_config.c,197,"pamt_size, (tdmr_size / entry_size) * sizeof(pamt_entry_t));"
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_vp_addcx.c,56,pamt_entry_t        * tdr_pamt_entry_ptr;        // Pointer to the TDR PAMT entry
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,61,pamt_entry_t        * removed_page_pamt_entry_ptr = NULL;  // Pointer to the to-be-removed page PAMT entry
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_sys_tdmr_init.c,113,pamt_block.pamt_1gb_p = (pamt_entry_t*) (tdmr_entry->pamt_1g_base
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_sys_tdmr_init.c,114,+ ((tdmr_entry->last_initialized - tdmr_entry->base) / _1GB * sizeof(pamt_entry_t)));
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_sys_tdmr_init.c,115,pamt_block.pamt_2mb_p = (pamt_entry_t*) (tdmr_entry->pamt_2m_base
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_sys_tdmr_init.c,116,+ ((tdmr_entry->last_initialized - tdmr_entry->base) / _2MB * sizeof(pamt_entry_t)));
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_sys_tdmr_init.c,117,pamt_block.pamt_4kb_p = (pamt_entry_t*) (tdmr_entry->pamt_4k_base
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_sys_tdmr_init.c,118,+ ((tdmr_entry->last_initialized - tdmr_entry->base) / _4KB * sizeof(pamt_entry_t)));
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_mem_range_unblock.c,63,pamt_entry_t        * unblocked_page_pamt_entry_ptr = NULL;  // Pointer to the to-be-removed page PAMT entry
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,185,pamt_entry_t* pamt_page_la[2];
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,179,pamt_entry_t        * merged_sept_page_pamt_entry_ptr[MAX_VMS] = { 0 };
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,63,pamt_entry_t        * removed_page_pamt_entry_ptr[MAX_VMS] = { 0 };
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_mem_range_block.c,139,pamt_entry_t        * td_page_pamt_entry_ptr = NULL; // Pointer to the TD PAMT entry
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_phymem_page_rdmd.c,54,pamt_entry_t          pamt_entry;
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_phymem_page_reclaim.c,46,pamt_entry_t        * reclaimed_page_pamt_entry_ptr;        // Pointer to the reclaimed page PAMT entry
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_phymem_page_reclaim.c,55,pamt_entry_t        * tdr_pamt_entry_ptr;                   // Pointer to the TDR PAMT entry
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_phymem_pamt_remove.c,99,uint32_t pamt_entries_in_page = TDX_PAGE_SIZE_IN_BYTES / sizeof(pamt_entry_t);
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_phymem_pamt_remove.c,103,"pamt_entry_t* pamt_entries_la = map_pa_with_global_hkid(pamt_pages[i].raw_void, TDX_RANGE_RO);"
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_vp_flush.c,54,pamt_entry_t        * tdr_pamt_entry_ptr;                   // Pointer to the TDR PAMT entry
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,64,pamt_entry_t*         mapped_page_pamt_ptr = NULL;
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_sys_info.c,116,tdhsysinfo_output_la->pamt_entry_size = sizeof(pamt_entry_t);
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_vp_init.c,104,pamt_entry_t        * tdr_pamt_entry_ptr;                   // Pointer to the TDR PAMT entry
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_vp_rd_wr.c,58,pamt_entry_t        * tdr_pamt_entry_ptr;                   // Pointer to the TDR PAMT entry
+pamt_entry_t,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,91,pamt_entry_t* split_page_pamt_entry_ptr = NULL; // Pointer to the to-be-splited page PAMT entry
+pamt_entry_t,common/data_structures/tdx_local_data.h,145,pamt_entry_t *        tdr_pamt_entry;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,167,pamt_block->pamt_1gb_p = (pamt_entry_t*) (covering_tdmr->pamt_1g_base
+pamt_entry_t,common/memory_handlers/pamt_manager.c,168,+ (uint64_t)(pamt_block_num * sizeof(pamt_entry_t)));
+pamt_entry_t,common/memory_handlers/pamt_manager.c,169,pamt_block->pamt_2mb_p = (pamt_entry_t*) (covering_tdmr->pamt_2m_base
+pamt_entry_t,common/memory_handlers/pamt_manager.c,170,+ (uint64_t)(pamt_block_num * sizeof(pamt_entry_t) * PAMT_2MB_ENTRIES_IN_1GB));
+pamt_entry_t,common/memory_handlers/pamt_manager.c,174,pamt_block->pamt_4kb_p = (pamt_entry_t*)covering_tdmr->pamt_4k_base;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,178,pamt_block->pamt_4kb_p = (pamt_entry_t*) (covering_tdmr->pamt_4k_base
+pamt_entry_t,common/memory_handlers/pamt_manager.c,179,+ (uint64_t)(pamt_block_num * sizeof(pamt_entry_t) * PAMT_4KB_ENTRIES_IN_1GB));
+pamt_entry_t,common/memory_handlers/pamt_manager.c,210,pamt_entry_t* pamt_entry = NULL;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,212,/ sizeof(pamt_entry_t);
+pamt_entry_t,common/memory_handlers/pamt_manager.c,220,uint32_t pamt_entries_in_page = TDX_PAGE_SIZE_IN_BYTES / sizeof(pamt_entry_t);
+pamt_entry_t,common/memory_handlers/pamt_manager.c,223,pamt_entry_t* pamt_entry_start = pamt_block->pamt_4kb_p;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,230,ALIGN(MOVDIR64_CHUNK_SIZE) pamt_entry_t chunk[PAMT_4K_ENTRIES_IN_CACHE];
+pamt_entry_t,common/memory_handlers/pamt_manager.c,231,"basic_memset((uint64_t)chunk, PAMT_4K_ENTRIES_IN_CACHE*sizeof(pamt_entry_t), 0 , PAMT_4K_ENTRIES_IN_CACHE*sizeof(pamt_entry_t));"
+pamt_entry_t,common/memory_handlers/pamt_manager.c,266,uint64_t starting_bit = (start_pamt_4k_p - tdmr_entry->pamt_4k_base) / sizeof(pamt_entry_t);
+pamt_entry_t,common/memory_handlers/pamt_manager.c,318,"pamt_entry_t* nodes_array, uint64_t entries_in_node, tdmr_entry_t *tdmr_entry)"
+pamt_entry_t,common/memory_handlers/pamt_manager.c,322,uint64_t entries_start = (start_pamt_4k_p - tdmr_entry->pamt_4k_base) / (entries_in_node * (uint64_t)sizeof(pamt_entry_t));
+pamt_entry_t,common/memory_handlers/pamt_manager.c,323,uint64_t entries_end   = (end_pamt_4k_p - tdmr_entry->pamt_4k_base) / (entries_in_node * (uint64_t)sizeof(pamt_entry_t));
+pamt_entry_t,common/memory_handlers/pamt_manager.c,345,uint64_t end_pamt_4k_p = start_pamt_4k_p + (num_4k_entries * (uint64_t)sizeof(pamt_entry_t));
+pamt_entry_t,common/memory_handlers/pamt_manager.c,364,"pamt_entry_t* pamt_1gb = map_pa_with_global_hkid(pamt_block.pamt_1gb_p, TDX_RANGE_RW);"
+pamt_entry_t,common/memory_handlers/pamt_manager.c,365,pamt_entry_t* pamt_2mb = NULL;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,366,pamt_entry_t* pamt_4kb = NULL;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,368,pamt_entry_t* ret_entry_pp = (void*)NULL_PA;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,441,pamt_4kb_pp.raw_void = &(((pamt_entry_t*)node_page.raw_void)[pa.pamt_4k_in_2mb.idx % 256]);
+pamt_entry_t,common/memory_handlers/pamt_manager.c,537,"static pamt_entry_t* pamt_implicit_get_internal(pa_t pa, page_size_t leaf_size, pamt_non_leaf_entry_t** pamt_nl_entry)"
+pamt_entry_t,common/memory_handlers/pamt_manager.c,548,pamt_entry_t* pamt_entry_p = NULL;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,580,pamt_4kb_pp.raw_void = &(((pamt_entry_t*)node_page.raw_void)[pa.pamt_4k_in_2mb.idx % 256]);
+pamt_entry_t,common/memory_handlers/pamt_manager.c,614,"pamt_entry_t* pamt_implicit_get(pa_t pa, page_size_t leaf_size)"
+pamt_entry_t,common/memory_handlers/pamt_manager.c,619,"pamt_entry_t* pamt_implicit_get_with_nl_entry(pa_t pa, page_size_t leaf_size, pamt_non_leaf_entry_t** pamt_nl_entry)"
+pamt_entry_t,common/memory_handlers/pamt_manager.c,625,"pamt_entry_t** pamt_entry,"
+pamt_entry_t,common/memory_handlers/pamt_manager.c,630,"pamt_entry_t* tmp_pamt_entry = pamt_implicit_get_internal(pa, leaf_size, pamt_nl_entry);"
+pamt_entry_t,common/memory_handlers/pamt_manager.c,651,"pamt_entry_t** pamt_entry, bool_t is_guest)"
+pamt_entry_t,common/memory_handlers/pamt_manager.c,659,"pamt_entry_t** pamt_entry, pamt_non_leaf_entry_t** pamt_nl_entry, bool_t is_guest)"
+pamt_entry_t,common/memory_handlers/pamt_manager.c,665,"void pamt_implicit_release_lock(pamt_entry_t* pamt_entry, lock_type_t leaf_lock_type)"
+pamt_entry_t,common/memory_handlers/pamt_manager.c,702,pamt_entry_t* pamt_entry_children_la;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,703,pamt_entry_t* pamt_entry_children_pa = &pamt_block->pamt_4kb_p[hpa.pamt_4k.idx];
+pamt_entry_t,common/memory_handlers/pamt_manager.c,704,uint32_t pamt_entries_in_page = TDX_PAGE_SIZE_IN_BYTES / sizeof(pamt_entry_t);
+pamt_entry_t,common/memory_handlers/pamt_manager.c,732,pamt_entry_t* promoted_pamt_entry = NULL;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,733,pamt_entry_t* pamt_entry_children_la = NULL;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,790,uint32_t pamt_entries_in_page = TDX_PAGE_SIZE_IN_BYTES / sizeof(pamt_entry_t);
+pamt_entry_t,common/memory_handlers/pamt_manager.c,856,pamt_entry_t* demoted_pamt_entry = NULL;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,858,pamt_entry_t* pamt_entry_children_la = NULL;
+pamt_entry_t,common/memory_handlers/pamt_manager.c,917,uint32_t pamt_entries_in_page = TDX_PAGE_SIZE_IN_BYTES / sizeof(pamt_entry_t);
+pamt_entry_t,common/memory_handlers/pamt_manager.c,999,ALIGN(MOVDIR64_CHUNK_SIZE) pamt_entry_t chunk[PAMT_4K_ENTRIES_IN_CACHE];
+pamt_entry_t,common/memory_handlers/pamt_manager.c,1000,"basic_memset((uint64_t)chunk, PAMT_4K_ENTRIES_IN_CACHE*sizeof(pamt_entry_t), 0, PAMT_4K_ENTRIES_IN_CACHE*sizeof(pamt_entry_t));"
+pamt_entry_t,common/memory_handlers/pamt_manager.h,69,#define PAMT_4K_ENTRIES_IN_CACHE  (MOVDIR64_CHUNK_SIZE / sizeof(pamt_entry_t))
+pamt_entry_t,common/memory_handlers/pamt_manager.h,91,* @struct pamt_entry_t
+pamt_entry_t,common/memory_handlers/pamt_manager.h,109,} pamt_entry_t;
+pamt_entry_t,common/memory_handlers/pamt_manager.h,110,"tdx_static_assert(sizeof(pamt_entry_t) == PAMT_ENTRY_SIZE_IN_BYTES, pamt_entry_t);"
+pamt_entry_t,common/memory_handlers/pamt_manager.h,111,"tdx_static_assert((MOVDIR64_CHUNK_SIZE % sizeof(pamt_entry_t)) == 0, pamt_entry_t_2);"
+pamt_entry_t,common/memory_handlers/pamt_manager.h,116,* @struct pamt_entry_t
+pamt_entry_t,common/memory_handlers/pamt_manager.h,146,_STATIC_INLINE_ pa_t get_pamt_entry_owner(pamt_entry_t* pamt_entry)
+pamt_entry_t,common/memory_handlers/pamt_manager.h,153,"_STATIC_INLINE_ void set_pamt_entry_owner(pamt_entry_t* pamt_entry, pa_t owner)"
+pamt_entry_t,common/memory_handlers/pamt_manager.h,190,pamt_entry_t* pamt_1gb_p;
+pamt_entry_t,common/memory_handlers/pamt_manager.h,191,pamt_entry_t* pamt_2mb_p;
+pamt_entry_t,common/memory_handlers/pamt_manager.h,192,pamt_entry_t* pamt_4kb_p;
+pamt_entry_t,common/memory_handlers/pamt_manager.h,210,pamt_entry_t*          pamt_walk_path[PT_1GB + 1];
+pamt_entry_t,common/memory_handlers/pamt_manager.h,215,pamt_entry_t* pamt_entry_p; // Actual PAMT entry that should be used in most cases
+pamt_entry_t,common/memory_handlers/pamt_manager.h,351,"pamt_entry_t* pamt_implicit_get(pa_t pa, page_size_t leaf_size);"
+pamt_entry_t,common/memory_handlers/pamt_manager.h,362,"pamt_entry_t* pamt_implicit_get_with_nl_entry(pa_t pa, page_size_t leaf_size, pamt_non_leaf_entry_t** pamt_nl_entry);"
+pamt_entry_t,common/memory_handlers/pamt_manager.h,378,"pamt_entry_t** pamt_entry, bool_t is_guest);"
+pamt_entry_t,common/memory_handlers/pamt_manager.h,397,"pamt_entry_t** pamt_entry, pamt_non_leaf_entry_t** pamt_nl_entry, bool_t is_guest);"
+pamt_entry_t,common/memory_handlers/pamt_manager.h,404,"void pamt_implicit_release_lock(pamt_entry_t* pamt_entry, lock_type_t leaf_lock_type);"
+pamt_entry_t,common/memory_handlers/pamt_manager.h,411,"void pamt_implicit_release_lock(pamt_entry_t* pamt_entry, lock_type_t leaf_lock_type);"
+pamt_entry_t,common/helpers/helpers.c,491,"pamt_entry_t** pamt_entry,"
+pamt_entry_t,common/helpers/error_reporting.c,109,"//extended_fatal_info_t prepare_extended_fatal_info_pamt(pamt_entry_t pamt_entry, uint64_t hpa, uint8_t level, uint64_t pamt_page)"
+pamt_entry_t,common/helpers/error_reporting.h,82,"//extended_fatal_info_t prepare_extended_fatal_info_pamt(pamt_entry_t pamt_entry, uint64_t hpa, uint8_t level, uint64_t pamt_page);"
+pamt_entry_t,common/helpers/helpers.h,931,"pamt_entry_t** pamt_entry,"
+pamt_entry_t,common/helpers/fatal_info.h,142,pamt_entry_t pamt_entry;
+pamt_entry_t,common/metadata_handlers/metadata_sys.c,158,*element_array = sizeof(pamt_entry_t);
+pamt_implicit_get_and_lock,common/memory_handlers/pamt_manager.c,650,"api_error_code_e pamt_implicit_get_and_lock(pa_t pa, page_size_t leaf_size, lock_type_t leaf_lock_type,"
+pamt_implicit_get_and_lock,common/memory_handlers/pamt_manager.h,377,"api_error_code_e pamt_implicit_get_and_lock(pa_t pa, page_size_t leaf_size, lock_type_t leaf_lock_type,"
+pamt_implicit_get_and_lock,common/helpers/helpers.c,496,"api_error_code_e errc = pamt_implicit_get_and_lock(tdr_pa, PT_4KB, lock_type, pamt_entry, false);"
+pamt_implicit_release_lock,td_transitions/td_exit.c,586,"pamt_implicit_release_lock(vp_ctx->tdr_pamt_entry, TDX_LOCK_SHARED);"
+pamt_implicit_release_lock,td_transitions/tdh_vp_enter.c,1068,"pamt_implicit_release_lock(tdr_pamt_entry_ptr, TDX_LOCK_SHARED);"
+pamt_implicit_release_lock,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,488,"pamt_implicit_release_lock(tdr_pamt_p, TDX_LOCK_SHARED);"
+pamt_implicit_release_lock,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,144,"// Map the TDCS structure and check the state        pamt_implicit_release_lock(tdr_pamt_p, TDX_LOCK_SHARED);"
+pamt_implicit_release_lock,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,614,"pamt_implicit_release_lock(tdr_pamt_p, TDX_LOCK_SHARED);"
+pamt_implicit_release_lock,vmm_dispatcher/api_calls/tdh_vp_addcx.c,198,"pamt_implicit_release_lock(tdr_pamt_entry_ptr, TDX_LOCK_SHARED);"
+pamt_implicit_release_lock,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,247,"pamt_implicit_release_lock(removed_page_pamt_entry_ptr, TDX_LOCK_EXCLUSIVE);"
+pamt_implicit_release_lock,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,537,"pamt_implicit_release_lock(merged_sept_page_pamt_entry_ptr[vm_id], TDX_LOCK_EXCLUSIVE);"
+pamt_implicit_release_lock,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,334,"pamt_implicit_release_lock(removed_page_pamt_entry_ptr[vm_id], TDX_LOCK_EXCLUSIVE);"
+pamt_implicit_release_lock,vmm_dispatcher/api_calls/tdh_phymem_page_reclaim.c,193,"pamt_implicit_release_lock(tdr_pamt_entry_ptr, TDX_LOCK_SHARED);"
+pamt_implicit_release_lock,vmm_dispatcher/api_calls/tdh_vp_flush.c,155,"pamt_implicit_release_lock(tdr_pamt_entry_ptr, TDX_LOCK_SHARED);"
+pamt_implicit_release_lock,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,312,"pamt_implicit_release_lock(mapped_page_pamt_ptr, TDX_LOCK_EXCLUSIVE);"
+pamt_implicit_release_lock,vmm_dispatcher/api_calls/tdh_vp_init.c,315,"pamt_implicit_release_lock(tdr_pamt_entry_ptr, tdr_lock_type);"
+pamt_implicit_release_lock,vmm_dispatcher/api_calls/tdh_vp_rd_wr.c,220,"pamt_implicit_release_lock(tdr_pamt_entry_ptr, TDX_LOCK_SHARED);"
+pamt_implicit_release_lock,common/memory_handlers/pamt_manager.c,665,"void pamt_implicit_release_lock(pamt_entry_t* pamt_entry, lock_type_t leaf_lock_type)"
+pamt_implicit_release_lock,common/memory_handlers/pamt_manager.h,404,"void pamt_implicit_release_lock(pamt_entry_t* pamt_entry, lock_type_t leaf_lock_type);"
+pamt_implicit_release_lock,common/memory_handlers/pamt_manager.h,411,"void pamt_implicit_release_lock(pamt_entry_t* pamt_entry, lock_type_t leaf_lock_type);"
+pamt_non_leaf_entry_t,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,474,pamt_non_leaf_entry_t*  td_page_pamt_nl_entry_p = NULL;
+pamt_non_leaf_entry_t,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,62,pamt_non_leaf_entry_t* removed_page_nl_pamt_entry_ptr = NULL;
+pamt_non_leaf_entry_t,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,124,pamt_non_leaf_entry_t* pamt_node_p = (pamt_non_leaf_entry_t*)pamt_walk_result.pamt_entry_p;
+pamt_non_leaf_entry_t,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,180,pamt_non_leaf_entry_t* merged_sept_page_pamt_nl_entry_ptr[MAX_VMS] = { 0 };
+pamt_non_leaf_entry_t,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,64,pamt_non_leaf_entry_t* removed_page_pamt_nl_entry_ptr[MAX_VMS] = { 0 };
+pamt_non_leaf_entry_t,vmm_dispatcher/api_calls/tdh_phymem_page_rdmd.c,128,pamt_non_leaf_entry_t* pamt_node = (pamt_non_leaf_entry_t*)&pamt_entry;
+pamt_non_leaf_entry_t,vmm_dispatcher/api_calls/tdh_phymem_pamt_remove.c,86,pamt_non_leaf_entry_t* pamt_node_p = (pamt_non_leaf_entry_t*)pamt_walk_result.pamt_entry_p;
+pamt_non_leaf_entry_t,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,65,pamt_non_leaf_entry_t* mapped_page_nl_pamt_ptr = NULL;
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.c,83,void pamt_inc_nl_page_count(pamt_non_leaf_entry_t* pamt_nl_entry)
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.c,93,bool_t pamt_dec_nl_page_count(pamt_non_leaf_entry_t* pamt_nl_entry)
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.c,436,pamt_non_leaf_entry_t* pamt_2mb_node = (pamt_non_leaf_entry_t*)pamt_2mb;
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.c,537,"static pamt_entry_t* pamt_implicit_get_internal(pa_t pa, page_size_t leaf_size, pamt_non_leaf_entry_t** pamt_nl_entry)"
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.c,569,"pamt_non_leaf_entry_t* pamt_2mb_node = map_pa_with_global_hkid(&pamt_block.pamt_2mb_p[pa.pamt_2m.idx], TDX_RANGE_RW);"
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.c,619,"pamt_entry_t* pamt_implicit_get_with_nl_entry(pa_t pa, page_size_t leaf_size, pamt_non_leaf_entry_t** pamt_nl_entry)"
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.c,626,"pamt_non_leaf_entry_t** pamt_nl_entry,"
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.c,659,"pamt_entry_t** pamt_entry, pamt_non_leaf_entry_t** pamt_nl_entry, bool_t is_guest)"
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.c,752,pamt_non_leaf_entry_t* promoted_pamt_node = (pamt_non_leaf_entry_t*)promoted_pamt_entry;
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.c,1021,((pamt_non_leaf_entry_t*)demoted_pamt_entry)->page_hpa0 = ((pa_t)pamt_hpa0).page_4k_num;
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.c,1022,((pamt_non_leaf_entry_t*)demoted_pamt_entry)->page_hpa1 = ((pa_t)pamt_hpa1).page_4k_num;
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.c,1023,((pamt_non_leaf_entry_t*)demoted_pamt_entry)->page_count = 512;
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.h,142,} pamt_non_leaf_entry_t;
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.h,143,"tdx_static_assert(sizeof(pamt_non_leaf_entry_t) == PAMT_ENTRY_SIZE_IN_BYTES, pamt_non_leaf_entry_t);"
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.h,144,"tdx_static_assert((MOVDIR64_CHUNK_SIZE % sizeof(pamt_non_leaf_entry_t)) == 0, pamt_non_leaf_entry_t_2);"
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.h,158,_STATIC_INLINE_ pa_t get_pamt_node_page0(pamt_non_leaf_entry_t* pamt_entry)
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.h,165,_STATIC_INLINE_ pa_t get_pamt_node_page1(pamt_non_leaf_entry_t* pamt_entry)
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.h,211,pamt_non_leaf_entry_t* pamt_walk_path_nl[PT_1GB + 1];
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.h,240,void pamt_inc_nl_page_count(pamt_non_leaf_entry_t* pamt_nl_entry);
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.h,251,bool_t pamt_dec_nl_page_count(pamt_non_leaf_entry_t* pamt_nl_entry);
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.h,253,_STATIC_INLINE_ uint64_t pamt_dec_nl_page_count_and_get_hint(pamt_non_leaf_entry_t* pamt_nl_entry)
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.h,362,"pamt_entry_t* pamt_implicit_get_with_nl_entry(pa_t pa, page_size_t leaf_size, pamt_non_leaf_entry_t** pamt_nl_entry);"
+pamt_non_leaf_entry_t,common/memory_handlers/pamt_manager.h,397,"pamt_entry_t** pamt_entry, pamt_non_leaf_entry_t** pamt_nl_entry, bool_t is_guest);"
+pamt_unwalk,td_transitions/td_exit.c,587,pamt_unwalk(&vp_ctx->tdvpr_pamt_walk_result);
+pamt_unwalk,td_transitions/tdh_vp_enter.c,1074,pamt_unwalk(&tdvpr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1073,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,493,pamt_unwalk(&tdvpr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,460,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,310,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_import_end.c,94,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,410,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_export_pause.c,114,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,620,pamt_unwalk(&tdvpr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_import_commit.c,90,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdg_servtd_rd_wr.c,284,pamt_unwalk(&target_tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_servtd_prebind.c,187,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_mig_stream_create.c,152,pamt_unwalk(&migsc_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_mig_stream_create.c,173,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_import_track.c,239,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_export_track.c,275,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_export_unblockw.c,274,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1015,pamt_unwalk(&td_page_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1418,pamt_unwalk(&td_page_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1593,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,565,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_export_abort.c,274,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_import_abort.c,216,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_servtd_bind.c,287,pamt_unwalk(&servtd_tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_servtd_bind.c,308,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,630,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/migration_api_calls/tdh_export_blockw.c,324,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_track.c,133,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_vp_addcx.c,180,pamt_unwalk(&tdvpr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_vp_addcx.c,188,pamt_unwalk(&tdcx_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_vp_create.c,128,pamt_unwalk(&tdvpr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_vp_create.c,140,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,277,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_range_unblock.c,273,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_rd_wr.c,214,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,205,pamt_unwalk(&pamt1_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,210,pamt_unwalk(&pamt0_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,215,pamt_unwalk(&pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_page_aug.c,198,pamt_unwalk(&td_page_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_page_aug.c,219,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mr_extend.c,203,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mng_key_freeid.c,115,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,572,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mr_finalize.c,138,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mng_create.c,151,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mng_rd_wr.c,172,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,361,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_range_block.c,328,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_phymem_page_wbinvd.c,84,pamt_unwalk(&page_wbinvd_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mng_init.c,895,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_phymem_page_rdmd.c,161,pamt_unwalk(&page_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_phymem_page_reclaim.c,201,pamt_unwalk(&reclaimed_page_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mng_key_config.c,125,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_sept_rd.c,212,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_phymem_pamt_remove.c,141,pamt_unwalk(&pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_page_add.c,253,pamt_unwalk(&td_page_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_page_add.c,270,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,498,pamt_unwalk(&sept_page_pamt_walk_result[vm_id]);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,520,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mng_add_cx.c,197,pamt_unwalk(&tdcx_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mng_add_cx.c,203,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mng_vpflushdone.c,157,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_vp_flush.c,160,pamt_unwalk(&tdvpr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,301,pamt_unwalk(&target_page_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,342,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_vp_init.c,320,pamt_unwalk(&tdvpr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_vp_rd_wr.c,226,pamt_unwalk(&tdvpr_pamt_walk_result);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,466,pamt_unwalk(&sept_page_pamt_walk_result[vm_id]);
+pamt_unwalk,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,502,pamt_unwalk(&tdr_pamt_walk_result);
+pamt_unwalk,common/memory_handlers/pamt_manager.c,497,void pamt_unwalk(pamt_walk_result_t* pamt_walk_result)
+pamt_unwalk,common/memory_handlers/pamt_manager.c,1053,pamt_unwalk(&pamt1_walk_result);
+pamt_unwalk,common/memory_handlers/pamt_manager.c,1058,pamt_unwalk(&pamt0_walk_result);
+pamt_unwalk,common/memory_handlers/pamt_manager.h,201,"*        Once created by pamt_walk, at the usage end must be passed to pamt_unwalk to free all the pointers."
+pamt_unwalk,common/memory_handlers/pamt_manager.h,322,*                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
+pamt_unwalk,common/memory_handlers/pamt_manager.h,342,void pamt_unwalk(pamt_walk_result_t* pamt_walk_result);
+pamt_unwalk,common/helpers/helpers.c,197,pamt_unwalk(pamt_walk_result);
+pamt_unwalk,common/helpers/helpers.c,205,pamt_unwalk(pamt_walk_result);
+pamt_unwalk,common/helpers/helpers.c,213,pamt_unwalk(pamt_walk_result);
+pamt_unwalk,common/helpers/helpers.c,477,pamt_unwalk(pamt_walk_result);
+pamt_unwalk,common/helpers/helpers.h,542,*                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
+pamt_unwalk,common/helpers/helpers.h,623,*                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
+pamt_unwalk,common/helpers/helpers.h,652,*                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
+pamt_unwalk,common/helpers/helpers.h,683,*                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
+pamt_unwalk,common/helpers/helpers.h,714,*                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
+pamt_unwalk,common/helpers/helpers.h,742,*                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
+pamt_unwalk,common/helpers/helpers.h,766,*                           Non-reached levels contain NULL. Must be passed to pamt_unwalk to be freed after use.
+pamt_walk,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,115,"return_val = pamt_walk(page_pa, pamt_block, TDX_LOCK_EXCLUSIVE, PT_2MB, true, false, &pamt_walk_result);"
+pamt_walk,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,136,"return_val = pamt_walk(pamt_hpa0, pamt0_block, TDX_LOCK_SHARED, PT_4KB, true, false, &pamt0_walk_result);"
+pamt_walk,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,153,"return_val = pamt_walk(pamt_hpa1, pamt1_block, TDX_LOCK_SHARED, PT_4KB, true, false, &pamt1_walk_result);"
+pamt_walk,vmm_dispatcher/api_calls/tdh_phymem_page_rdmd.c,97,"if ((return_val = pamt_walk(page_pa, page_pamt_block, TDX_LOCK_SHARED,"
+pamt_walk,vmm_dispatcher/api_calls/tdh_phymem_page_reclaim.c,87,"if ((return_val = pamt_walk(reclaimed_page_pa, reclaimed_page_pamt_block, TDX_LOCK_EXCLUSIVE,"
+pamt_walk,vmm_dispatcher/api_calls/tdh_phymem_pamt_remove.c,77,"return_val = pamt_walk(page_pa, pamt_block, TDX_LOCK_EXCLUSIVE, PT_2MB, true, false, &pamt_walk_result);"
+pamt_walk,common/memory_handlers/pamt_manager.c,360,"api_error_code_e pamt_walk(pa_t pa, pamt_block_t pamt_block, lock_type_t leaf_lock_type,"
+pamt_walk,common/memory_handlers/pamt_manager.c,953,"retval = pamt_walk((pa_t)pamt_hpa0, pamt0_block, TDX_LOCK_SHARED, PT_4KB, true, false, &pamt0_walk_result);"
+pamt_walk,common/memory_handlers/pamt_manager.c,967,"retval = pamt_walk((pa_t)pamt_hpa1, pamt1_block, TDX_LOCK_SHARED, PT_4KB, true, false, &pamt1_walk_result);"
+pamt_walk,common/memory_handlers/pamt_manager.h,198,* @brief Pointers stored by pamt_walk function for all levels reached.
+pamt_walk,common/memory_handlers/pamt_manager.h,201,"*        Once created by pamt_walk, at the usage end must be passed to pamt_unwalk to free all the pointers."
+pamt_walk,common/memory_handlers/pamt_manager.h,326,"api_error_code_e pamt_walk(pa_t pa, pamt_block_t pamt_block, lock_type_t leaf_lock_type,"
+pamt_walk,common/helpers/helpers.c,175,"api_error_code_e errc = pamt_walk(hpa, *pamt_block, lock_type, target_size,"
+pamt_walk,common/helpers/helpers.c,180,"TDX_ERROR(""pamt_walk error - 0x%llx\n"", errc);"
+pamt_walk_result_t,td_transitions/tdh_vp_enter.c,655,pamt_walk_result_t    tdvpr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,497,pamt_walk_result_t      tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,48,pamt_walk_result_t    tdvpr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_import_state_td.c,46,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,47,pamt_walk_result_t      tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_import_end.c,37,pamt_walk_result_t tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_export_state_td.c,47,pamt_walk_result_t tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_export_pause.c,41,pamt_walk_result_t tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,72,pamt_walk_result_t    tdvpr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_import_commit.c,37,pamt_walk_result_t tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdg_servtd_rd_wr.c,56,pamt_walk_result_t    target_tdr_pamt_walk_result = { .valid = false };
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_servtd_prebind.c,40,pamt_walk_result_t tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_mig_stream_create.c,39,pamt_walk_result_t tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_mig_stream_create.c,49,pamt_walk_result_t migsc_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_import_track.c,42,pamt_walk_result_t tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_export_track.c,42,pamt_walk_result_t tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_export_unblockw.c,50,pamt_walk_result_t      tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,449,pamt_walk_result_t      tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,472,pamt_walk_result_t      td_page_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,321,pamt_walk_result_t   tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_export_abort.c,42,pamt_walk_result_t tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_import_abort.c,43,pamt_walk_result_t tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_servtd_bind.c,43,pamt_walk_result_t tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_servtd_bind.c,52,pamt_walk_result_t servtd_tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_import_state_immutable.c,259,pamt_walk_result_t   tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/migration_api_calls/tdh_export_blockw.c,50,pamt_walk_result_t      tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_track.c,45,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_vp_addcx.c,44,pamt_walk_result_t    tdcx_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_vp_addcx.c,50,pamt_walk_result_t    tdvpr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_vp_create.c,44,pamt_walk_result_t    tdvpr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_vp_create.c,50,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,46,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_range_unblock.c,47,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_rd_wr.c,55,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,50,pamt_walk_result_t    pamt_walk_result = { .valid = false };
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,55,pamt_walk_result_t    pamt0_walk_result = { .valid = false };
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_phymem_pamt_add.c,56,pamt_walk_result_t    pamt1_walk_result = { .valid = false };
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_page_aug.c,49,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_page_aug.c,65,pamt_walk_result_t    td_page_pamt_walk_result;  // Pointer to the TD PAMT entry
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mr_extend.c,48,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mng_key_freeid.c,47,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,165,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mr_finalize.c,44,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mng_create.c,46,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mng_rd_wr.c,49,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,47,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_range_block.c,124,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_phymem_page_wbinvd.c,43,pamt_walk_result_t    page_wbinvd_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mng_init.c,668,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_phymem_page_rdmd.c,49,pamt_walk_result_t    page_pamt_walk_result = { .valid = false };
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_phymem_page_reclaim.c,47,pamt_walk_result_t    reclaimed_page_pamt_walk_result = { .valid = false };
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mng_key_config.c,51,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_sept_rd.c,48,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_phymem_pamt_remove.c,48,pamt_walk_result_t    pamt_walk_result = { .valid = false };
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_page_add.c,51,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_page_add.c,66,pamt_walk_result_t    td_page_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,40,"pamt_walk_result_t* sept_page_pamt_walk_result, uint64_t sept_page_init_val)"
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,66,"pamt_walk_result_t sept_page_pamt_walk_result[MAX_VMS],"
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,131,"pamt_walk_result_t sept_page_pamt_walk_result[MAX_VMS],"
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,200,"pamt_walk_result_t sept_page_pamt_walk_result[MAX_VMS],"
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,284,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,301,pamt_walk_result_t    sept_page_pamt_walk_result[MAX_VMS];
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mng_add_cx.c,45,pamt_walk_result_t    tdcx_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mng_add_cx.c,51,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mng_vpflushdone.c,47,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_vp_flush.c,49,pamt_walk_result_t    tdvpr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,44,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,51,pamt_walk_result_t    target_page_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_vp_init.c,99,pamt_walk_result_t    tdvpr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_vp_rd_wr.c,53,pamt_walk_result_t    tdvpr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,79,pamt_walk_result_t    tdr_pamt_walk_result;
+pamt_walk_result_t,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,97,pamt_walk_result_t    sept_page_pamt_walk_result[MAX_VMS];
+pamt_walk_result_t,common/data_structures/tdx_local_data.h,153,pamt_walk_result_t    tdvpr_pamt_walk_result;
+pamt_walk_result_t,common/memory_handlers/pamt_manager.c,362,"bool_t is_guest, pamt_walk_result_t* pamt_walk_result)"
+pamt_walk_result_t,common/memory_handlers/pamt_manager.c,497,void pamt_unwalk(pamt_walk_result_t* pamt_walk_result)
+pamt_walk_result_t,common/memory_handlers/pamt_manager.c,864,pamt_walk_result_t pamt0_walk_result = { .valid = false };
+pamt_walk_result_t,common/memory_handlers/pamt_manager.c,865,pamt_walk_result_t pamt1_walk_result = { .valid = false };
+pamt_walk_result_t,common/memory_handlers/pamt_manager.h,196,* @struct pamt_walk_result_t
+pamt_walk_result_t,common/memory_handlers/pamt_manager.h,216,} pamt_walk_result_t;
+pamt_walk_result_t,common/memory_handlers/pamt_manager.h,328,"bool_t is_guest, pamt_walk_result_t* pamt_walk_result);"
+pamt_walk_result_t,common/memory_handlers/pamt_manager.h,342,void pamt_unwalk(pamt_walk_result_t* pamt_walk_result);
+pamt_walk_result_t,common/helpers/helpers.c,164,pamt_walk_result_t* pamt_walk_result
+pamt_walk_result_t,common/helpers/helpers.c,312,"pamt_walk_result_t* pamt_walk_result,"
+pamt_walk_result_t,common/helpers/helpers.c,338,"pamt_walk_result_t* pamt_walk_result,"
+pamt_walk_result_t,common/helpers/helpers.c,353,"pamt_walk_result_t* pamt_walk_result,"
+pamt_walk_result_t,common/helpers/helpers.c,394,"pamt_walk_result_t* pamt_walk_result,"
+pamt_walk_result_t,common/helpers/helpers.c,425,"pamt_walk_result_t* pamt_walk_result,"
+pamt_walk_result_t,common/helpers/helpers.c,451,"pamt_walk_result_t* pamt_walk_result,"
+pamt_walk_result_t,common/helpers/helpers.h,554,pamt_walk_result_t* pamt_walk_result
+pamt_walk_result_t,common/helpers/helpers.h,635,"pamt_walk_result_t* pamt_walk_result,"
+pamt_walk_result_t,common/helpers/helpers.h,664,"pamt_walk_result_t* pamt_walk_result,"
+pamt_walk_result_t,common/helpers/helpers.h,696,"pamt_walk_result_t* pamt_walk_result,"
+pamt_walk_result_t,common/helpers/helpers.h,728,"pamt_walk_result_t* pamt_walk_result,"
+pamt_walk_result_t,common/helpers/helpers.h,752,"pamt_walk_result_t* pamt_walk_result,"
+pamt_walk_result_t,common/helpers/helpers.h,776,"pamt_walk_result_t* pamt_walk_result,"
+promote_sharex_lock,common/helpers/tdx_locks.h,217,_STATIC_INLINE_ lock_return_t promote_sharex_lock(sharex_lock_t * lock_ptr)
+promote_sharex_lock_hp,common/memory_handlers/pamt_manager.c,395,((retval = promote_sharex_lock_hp(&pamt_1gb->entry_lock)) != TDX_SUCCESS))
+promote_sharex_lock_hp,common/memory_handlers/pamt_manager.c,421,((retval = promote_sharex_lock_hp(&pamt_2mb->entry_lock)) != TDX_SUCCESS))
+promote_sharex_lock_hp,common/helpers/tdx_locks.h,474,_STATIC_INLINE_ api_error_code_e promote_sharex_lock_hp(sharex_hp_lock_t * lock_ptr)
+release_bit_lock,common/helpers/tdx_locks.h,514,"_STATIC_INLINE_ void release_bit_lock(uint32_t* mem_ptr, uint32_t bit_idx)"
+release_mutex_lock,vmm_dispatcher/api_calls/tdh_sys_tdmr_init.c,137,release_mutex_lock(&tdx_global_data_ptr->tdmr_table[tdmr_index].lock);
+release_mutex_lock,vmm_dispatcher/api_calls/tdh_phymem_cache_wb.c,203,release_mutex_lock(&global_data_ptr->wbt_entries[cachewb_index].entry_lock);
+release_mutex_lock,common/helpers/helpers.c,1298,// Accomplished by acquire_mutex_lock/release_mutex_lock
+release_mutex_lock,common/helpers/tdx_locks.h,93,_STATIC_INLINE_ void release_mutex_lock(mutex_lock_t * lock_ptr)
+release_mutex_lock,common/debug/tdx_debug.c,167,release_mutex_lock(&(p_ctl->trace_buffer_lock));
+release_mutex_lock,common/debug/tdx_debug.c,187,release_mutex_lock(&(p_ctl->trace_buffer_lock));
+release_mutex_lock,common/debug/tdx_debug.c,237,release_mutex_lock(&(p_ctl->trace_buffer_lock));
+release_mutex_lock,common/debug/tdx_debug.c,313,release_mutex_lock(&(p_ctl->trace_buffer_lock));
+release_mutex_lock,common/debug/tdx_debug.c,325,release_mutex_lock(&(p_ctl->com_port_lock));
+release_sharex_lock,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1051,"release_sharex_lock(&tdcs_p->migration_fields.mig_lock, TDX_LOCK_SHARED);"
+release_sharex_lock,vmm_dispatcher/migration_api_calls/tdh_mig_stream_create.c,158,"release_sharex_lock(&tdcs_p->migration_fields.mig_lock, TDX_LOCK_EXCLUSIVE);"
+release_sharex_lock,vmm_dispatcher/migration_api_calls/tdh_export_track.c,260,"release_sharex_lock(&tdcs_p->migration_fields.mig_lock, TDX_LOCK_EXCLUSIVE);"
+release_sharex_lock,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1545,"release_sharex_lock(&tdcs_p->migration_fields.mig_lock, TDX_LOCK_SHARED);"
+release_sharex_lock,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,555,"release_sharex_lock(&tdcs_p->migration_fields.mig_lock, TDX_LOCK_EXCLUSIVE);"
+release_sharex_lock,vmm_dispatcher/migration_api_calls/tdh_export_abort.c,265,"release_sharex_lock(&tdcs_p->migration_fields.mig_lock, TDX_LOCK_EXCLUSIVE);"
+release_sharex_lock,common/helpers/tdx_locks.h,201,"_STATIC_INLINE_ void release_sharex_lock(sharex_lock_t * lock_ptr, lock_type_t lock_type)"
+release_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_export_state_vp.c,468,"release_sharex_lock_hp(&(tdcs_p->management_fields.op_state_lock), TDX_LOCK_SHARED);"
+release_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,300,"release_sharex_lock_hp(&(tdcs_p->management_fields.op_state_lock), TDX_LOCK_SHARED);"
+release_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_import_state_vp.c,609,"release_sharex_lock_hp(&(tdcs_p->management_fields.op_state_lock), TDX_LOCK_SHARED);"
+release_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdg_servtd_rd_wr.c,273,"release_sharex_lock_hp(&(target_tdcs_ptr->service_td_fields.servtd_bindings_lock), TDX_LOCK_SHARED);"
+release_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdg_servtd_rd_wr.c,278,"release_sharex_lock_hp(&(target_tdcs_ptr->management_fields.op_state_lock), TDX_LOCK_SHARED);"
+release_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_servtd_prebind.c,167,"release_sharex_lock_hp(&tdcs_p->service_td_fields.servtd_bindings_lock, TDX_LOCK_EXCLUSIVE);"
+release_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_mig_stream_create.c,163,"release_sharex_lock_hp(&(tdcs_p->management_fields.op_state_lock), TDX_LOCK_EXCLUSIVE);"
+release_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_export_track.c,265,"release_sharex_lock_hp(&(tdcs_p->management_fields.op_state_lock), TDX_LOCK_EXCLUSIVE);"
+release_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_export_unblockw.c,264,"release_sharex_lock_hp(&(tdcs_p->management_fields.op_state_lock), TDX_LOCK_SHARED);"
+release_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_export_state_immutable.c,560,"release_sharex_lock_hp(&(tdcs_p->management_fields.op_state_lock), TDX_LOCK_EXCLUSIVE);"
+release_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_export_abort.c,269,"release_sharex_lock_hp(&(tdcs_p->management_fields.op_state_lock), TDX_LOCK_EXCLUSIVE);"
+release_sharex_lock_hp,vmm_dispatcher/migration_api_calls/tdh_servtd_bind.c,277,"release_sharex_lock_hp(&tdcs_p->service_td_fields.servtd_bindings_lock, TDX_LOCK_EXCLUSIVE);"
+release_sharex_lock_hp,common/memory_handlers/pamt_manager.c,506,"release_sharex_lock_hp(&pamt_walk_result->pamt_walk_path[PT_4KB]->entry_lock, lock_type);"
+release_sharex_lock_hp,common/memory_handlers/pamt_manager.c,513,"release_sharex_lock_hp(&pamt_walk_result->pamt_walk_path[PT_2MB]->entry_lock, lock_type);"
+release_sharex_lock_hp,common/memory_handlers/pamt_manager.c,520,"release_sharex_lock_hp(&pamt_walk_result->pamt_walk_path[PT_1GB]->entry_lock, lock_type);"
+release_sharex_lock_hp,common/memory_handlers/pamt_manager.c,667,"release_sharex_lock_hp(&pamt_entry->entry_lock, leaf_lock_type);"
+release_sharex_lock_hp,common/helpers/helpers.c,605,"release_sharex_lock_hp(&(tmp_tdcs_p->management_fields.op_state_lock), op_state_lock_type);"
+release_sharex_lock_hp,common/helpers/helpers.c,781,"release_sharex_lock_hp(&tdcs_p->executions_ctl_fields.secure_ept_lock, lock_type);"
+release_sharex_lock_hp,common/helpers/tdx_locks.h,458,"_STATIC_INLINE_ void release_sharex_lock_hp(sharex_hp_lock_t * lock_ptr, lock_type_t lock_type)"
+sept_lock_acquire_guest,td_dispatcher/vm_exits/tdg_mem_page_attr_rd.c,79,return_val = sept_lock_acquire_guest(page_sept_entry_ptr);
+sept_lock_acquire_guest,td_dispatcher/vm_exits/tdg_mem_page_attr_wr.c,267,return_val = sept_lock_acquire_guest(page_sept_entry_ptr);
+sept_lock_acquire_guest,td_dispatcher/vm_exits/tdg_mem_page_accept.c,87,api_error_type return_val = sept_lock_acquire_guest(sept_ptr);
+sept_lock_acquire_guest,td_dispatcher/vm_exits/tdg_mem_page_accept.c,90,"TDX_ERROR(""sept_lock_acquire_guest with error code 0x%llx\n"", return_val);"
+sept_lock_acquire_guest,common/helpers/tdx_locks.h,263,_STATIC_INLINE_ api_error_type sept_lock_acquire_guest(ia32e_sept_t* sept_ptr)
+sept_lock_acquire_host,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,797,return_val = sept_lock_acquire_host(sept_entry_ptr);
+sept_lock_acquire_host,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,165,return_val = sept_lock_acquire_host(sept_entry_ptr);
+sept_lock_acquire_host,vmm_dispatcher/migration_api_calls/tdh_export_unblockw.c,152,return_val = sept_lock_acquire_host(page_sept_entry_ptr);
+sept_lock_acquire_host,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,811,return_val = sept_lock_acquire_host(sept_entry_ptr);
+sept_lock_acquire_host,vmm_dispatcher/migration_api_calls/tdh_export_blockw.c,168,return_val = sept_lock_acquire_host(sept_entry_ptr);
+sept_lock_acquire_host,vmm_dispatcher/migration_api_calls/tdh_export_blockw.c,171,"TDX_ERROR(""sept_lock_acquire_host failed\n"");"
+sept_lock_acquire_host,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,132,return_val = sept_lock_acquire_host(page_sept_entry_ptr);
+sept_lock_acquire_host,vmm_dispatcher/api_calls/tdh_mem_range_unblock.c,133,return_val = sept_lock_acquire_host(sept_entry_ptr);
+sept_lock_acquire_host,vmm_dispatcher/api_calls/tdh_mem_rd_wr.c,147,return_val = sept_lock_acquire_host(sept_entry_ptr);
+sept_lock_acquire_host,vmm_dispatcher/api_calls/tdh_mem_page_aug.c,136,return_val = sept_lock_acquire_host(page_sept_entry_ptr);
+sept_lock_acquire_host,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,286,return_val = sept_lock_acquire_host(merged_sept_page_sept_entry_ptr[0]);
+sept_lock_acquire_host,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,153,return_val = sept_lock_acquire_host(sept_entry_ptr[0]);
+sept_lock_acquire_host,vmm_dispatcher/api_calls/tdh_mem_range_block.c,210,return_val = sept_lock_acquire_host(page_sept_entry_ptr);
+sept_lock_acquire_host,vmm_dispatcher/api_calls/tdh_mem_sept_rd.c,140,return_val = sept_lock_acquire_host(sept_entry_ptr);
+sept_lock_acquire_host,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,414,return_val = sept_lock_acquire_host(page_sept_entry_ptr[0]);
+sept_lock_acquire_host,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,136,return_val = sept_lock_acquire_host(mapped_page_sept_entry_ptr);
+sept_lock_acquire_host,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,199,return_val = sept_lock_acquire_host(split_page_sept_entry_ptr);
+sept_lock_acquire_host,common/helpers/tdx_locks.h,246,_STATIC_INLINE_ api_error_type sept_lock_acquire_host(ia32e_sept_t* sept_ptr)
+sept_lock_release,td_dispatcher/vm_exits/tdg_mem_page_attr_rd.c,93,sept_lock_release(page_sept_entry_ptr);
+sept_lock_release,td_dispatcher/vm_exits/tdg_mem_page_attr_rd.c,155,sept_lock_release(page_sept_entry_ptr);
+sept_lock_release,td_dispatcher/vm_exits/tdg_mem_page_attr_wr.c,142,sept_lock_release(l1_sept_entry_ptr);
+sept_lock_release,td_dispatcher/vm_exits/tdg_mem_page_attr_wr.c,290,sept_lock_release(page_sept_entry_ptr);
+sept_lock_release,td_dispatcher/vm_exits/tdg_mem_page_attr_wr.c,398,sept_lock_release(page_sept_entry_ptr);
+sept_lock_release,td_dispatcher/vm_exits/tdg_mem_page_accept.c,210,sept_lock_release(sept_entry_ptr);
+sept_lock_release,td_dispatcher/vm_exits/tdg_mem_page_accept.c,307,sept_lock_release(sept_entry_ptr);
+sept_lock_release,td_dispatcher/vm_exits/tdg_mem_page_accept.c,323,sept_lock_release(sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,956,sept_lock_release(sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/migration_api_calls/tdh_export_mem.c,1026,sept_lock_release(sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,230,sept_lock_release(sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/migration_api_calls/tdh_export_restore.c,252,sept_lock_release(sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/migration_api_calls/tdh_export_unblockw.c,250,sept_lock_release(page_sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1439,sept_lock_release(sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1550,sept_lock_release(sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/migration_api_calls/tdh_export_blockw.c,266,sept_lock_release(sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/api_calls/tdh_mem_page_remove.c,257,sept_lock_release(page_sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/api_calls/tdh_mem_range_unblock.c,253,sept_lock_release(sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/api_calls/tdh_mem_rd_wr.c,194,sept_lock_release(sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/api_calls/tdh_mem_page_aug.c,202,sept_lock_release(page_sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/api_calls/tdh_mem_page_promote.c,553,sept_lock_release(merged_sept_page_sept_entry_ptr[0]);
+sept_lock_release,vmm_dispatcher/api_calls/tdh_mem_sept_remove.c,322,sept_lock_release(sept_entry_ptr[0]);
+sept_lock_release,vmm_dispatcher/api_calls/tdh_mem_range_block.c,308,sept_lock_release(page_sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/api_calls/tdh_mem_sept_rd.c,192,sept_lock_release(sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/api_calls/tdh_mem_sept_add.c,491,sept_lock_release(page_sept_entry_ptr[0]);
+sept_lock_release,vmm_dispatcher/api_calls/tdh_mem_page_relocate.c,322,sept_lock_release(mapped_page_sept_entry_ptr);
+sept_lock_release,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,477,sept_lock_release(split_page_sept_entry_ptr);
+sept_lock_release,common/helpers/tdx_locks.h,284,_STATIC_INLINE_ void sept_lock_release(ia32e_sept_t* sept_ptr)
+sept_lock_release_local,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1055,sept_lock_release_local(&sept_entry_copy);
+sept_lock_release_local,vmm_dispatcher/migration_api_calls/tdh_import_mem.c,1264,sept_lock_release_local(&sept_entry_copy);
+sept_lock_release_local,vmm_dispatcher/api_calls/tdh_mem_range_unblock.c,233,sept_lock_release_local(&epte_val);
+sept_lock_release_local,vmm_dispatcher/api_calls/tdh_mem_page_demote.c,326,sept_lock_release_local(&split_page_sept_entry_copy); // Local lock release
+sept_lock_release_local,common/helpers/tdx_locks.h,292,_STATIC_INLINE_ void sept_lock_release_local(ia32e_sept_t* sept_ptr)
+sharex_hp_lock_t,common/data_structures/td_control_structures.h,223,sharex_hp_lock_t   op_state_lock;
+sharex_hp_lock_t,common/data_structures/td_control_structures.h,520,ALIGN(2) sharex_hp_lock_t    secure_ept_lock; /**< Protects Secure EPT updates */
+sharex_hp_lock_t,common/data_structures/td_control_structures.h,579,sharex_hp_lock_t rtmr_lock; /**< Controls concurrent access to the RTMR array */
+sharex_hp_lock_t,common/data_structures/td_control_structures.h,695,ALIGN(2) sharex_hp_lock_t  servtd_bindings_lock;   // Not in the TDR TDCS spreadsheet
+sharex_hp_lock_t,common/memory_handlers/pamt_manager.c,306,sharex_hp_lock_t entry_lock; // 2 byte (16 bit)
+sharex_hp_lock_t,common/memory_handlers/pamt_manager.h,99,sharex_hp_lock_t entry_lock; // 2 byte (16 bit)
+sharex_hp_lock_t,common/memory_handlers/pamt_manager.h,124,sharex_hp_lock_t entry_lock; // 2-byte
+sharex_hp_lock_t,common/helpers/helpers.c,3174,"api_error_type check_host_interrupt_and_hp_bit(sharex_hp_lock_t* lock, bool_t is_resumeable)"
+sharex_hp_lock_t,common/helpers/tdx_locks.h,313,} sharex_hp_lock_t;
+sharex_hp_lock_t,common/helpers/tdx_locks.h,314,"tdx_static_assert(sizeof(sharex_hp_lock_t) == 2, sharex_hp_lock_t);"
+sharex_hp_lock_t,common/helpers/tdx_locks.h,316,_STATIC_INLINE_ bool_t is_lock_hp_set(sharex_hp_lock_t* lock)
+sharex_hp_lock_t,common/helpers/tdx_locks.h,323,"_STATIC_INLINE_ api_error_code_e acquire_sharex_lock_hp_sh(sharex_hp_lock_t * lock_ptr, bool_t is_guest)"
+sharex_hp_lock_t,common/helpers/tdx_locks.h,325,sharex_hp_lock_t retval;
+sharex_hp_lock_t,common/helpers/tdx_locks.h,377,"_STATIC_INLINE_ api_error_code_e acquire_sharex_lock_hp_ex(sharex_hp_lock_t * lock_ptr, bool_t is_guest)"
+sharex_hp_lock_t,common/helpers/tdx_locks.h,379,sharex_hp_lock_t retval;
+sharex_hp_lock_t,common/helpers/tdx_locks.h,418,"_STATIC_INLINE_ api_error_code_e acquire_sharex_lock_hp(sharex_hp_lock_t * lock_ptr, lock_type_t lock_type,"
+sharex_hp_lock_t,common/helpers/tdx_locks.h,436,_STATIC_INLINE_ void release_sharex_lock_hp_sh(sharex_hp_lock_t * lock_ptr)
+sharex_hp_lock_t,common/helpers/tdx_locks.h,438,sharex_hp_lock_t retval;
+sharex_hp_lock_t,common/helpers/tdx_locks.h,448,_STATIC_INLINE_ void release_sharex_lock_hp_ex(sharex_hp_lock_t * lock_ptr)
+sharex_hp_lock_t,common/helpers/tdx_locks.h,458,"_STATIC_INLINE_ void release_sharex_lock_hp(sharex_hp_lock_t * lock_ptr, lock_type_t lock_type)"
+sharex_hp_lock_t,common/helpers/tdx_locks.h,474,_STATIC_INLINE_ api_error_code_e promote_sharex_lock_hp(sharex_hp_lock_t * lock_ptr)
+sharex_hp_lock_t,common/helpers/tdx_locks.h,476,sharex_hp_lock_t retval;
+sharex_hp_lock_t,common/helpers/helpers.h,2471,"api_error_type check_host_interrupt_and_hp_bit(sharex_hp_lock_t* lock, bool_t is_resumeable);"
+sharex_lock_t,common/data_structures/td_control_structures.h,338,sharex_lock_t epoch_lock; /**< Protects the update of epoch tracking fields above as a critical region */
+sharex_lock_t,common/data_structures/td_control_structures.h,624,sharex_lock_t     mig_lock;
+sharex_lock_t,common/data_structures/td_control_structures.h,625,sharex_lock_t     mem_scan_lock;
+sharex_lock_t,common/data_structures/tdx_global_data.h,127,sharex_lock_t lock; /**< shared exclusve lock to access the kot */
+sharex_lock_t,common/data_structures/tdx_global_data.h,298,sharex_lock_t global_lock;
+sharex_lock_t,common/data_structures/tdx_global_data.h,433,"tdx_static_assert((offsetof(tdx_module_global_t, kot) + offsetof(kot_t, lock)) % sizeof(sharex_lock_t) == 0, kot_t);"
+sharex_lock_t,common/helpers/tdx_locks.h,129,} sharex_lock_t;
+sharex_lock_t,common/helpers/tdx_locks.h,130,"tdx_static_assert(sizeof(sharex_lock_t) == 2, sharex_lock_t);"
+sharex_lock_t,common/helpers/tdx_locks.h,135,_STATIC_INLINE_ lock_return_t acquire_sharex_lock_sh(sharex_lock_t * lock_ptr)
+sharex_lock_t,common/helpers/tdx_locks.h,137,sharex_lock_t retval;
+sharex_lock_t,common/helpers/tdx_locks.h,149,_STATIC_INLINE_ lock_return_t acquire_sharex_lock_ex(sharex_lock_t * lock_ptr)
+sharex_lock_t,common/helpers/tdx_locks.h,151,sharex_lock_t retval;
+sharex_lock_t,common/helpers/tdx_locks.h,160,"_STATIC_INLINE_ lock_return_t acquire_sharex_lock(sharex_lock_t * lock_ptr, lock_type_t lock_type)"
+sharex_lock_t,common/helpers/tdx_locks.h,177,_STATIC_INLINE_ void release_sharex_lock_sh(sharex_lock_t * lock_ptr)
+sharex_lock_t,common/helpers/tdx_locks.h,179,sharex_lock_t retval;
+sharex_lock_t,common/helpers/tdx_locks.h,189,_STATIC_INLINE_ void release_sharex_lock_ex(sharex_lock_t * lock_ptr)
+sharex_lock_t,common/helpers/tdx_locks.h,191,sharex_lock_t retval;
+sharex_lock_t,common/helpers/tdx_locks.h,201,"_STATIC_INLINE_ void release_sharex_lock(sharex_lock_t * lock_ptr, lock_type_t lock_type)"
+sharex_lock_t,common/helpers/tdx_locks.h,217,_STATIC_INLINE_ lock_return_t promote_sharex_lock(sharex_lock_t * lock_ptr)
+sharex_lock_t,common/helpers/tdx_locks.h,219,sharex_lock_t retval;
+sharex_lock_t,common/helpers/tdx_locks.h,231,_STATIC_INLINE_ lock_return_t demote_sharex_lock(sharex_lock_t * lock_ptr)
+sharex_lock_t,common/helpers/tdx_locks.h,233,sharex_lock_t retval;
