@@ -29,6 +29,7 @@ HARDWARE_STRUCTURES = [
     "REPORTMACSTRUCT",
 ]
 
+'''
 LOCK_TERMS = [
     # Lock types / structs
     "mutex_lock_t",
@@ -83,6 +84,37 @@ LOCK_TERMS = [
     "map_pa",
     "free_la",
 ]
+'''
+
+ATOMIC_INLINE_HELPERS = [
+    "_lock_cmpxchg_8bit",
+    "_lock_cmpxchg_16b",
+    "_lock_cmpxchg_32b",
+    "_lock_cmpxchg_64b",
+    "_lock_read_128b",
+    "_xchg_8_bit",
+    "_xchg_16b",
+    "_xchg_32b",
+    "_lock_xadd_8b",
+    "_lock_xadd_16b",
+    "_lock_xadd_32b",
+    "_lock_xadd_64b",
+    "_lock_or_16b",
+    "_lock_or_32b",
+    "_lock_or_64b",
+    "_lock_and_8b",
+    "_lock_and_16b",
+    "_lock_xor_16b",
+    "_lock_bts_16b",
+    "_lock_bts_32b",
+    "_lock_btr_16b",
+    "_lock_btr_32b",
+    "_lock_bts_64b",
+    "_lock_btr_64b",
+    "atomic_mem_write_64b",
+]
+
+LOCK_TERMS = ATOMIC_INLINE_HELPERS
 
 SOURCE_EXTENSIONS = {
     ".c", ".h", ".S", ".asm", ".inc", ".txt", ".md"
@@ -97,11 +129,11 @@ def build_patterns(structures):
         # Match case-insensitively and allow _, -, or spaces between words.
         flexible = re.escape(name)
         flexible = flexible.replace(r"\ ", r"[\s_\-]*")
-        patterns[name] = re.compile(rf"\b{flexible}\b", re.IGNORECASE)
+        patterns[name] = re.compile(rf"(?<![A-Za-z0-9_]){flexible}(?![A-Za-z0-9_])", re.IGNORECASE)
     return patterns
 
 def scan_tree(root):
-    patterns = build_patterns(HARDWARE_STRUCTURES + LOCK_TERMS)
+    patterns = build_patterns(LOCK_TERMS) #HARDWARE_STRUCTURES + 
     results = defaultdict(list)
 
     for dirpath, _, filenames in os.walk(root):
@@ -142,7 +174,7 @@ def write_csv(results, output_path):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Scan TDX source code for hardware/architectural data structure references."
+        description="Scan TDX source code for hardware references and inline atomic helper call sites."
     )
     parser.add_argument(
         "-s", "--source", 

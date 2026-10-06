@@ -23,7 +23,7 @@
 include src_defs.mk
 include compiler_defs.mk
 
-.PHONY: default all clean
+.PHONY: default all clean llvm-callgraph ippcp_s_l9
 
 MSG := echo -e
 
@@ -33,6 +33,14 @@ CLEAN_TARGETS := clean cleanall
 TARGET = $(RELEASE_TARGET)
 TARGET_DIR = $(RELEASE_DIR)
 OBJS_DIR = $(RELEASE_DIR)/$(OBJ_DIR_NAME)
+
+LLVM_IR_DIR := $(PROJ_DIR)/bin/llvm-ir
+LLVM_IR_FILES := $(foreach src,$(C_SRC_FILES),$(LLVM_IR_DIR)/$(notdir $(src:.c=.ll)))
+LLVM_LINKED_IR := $(LLVM_IR_DIR)/tdx-linked.ll
+LLVM_CALLGRAPH_DOT := $(LLVM_IR_DIR)/callgraph.dot
+LLVM_CLANG ?= $(CC)
+LLVM_LINK ?= llvm-link
+LLVM_OPT ?= opt
 
 ORIG_TARGET := $(TARGET_DIR)/libtdx.so.unstripped
 
@@ -44,6 +52,7 @@ ifneq ($(filter $(MAKECMDGOALS), $(CLEAN_TARGETS)),)
 clean:
 	rm -rf $(DEBUG_DIR)/$(OBJ_DIR_NAME)
 	rm -rf $(RELEASE_DIR)/$(OBJ_DIR_NAME)
+	rm -rf $(LLVM_IR_DIR)
 	rm -f $(RELEASE_TARGET)
 	rm -f $(ORIG_TARGET)
 
@@ -60,18 +69,34 @@ DEPS := $(OBJECTS:.o=.d)
 CFLAGS += -D__FILENAME__=\"$(lastword $(subst /, ,$<))\"
 
 CRYPTO_OBJECTS := $(CRYPTO_LIB_PATH)/$(CRYPTO_LIB_FILENAME)
+IPPCP_BUILD_CMD = cd $(CRYPTO_LIB_MAIN_DIR); \
+CC=$(CC_WITHOUT_CODE_COVERAGE) CXX=$(CXX_WITHOUT_CODE_COVERAGE) cmake CMakeLists.txt \
+-B_build -DARCH=intel64 -DMERGED_BLD:BOOL=off -DNO_CRYPTO_MB:BOOL=TRUE -DPLATFORM_LIST="l9" \
+-DIPPCP_CUSTOM_BUILD="IPPCP_AES_ON;IPPCP_CLMUL_ON;IPPCP_VAES_ON;IPPCP_VCLMUL_ON"; \
+cd _build; \
+make -j8 ippcp_s_l9
 
 
 default: preBuildScripts $(TARGET) postBuildScripts
 all: default
 
+llvm-callgraph: $(LLVM_CALLGRAPH_DOT)
+
+$(LLVM_IR_DIR)/%.ll: %.c
+	@mkdir -p $(@D)
+	$(LLVM_CLANG) $(INCLUDE_PATH) $(CFLAGS) -O0 -fno-inline -fno-optimize-sibling-calls -emit-llvm -S -c $< -o $@
+
+$(LLVM_LINKED_IR): $(LLVM_IR_FILES)
+	$(LLVM_LINK) $(LLVM_IR_FILES) -S -o $@
+
+$(LLVM_CALLGRAPH_DOT): $(LLVM_LINKED_IR)
+	cd $(LLVM_IR_DIR) && $(LLVM_OPT) -passes=dot-callgraph -disable-output $(notdir $<)
+
 $(CRYPTO_OBJECTS): $(CRYPTO_LIB_SRC_DIR)
-	cd $(CRYPTO_LIB_MAIN_DIR); \
-	CC=$(CC_WITHOUT_CODE_COVERAGE) CXX=$(CXX_WITHOUT_CODE_COVERAGE) cmake CMakeLists.txt \
-	-B_build -DARCH=intel64 -DMERGED_BLD:BOOL=off -DNO_CRYPTO_MB:BOOL=TRUE -DPLATFORM_LIST="l9" \
-	-DIPPCP_CUSTOM_BUILD="IPPCP_AES_ON;IPPCP_CLMUL_ON;IPPCP_VAES_ON;IPPCP_VCLMUL_ON"; \
-	cd _build; \
-	make -j8 ippcp_s_l9
+	@$(IPPCP_BUILD_CMD)
+
+ippcp_s_l9:
+	@$(IPPCP_BUILD_CMD)
 
 preBuildScripts:
 ifneq ($(shell expr $(CCVERSION) \>= 12), 1)
@@ -103,6 +128,7 @@ help:
 	@echo "\nTDX Module Makefile - available build flag options (use with regular 'make' command):"
 	@echo "\tRELEASE=1                  - builds a release flavor of the library."
 	@echo "\tDBG_TRACE=1                - enables debug trace capabilities."
+	@echo "\tmake llvm-callgraph       - emits LLVM IR and a Graphviz call graph for C sources."
 	@echo "\nAdditional make targets:"
 	@echo "\tmake clean                 - cleans everything except crypto library."
 	@echo "\tmake cleanall              - cleans everything including the crypto library."

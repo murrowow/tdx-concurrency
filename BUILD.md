@@ -38,10 +38,16 @@ Please note that the TDX module isn't part of the docker image and the user must
 
 1. Clone/download the desired TDX module version ([Releases](https://github.com/intel/confidential-computing.tdx.tdx-module/releases)).  
 2. Build the Docker image from the [Dockerfile](Dockerfile) (located inside the relevant repo) at the root:  
-```docker build . -t tdx-module-docker```
+```bash
+docker build --platform linux/amd64 . -t tdx-module-docker
+```
+
+> On macOS and Apple Silicon hosts, use the `--platform linux/amd64` flag because the TDX build environment expects an amd64-compatible toolchain.
 
 3. Run the Docker container from the local created docker image:  
-```docker run -ti --rm --net=host -v "$PWD":$HOME/tdx-module -w $HOME/tdx-module tdx-module-docker bash```  
+```bash
+docker run --platform linux/amd64 -ti --rm --net=host -v "$PWD":$HOME/tdx-module -w $HOME/tdx-module tdx-module-docker bash
+```  
 NOTE: In order to run on Windows, replace the mount line with: -v "%CD%":$HOME/tdx-module
 
 

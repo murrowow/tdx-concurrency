@@ -1,0 +1,2 @@
+clang++-18 $(llvm-config-18 --cxxflags) -fPIC -shared llvm-tools/getlockfunctions.cpp -o llvm-tools/getlockfunctions.so $(llvm-config-18 --ldflags --system-libs --link-shared --libs core passes)
+opt-18 -load-pass-plugin=./llvm-tools/getlockfunctions.so -passes='get-function-names' -disable-output bin/llvm-ir/tdx-linked.ll

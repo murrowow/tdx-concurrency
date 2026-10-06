@@ -25,9 +25,9 @@
 include proj_defs.mk
 
 # Compiler
-CC = clang-16
-CXX = clang++-16
-CCVERSION = $(shell $(CC) --version | grep 'clang version' | cut -f1 -d"." | sed 's/^.* //g' )
+CC := clang-18
+CXX := clang++-18
+CCVERSION = $(shell $(CC) --version 2>/dev/null | head -n 1 | sed -E 's/.*clang version ([0-9]+).*/\1/' )
 
 CC_WITHOUT_CODE_COVERAGE := $(CC)
 CXX_WITHOUT_CODE_COVERAGE := $(CXX)
@@ -37,15 +37,20 @@ STD_FLAGS = -MD -MP -m64 -Wall -Wextra -fPIC -fno-builtin-memset -fvisibility=hi
 			-mstack-alignment=16 -mstackrealign -std=c17 -mno-mmx -mno-sse -fno-jump-tables
 
 # Optimization flags
-OPT_FLAGS = -Os
+OPT_FLAGS = -O0 \
+            -fno-inline \
+            -fno-optimize-sibling-calls
 
 # SecV mandatory flags
 SECV_FLAGS = -Wdouble-promotion -Wshadow -Wconversion -Wmissing-prototypes -Wpointer-arith -Wuninitialized -Wunreachable-code -Wunused-function -Werror -D_FORTIFY_SOURCE=2 -fno-zero-initialized-in-bss -fstack-protector-strong -Wformat -Wformat-security -Werror=format-security
 
 CET_FLAGS = -mshstk -fcf-protection
 
+#Sophia added compiler flags 
+SOPHIA_FLAGS = -emit-llvm
+
 # Combined flags
-CFLAGS = $(STD_FLAGS) $(PROJ_FLAGS) $(OPT_FLAGS) $(SECV_FLAGS) $(CET_FLAGS) $(PRODUCTION_FLAGS)
+CFLAGS = $(STD_FLAGS) $(PROJ_FLAGS) $(OPT_FLAGS) $(SECV_FLAGS) $(CET_FLAGS) $(PRODUCTION_FLAGS) $(SOPHIA_FLAGS)
 
 # Entry pointer for the linker
 MODULE_ENTRY_POINT = tdx_seamcall_entry_point
