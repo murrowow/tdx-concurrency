@@ -47,6 +47,7 @@ RUN if [ -f /etc/apt/sources.list ]; then sed -i 's|http://ports.ubuntu.com/ubun
     clang \
     lld \
     llvm \
+    llvm-18-dev \
     cmake \
     ninja-build \
     python3 \

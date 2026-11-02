@@ -30,12 +30,12 @@
 
 #include "tdx_basic_defs.h"
 #include "tdx_basic_types.h"
-#include "helpers/error_reporting.h"
+#include "src/common/helpers/error_reporting.h"
 
-#include "x86_defs/mktme.h"
-#include "x86_defs/x86_defs.h"
+#include "src/common/x86_defs/mktme.h"
+#include "src/common/x86_defs/x86_defs.h"
 
-#include "exception_handling/exception_handling_consts.h"
+#include "src/common/exception_handling/exception_handling_consts.h"
 
 /**
  * @brief Invalidate TLB entries by calling INVLPG instruction
