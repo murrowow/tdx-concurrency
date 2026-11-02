@@ -1,2 +1,20 @@
-clang++-18 $(llvm-config-18 --cxxflags) -fPIC -shared llvm-tools/getlockfunctions.cpp -o llvm-tools/getlockfunctions.so $(llvm-config-18 --ldflags --system-libs --link-shared --libs core passes)
-opt-18 -load-pass-plugin=./llvm-tools/getlockfunctions.so -passes='get-function-names' -disable-output bin/llvm-ir/tdx-linked.ll >> getlockfunctions_function_names.txt
+# Build the LLVM IR pass if it does not exist
+if [ ! -f llvm-tools/getlockfunctions.so ]; then
+  clang++-18 $(llvm-config-18 --cxxflags) -fPIC -shared \
+  llvm-tools/getlockfunctions.cpp \
+  -o llvm-tools/getlockfunctions.so $(llvm-config-18 --ldflags --system-libs --link-shared --libs core passes)
+fi
+#run llvm pass on an llvm-ir
+#opt-18 -load-pass-plugin=./llvm-tools/getlockfunctions.so -passes='get-function-names' -disable-output bin/llvm-ir/tdx-linked.ll >> getlockfunctions_function_names.txt
+
+#compile llvm pass that extracts all function names from a specific file
+if [ ! -f llvm-tools/function_names ]; then
+  clang++-18 $(llvm-config-18 --cxxflags) llvm-tools/function_names.cpp \
+  /usr/lib/llvm-18/lib/libclang-cpp.so.18.1 \
+  $(llvm-config-18 --ldflags --system-libs --link-shared --libs core) \
+  -Wl,-rpath,/usr/lib/llvm-18/lib -o llvm-tools/function_names
+fi
+
+#run get function names on ia32_accessors.h
+  ./llvm-tools/function_names src/common/accessors/ia32_accessors.h -- \
+  -x c -target x86_64-linux-gnu -I. -Iinclude -Isrc -Isrc/common
