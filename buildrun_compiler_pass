@@ -23,15 +23,21 @@ fi
 python3 scripts/list_file_names.py > api_calls
 python3 scripts/find_callers.py >> direct_callers
 
-mkdir -p bin/llvm-ir/api-functions
+if [ ! -d bin/llvm-ir/api-functions ]; then
+  mkdir -p bin/llvm-ir/api-functions
+fi
+
 while IFS= read -r api_call_name || [ -n "$api_call_name" ]; do
   [ -n "$api_call_name" ] || continue
-  if ! llvm-extract-18 --func="$api_call_name" \
-    bin/llvm-ir/tdx-linked.ll -S \
-    -o "bin/llvm-ir/api-functions/${api_call_name}.ll"; then
-    echo "Failed to extract API function: $api_call_name" >&2
-    continue
+  if [ ! -f "bin/llvm-ir/api-functions/${api_call_name}.ll" ]; then
+    if ! llvm-extract-18 --func="$api_call_name" \
+      bin/llvm-ir/tdx-linked.ll -S \
+      -o "bin/llvm-ir/api-functions/${api_call_name}.ll"; then
+      echo "Failed to extract API function: $api_call_name" >&2
+      continue
+    fi
   fi
 done < api_calls
 
 #delete temp files
+rm -f temp api_calls 
