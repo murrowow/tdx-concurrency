@@ -84,7 +84,7 @@ llvm-callgraph: $(LLVM_CALLGRAPH_DOT)
 
 $(LLVM_IR_DIR)/%.ll: %.c
 	@mkdir -p $(@D)
-	$(LLVM_CLANG) $(INCLUDE_PATH) $(CFLAGS) -O0 -fno-inline -fno-optimize-sibling-calls -emit-llvm -S -c $< -o $@
+	$(LLVM_CLANG) $(INCLUDE_PATH) $(CFLAGS) -g -O0 -fno-inline -fno-optimize-sibling-calls -emit-llvm -S -c $< -o $@
 
 $(LLVM_LINKED_IR): $(LLVM_IR_FILES)
 	$(LLVM_LINK) $(LLVM_IR_FILES) -S -o $@

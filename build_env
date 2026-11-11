@@ -1,0 +1,4 @@
+apt install lsb-release
+apt update
+apt install lsb-release wget software-properties-common gnupg
+./llvm.sh 18

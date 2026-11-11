@@ -20,7 +20,18 @@ fi
   -x c -target x86_64-linux-gnu -I. -Iinclude -Isrc -Isrc/common >> temp
 
 #run python script to get direct callers
-python3 find_callers.py >> direct_callers
+python3 scripts/list_file_names.py > api_calls
+python3 scripts/find_callers.py >> direct_callers
+
+mkdir -p bin/llvm-ir/api-functions
+while IFS= read -r api_call_name || [ -n "$api_call_name" ]; do
+  [ -n "$api_call_name" ] || continue
+  if ! llvm-extract-18 --func="$api_call_name" \
+    bin/llvm-ir/tdx-linked.ll -S \
+    -o "bin/llvm-ir/api-functions/${api_call_name}.ll"; then
+    echo "Failed to extract API function: $api_call_name" >&2
+    continue
+  fi
+done < api_calls
 
 #delete temp files
-rm temp

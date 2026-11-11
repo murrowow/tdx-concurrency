@@ -8,18 +8,18 @@ target triple = "x86_64-pc-linux-gnu"
 %union.anon = type { i56 }
 %struct.pamt_walk_result_s = type { i8, i32, %union.anon.9, i32, ptr }
 %union.anon.9 = type { [3 x ptr] }
-%union.hpa_and_size_u = type { %struct.anon.10 }
-%struct.anon.10 = type { i64 }
-%struct.mbmd_s = type { %union.anon.11 }
-%union.anon.11 = type { %struct.mbmd_mem_s }
+%union.hpa_and_size_u = type { %struct.anon.33 }
+%struct.anon.33 = type { i64 }
+%struct.mbmd_s = type { %union.anon.34 }
+%union.anon.34 = type { %struct.mbmd_mem_s }
 %struct.mbmd_mem_s = type { %struct.mbmd_header_s, i64, [16 x i8] }
-%struct.mbmd_header_s = type { %union.anon.12 }
-%union.anon.12 = type { %struct.anon.13 }
-%struct.anon.13 = type { i16, i16, i16, i8, i8, i32, i32, i64 }
-%struct.tdcs_s = type { %struct.tdcs_management_fields_s, %struct.tdcs_execution_control_fields_s, %struct.tdcs_epoch_tracking_fields_s, %struct.tdcs_measurement_fields_s, %struct.tdcs_migration_fields_s, %struct.tdcs_virt_msrs_s, [80 x %union.cpuid_config_return_values_t], %struct.tdcs_service_td_fields_s, %struct.tdcs_execution_control2_field_s, [576 x i32], [512 x %union.event_filter_internal_s], [256 x i8], [256 x i8], [4096 x i8], [4096 x i8], [4096 x i8], %union.anon.38, [4096 x i8], [4096 x i8], [4096 x i8] }
+%struct.mbmd_header_s = type { %union.anon.31 }
+%union.anon.31 = type { %struct.anon.32 }
+%struct.anon.32 = type { i16, i16, i16, i8, i8, i32, i32, i64 }
+%struct.tdcs_s = type { %struct.tdcs_management_fields_s, %struct.tdcs_execution_control_fields_s, %struct.tdcs_epoch_tracking_fields_s, %struct.tdcs_measurement_fields_s, %struct.tdcs_migration_fields_s, %struct.tdcs_virt_msrs_s, [80 x %union.cpuid_config_return_values_t], %struct.tdcs_service_td_fields_s, %struct.tdcs_execution_control2_field_s, [576 x i32], [512 x %union.event_filter_internal_s], [256 x i8], [256 x i8], [4096 x i8], [4096 x i8], [4096 x i8], %union.anon.48, [4096 x i8], [4096 x i8], [4096 x i8] }
 %struct.tdcs_management_fields_s = type { i32, i32, i32, %union.sharex_hp_lock_t, [2 x i8], i16, [110 x i8] }
-%union.sharex_hp_lock_t = type { %struct.anon.14 }
-%struct.anon.14 = type { i16 }
+%union.sharex_hp_lock_t = type { %struct.anon.10 }
+%struct.anon.10 = type { i16 }
 %struct.tdcs_execution_control_fields_s = type { %union.td_param_attributes_s, i64, i32, i8, %union.ia32e_eptp_u, %union.sharex_hp_lock_t, i64, i64, i16, %struct.cpuid_flags_s, i32, %union.notify_enables_t, i64, [4 x %union.vm_ctls_t], i64, %union.config_flags_s, %union.td_ctls_t, i8, [3 x i8], i8, i8, [2 x i8], i32, [80 x i8], [12 x i8], [19 x i32], [36 x i8] }
 %union.td_param_attributes_s = type { %struct.anon.15 }
 %struct.anon.15 = type { i64 }
@@ -35,43 +35,43 @@ target triple = "x86_64-pc-linux-gnu"
 %union.td_ctls_t = type { %struct.anon.20 }
 %struct.anon.20 = type { i64 }
 %struct.tdcs_epoch_tracking_fields_s = type { %struct.epoch_and_refcount_s, %union.sharex_lock_t, [46 x i8] }
-%struct.epoch_and_refcount_s = type { %union.anon.21 }
-%union.anon.21 = type { %struct.anon.22 }
-%struct.anon.22 = type { i64, [2 x i16], [4 x i8] }
-%union.sharex_lock_t = type { %struct.anon.23 }
-%struct.anon.23 = type { i16 }
+%struct.epoch_and_refcount_s = type { %union.anon.41 }
+%union.anon.41 = type { %struct.anon.42 }
+%struct.anon.42 = type { i64, [2 x i16], [4 x i8] }
+%union.sharex_lock_t = type { %struct.anon.21 }
+%struct.anon.21 = type { i16 }
 %struct.tdcs_measurement_fields_s = type { %union.measurement_u, %union.measurement_u, %union.measurement_u, %union.measurement_u, [4 x %union.measurement_u], %union.measurement_u, %union.sharex_hp_lock_t, i8, [43 x i8], i16, %struct.sha384_ctx_s, [88 x i8] }
 %union.measurement_u = type { [6 x i64] }
 %struct.sha384_ctx_s = type { i64, [256 x i8] }
 %struct.tdcs_migration_fields_s = type { i8, i32, i32, i32, %union.bepoch_u, i64, %union.uint256_t, %union.uint256_t, %union.uint256_t, %union.uint256_t, i16, i16, i32, i64, i64, i16, i8, i8, i32, %union.uint256_t, %union.sharex_lock_t, %union.sharex_lock_t, i8, i8, i8, i8, i8, [2 x i64], [16 x i8], i16, [110 x i8] }
-%union.bepoch_u = type { %struct.anon.24 }
-%struct.anon.24 = type { i64 }
+%union.bepoch_u = type { %struct.anon.12 }
+%struct.anon.12 = type { i64 }
 %union.uint256_t = type { [4 x i64] }
 %struct.tdcs_virt_msrs_s = type { %union.ia32_vmx_basic_t, %union.ia32_vmx_misc_u, %union.ia32_cr0_t, %union.ia32_cr0_t, %union.ia32_cr4_t, %union.ia32_cr4_t, %union.ia32_vmx_allowed_bits_t, %union.ia32_vmx_ept_vpid_cap_u, %union.ia32_vmx_allowed_bits_t, %union.ia32_vmx_allowed_bits_t, %union.ia32_vmx_allowed_bits_t, %union.ia32_vmx_allowed_bits_t, i64, i64, i64, i64, [128 x i8] }
-%union.ia32_vmx_basic_t = type { %struct.anon.25 }
+%union.ia32_vmx_basic_t = type { %struct.anon.22 }
+%struct.anon.22 = type { i64 }
+%union.ia32_vmx_misc_u = type { %struct.anon.23 }
+%struct.anon.23 = type { i64 }
+%union.ia32_cr0_t = type { %struct.anon.24 }
+%struct.anon.24 = type { i64 }
+%union.ia32_cr4_t = type { %struct.anon.25 }
 %struct.anon.25 = type { i64 }
-%union.ia32_vmx_misc_u = type { %struct.anon.26 }
+%union.ia32_vmx_ept_vpid_cap_u = type { %struct.anon.26 }
 %struct.anon.26 = type { i64 }
-%union.ia32_cr0_t = type { %struct.anon.27 }
-%struct.anon.27 = type { i64 }
-%union.ia32_cr4_t = type { %struct.anon.28 }
-%struct.anon.28 = type { i64 }
-%union.ia32_vmx_ept_vpid_cap_u = type { %struct.anon.30 }
-%struct.anon.30 = type { i64 }
 %union.ia32_vmx_allowed_bits_t = type { i64 }
-%union.cpuid_config_return_values_t = type { %struct.anon.32 }
-%struct.anon.32 = type { i64, i64 }
+%union.cpuid_config_return_values_t = type { %struct.anon.45 }
+%struct.anon.45 = type { i64, i64 }
 %struct.tdcs_service_td_fields_s = type { %union.measurement_u, i16, %union.sharex_hp_lock_t, [80 x i8], [12 x i8], [1 x %struct.servtd_binding_s], [240 x i8] }
 %struct.servtd_binding_s = type { i8, i8, i16, i32, %union.servtd_attributes_u, %union.uint256_t, %union.measurement_u, [32 x i8] }
 %union.servtd_attributes_u = type { i64 }
 %struct.tdcs_execution_control2_field_s = type { i32, i32, i64, [4 x %union.cpuid_config_return_values_t], [4 x i8], [4 x i8], %union.feature_paravirt_ctls_u, [4 x i64], i16, i32, i64, i64, i64, [4 x i8], [4 x i16], [4 x i16], [4 x %union.pa_u], [4 x [8 x i32]], [4 x i8], [4 x i8], [4 x i8], [4 x i8], [4 x i8], [148 x i8] }
-%union.feature_paravirt_ctls_u = type { %struct.anon.36 }
-%struct.anon.36 = type { i64 }
+%union.feature_paravirt_ctls_u = type { %struct.anon.29 }
+%struct.anon.29 = type { i64 }
 %union.event_filter_internal_s = type { i16 }
-%union.anon.38 = type { [512 x %union.migsc_link_u] }
-%union.migsc_link_u = type { %struct.anon.39 }
-%struct.anon.39 = type { i64 }
-%struct.anon.40 = type { %union.migsc_link_u, [511 x %union.migsc_link_u] }
+%union.anon.48 = type { [512 x %union.migsc_link_u] }
+%union.migsc_link_u = type { %struct.anon.30 }
+%struct.anon.30 = type { i64 }
+%struct.anon.49 = type { %union.migsc_link_u, [511 x %union.migsc_link_u] }
 %struct.tdx_module_global_s = type <{ %struct.xsave_area_no_extended_s, %union.sharex_lock_t, [6 x i8], i64, i32, [4 x i8], i64, i32, i32, i32, i32, i16, i16, i16, i16, i8, i8, i16, i16, [2 x i8], i64, %union.uint256_t, i32, i32, i32, i16, %struct.tdx_global_state_s, i8, %struct.kot_s, [4 x i8], [8 x %struct.wbt_entry_s], [64 x %struct.tdmr_entry_s], i32, [4 x i8], %struct.platform_common_config_t, i64, i64, i64, i32, i32, i32, i8, i8, i8, i8, i8, i8, i8, i8, i8, i8, [2 x i8], i64, i64, i32, i32, i32, [19 x %struct.xsave_component_info_s], [79 x %struct.cpuid_config_t], i32, i32, [4 x i8], %struct.td_vmcs_values_t, %struct.td_vmcs_values_t, %struct.vmcs_host_values_s, i32, i8, [3 x i8], i32, i8, [3 x i8], i64, i64, %union.config_flags_s, %union.config_flags_s, [64 x %struct.tdmr_info_entry_s], %union.seam_ops_capabilities_s, i8, i8, i8, %struct.hash_method_s, %union.fms_info_t, %union.cpuid_1a_eax_u, [4 x i8], i64, i64, i64, i8, i8, i8, i8, [1020 x i8] }>
 %struct.xsave_area_no_extended_s = type { %struct.xsave_legacy_region_t, %struct.xsave_header_t, [3520 x i8] }
 %struct.xsave_legacy_region_t = type { i16, i16, i8, i8, i16, i64, i64, i32, i32, [8 x %union.uint128_t], [16 x %union.uint128_t], [96 x i8] }
@@ -81,75 +81,75 @@ target triple = "x86_64-pc-linux-gnu"
 %struct.kot_s = type { %union.sharex_lock_t, [2048 x %struct.kot_entry_s] }
 %struct.kot_entry_s = type { i32, i8 }
 %struct.wbt_entry_s = type { i64, [2048 x i8], i8 }
-%struct.tdmr_entry_s = type { i64, i64, i64, i64, i64, i64, i32, i32, [16 x %struct.anon.41], i8 }
-%struct.anon.41 = type { i64, i64 }
+%struct.tdmr_entry_s = type { i64, i64, i64, i64, i64, i64, i32, i32, [16 x %struct.anon.50], i8 }
+%struct.anon.50 = type { i64, i64 }
 %struct.platform_common_config_t = type { i64, %union.ia32_misc_enable_u, %union.ia32_vmx_basic_t, %union.ia32_vmx_misc_u, %union.ia32_vmx_allowed_bits_t, %union.ia32_vmx_allowed_bits_t, %union.ia32_vmx_allowed_bits_t, %union.vmx_procbased_ctls3_t, %union.ia32_vmx_allowed_bits_t, %union.ia32_vmx_allowed_bits_t, i64, %union.ia32_cr0_t, %union.ia32_cr0_t, %union.ia32_cr4_t, %union.ia32_cr4_t, %union.ia32_mtrrcap_u, %union.ia32_arch_capabilities_u, %union.ia32_xapic_disable_status_u, %union.ia32_core_capabilities_u, %union.ia32_perf_capabilities_t, %union.ia32_tme_capability_t, %union.ia32_tme_activate_t, %union.ia32_tme_keyid_partitioning_t, %union.ia32_misc_package_ctls_u, [2 x %struct.smrr_range_t] }
-%union.ia32_misc_enable_u = type { %struct.anon.42 }
-%struct.anon.42 = type { i64 }
-%union.vmx_procbased_ctls3_t = type { %struct.anon.43 }
-%struct.anon.43 = type { i64 }
-%union.ia32_mtrrcap_u = type { %struct.anon.44 }
-%struct.anon.44 = type { i64 }
-%union.ia32_arch_capabilities_u = type { %struct.anon.45 }
-%struct.anon.45 = type { i64 }
-%union.ia32_xapic_disable_status_u = type { %struct.anon.46 }
-%struct.anon.46 = type { i64 }
-%union.ia32_core_capabilities_u = type { %struct.anon.47 }
-%struct.anon.47 = type { i64 }
-%union.ia32_perf_capabilities_t = type { %struct.anon.48 }
-%struct.anon.48 = type { i64 }
-%union.ia32_tme_capability_t = type { %struct.anon.49 }
-%struct.anon.49 = type { i64 }
-%union.ia32_tme_activate_t = type { %struct.anon.50 }
-%struct.anon.50 = type { i64 }
-%union.ia32_tme_keyid_partitioning_t = type { i64 }
-%union.ia32_misc_package_ctls_u = type { %struct.anon.52 }
+%union.ia32_misc_enable_u = type { %struct.anon.51 }
+%struct.anon.51 = type { i64 }
+%union.vmx_procbased_ctls3_t = type { %struct.anon.52 }
 %struct.anon.52 = type { i64 }
-%struct.smrr_range_t = type { %union.smrr_base_t, %union.smrr_mask_t }
-%union.smrr_base_t = type { %struct.anon.53 }
+%union.ia32_mtrrcap_u = type { %struct.anon.53 }
 %struct.anon.53 = type { i64 }
-%union.smrr_mask_t = type { %struct.anon.54 }
+%union.ia32_arch_capabilities_u = type { %struct.anon.54 }
 %struct.anon.54 = type { i64 }
+%union.ia32_xapic_disable_status_u = type { %struct.anon.55 }
+%struct.anon.55 = type { i64 }
+%union.ia32_core_capabilities_u = type { %struct.anon.56 }
+%struct.anon.56 = type { i64 }
+%union.ia32_perf_capabilities_t = type { %struct.anon.57 }
+%struct.anon.57 = type { i64 }
+%union.ia32_tme_capability_t = type { %struct.anon.58 }
+%struct.anon.58 = type { i64 }
+%union.ia32_tme_activate_t = type { %struct.anon.59 }
+%struct.anon.59 = type { i64 }
+%union.ia32_tme_keyid_partitioning_t = type { i64 }
+%union.ia32_misc_package_ctls_u = type { %struct.anon.61 }
+%struct.anon.61 = type { i64 }
+%struct.smrr_range_t = type { %union.smrr_base_t, %union.smrr_mask_t }
+%union.smrr_base_t = type { %struct.anon.62 }
+%struct.anon.62 = type { i64 }
+%union.smrr_mask_t = type { %struct.anon.63 }
+%struct.anon.63 = type { i64 }
 %struct.xsave_component_info_s = type { i32, i8 }
 %struct.cpuid_config_t = type { %union.cpuid_config_leaf_subleaf_t, %union.cpuid_config_return_values_t }
 %union.cpuid_config_leaf_subleaf_t = type { i64 }
 %struct.td_vmcs_values_t = type { i32, i32, i32, i64, i32, i32 }
 %struct.vmcs_host_values_s = type { %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s, %struct.vmcs_fields_info_s }
 %struct.vmcs_fields_info_s = type { i64, i64 }
-%struct.tdmr_info_entry_s = type { i64, i64, i64, i64, i64, i64, i64, i64, [16 x %struct.anon.56] }
-%struct.anon.56 = type { i64, i64 }
-%union.seam_ops_capabilities_s = type { %struct.anon.57 }
-%struct.anon.57 = type { i64 }
+%struct.tdmr_info_entry_s = type { i64, i64, i64, i64, i64, i64, i64, i64, [16 x %struct.anon.65] }
+%struct.anon.65 = type { i64, i64 }
+%union.seam_ops_capabilities_s = type { %struct.anon.66 }
+%struct.anon.66 = type { i64 }
 %struct.hash_method_s = type { [64 x i8], i8 }
-%union.fms_info_t = type { %struct.anon.58 }
-%struct.anon.58 = type { i32 }
-%union.cpuid_1a_eax_u = type { %struct.anon.59 }
-%struct.anon.59 = type { i32 }
+%union.fms_info_t = type { %struct.anon.67 }
+%struct.anon.67 = type { i32 }
+%union.cpuid_1a_eax_u = type { %struct.anon.68 }
+%struct.anon.68 = type { i32 }
 %struct.tdr_s = type { %struct.tdr_td_management_fields_s, %struct.tdr_key_managment_fields_s, %struct.tdr_td_preserving_fields_s, [16 x i8], [3696 x i8] }
 %struct.tdr_td_management_fields_s = type { i8, i32, i64, i32, [9 x i64], %union.uint256_t, [128 x i8] }
 %struct.tdr_key_managment_fields_s = type { i16, i64, [48 x i8] }
 %struct.tdr_td_preserving_fields_s = type { i16, i64, %union.uint256_t, [16 x i8] }
-%struct.migsc_s = type { i16, [6 x i8], i64, i32, i32, %struct.anon.60, %struct.mbmd_s, [56 x i8], %struct.aes_gcm_ctx_s, [252 x i8] }
-%struct.anon.60 = type { %union.tdx_leaf_and_version_u, i8, i8, i16, i32, %struct.page_list_info_s, %union.md_field_id_u, %union.pa_u, %union.gpa_list_info_u, %union.pa_u, [2 x %union.pa_u], %union.pa_u, i64, [2 x i64], %union.pa_u, [16 x i8] }
-%union.tdx_leaf_and_version_u = type { %struct.anon.61 }
-%struct.anon.61 = type { i64 }
-%struct.page_list_info_s = type { %union.anon.62 }
-%union.anon.62 = type { %struct.anon.63 }
-%struct.anon.63 = type { i64 }
+%struct.migsc_s = type { i16, [6 x i8], i64, i32, i32, %struct.anon.69, %struct.mbmd_s, [56 x i8], %struct.aes_gcm_ctx_s, [252 x i8] }
+%struct.anon.69 = type { %union.tdx_leaf_and_version_u, i8, i8, i16, i32, %struct.page_list_info_s, %union.md_field_id_u, %union.pa_u, %union.gpa_list_info_u, %union.pa_u, [2 x %union.pa_u], %union.pa_u, i64, [2 x i64], %union.pa_u, [16 x i8] }
+%union.tdx_leaf_and_version_u = type { %struct.anon.35 }
+%struct.anon.35 = type { i64 }
+%struct.page_list_info_s = type { %union.anon.70 }
+%union.anon.70 = type { %struct.anon.36 }
+%struct.anon.36 = type { i64 }
 %union.md_field_id_u = type { i64 }
-%union.gpa_list_info_u = type { %struct.anon.69 }
-%struct.anon.69 = type { i64 }
+%union.gpa_list_info_u = type { %struct.anon.40 }
+%struct.anon.40 = type { i64 }
 %struct.aes_gcm_ctx_s = type { i32, [3584 x i8] }
 %struct.mbmd_abort_token_s = type { %struct.mbmd_header_s, i64, [16 x i8] }
-%union.api_error_code_u = type { %struct.anon.73 }
-%struct.anon.73 = type { i64 }
-%struct.anon.70 = type { %union.anon.71, i32 }
-%union.anon.71 = type { i32 }
-%union.migs_iv_s = type { %struct.anon.74 }
-%struct.anon.74 = type <{ i64, i16, i16 }>
+%union.api_error_code_u = type { %struct.anon.76 }
+%struct.anon.76 = type { i64 }
+%struct.anon.73 = type { %union.anon.74, i32 }
+%union.anon.74 = type { i32 }
+%union.migs_iv_s = type { %struct.anon.77 }
+%struct.anon.77 = type <{ i64, i16, i16 }>
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define hidden i64 @tdh_import_abort(i64 noundef %0, i64 noundef %1, i64 noundef %2) #0 {
+define hidden i64 @tdh_import_abort(i64 noundef %0, i64 noundef %1, i64 noundef %2) #0 !dbg !1528 {
   %4 = alloca i64, align 8
   %5 = alloca i64, align 8
   %6 = alloca i64, align 8
@@ -168,571 +168,618 @@ define hidden i64 @tdh_import_abort(i64 noundef %0, i64 noundef %1, i64 noundef 
   %19 = alloca %union.pa_u, align 8
   %20 = alloca i16, align 2
   store i64 %0, ptr %4, align 8
+  call void @llvm.dbg.declare(metadata ptr %4, metadata !1533, metadata !DIExpression()), !dbg !1534
   store i64 %1, ptr %5, align 8
+  call void @llvm.dbg.declare(metadata ptr %5, metadata !1535, metadata !DIExpression()), !dbg !1536
   store i64 %2, ptr %6, align 8
-  store ptr null, ptr %7, align 8
-  store ptr null, ptr %10, align 8
-  store i8 0, ptr %11, align 1
-  store ptr null, ptr %12, align 8
-  store i64 -4611684918915760128, ptr %15, align 8
-  store ptr null, ptr %16, align 8
-  store i8 0, ptr %18, align 1
-  %21 = load i64, ptr %4, align 8
-  store i64 %21, ptr %8, align 8
-  %22 = load i64, ptr %5, align 8
-  store i64 %22, ptr %13, align 8
-  %23 = getelementptr inbounds %union.pa_u, ptr %8, i32 0, i32 0
-  %24 = getelementptr inbounds %struct.anon, ptr %23, i32 0, i32 0
-  %25 = load i64, ptr %24, align 8
-  %26 = call i64 @check_lock_and_map_explicit_tdr(i64 %25, i64 noundef 1, i32 noundef 0, i32 noundef 2, i32 noundef 4, ptr noundef %9, ptr noundef %11, ptr noundef %7) #3
-  store i64 %26, ptr %15, align 8
-  %27 = load i64, ptr %15, align 8
-  %28 = icmp ne i64 %27, 0
-  br i1 %28, label %29, label %30
+  call void @llvm.dbg.declare(metadata ptr %6, metadata !1537, metadata !DIExpression()), !dbg !1538
+  call void @llvm.dbg.declare(metadata ptr %7, metadata !1539, metadata !DIExpression()), !dbg !1582
+  store ptr null, ptr %7, align 8, !dbg !1582
+  call void @llvm.dbg.declare(metadata ptr %8, metadata !1583, metadata !DIExpression()), !dbg !1584
+  call void @llvm.dbg.declare(metadata ptr %9, metadata !1585, metadata !DIExpression()), !dbg !1661
+  call void @llvm.dbg.declare(metadata ptr %10, metadata !1662, metadata !DIExpression()), !dbg !2152
+  store ptr null, ptr %10, align 8, !dbg !2152
+  call void @llvm.dbg.declare(metadata ptr %11, metadata !2153, metadata !DIExpression()), !dbg !2154
+  store i8 0, ptr %11, align 1, !dbg !2154
+  call void @llvm.dbg.declare(metadata ptr %12, metadata !2155, metadata !DIExpression()), !dbg !2156
+  store ptr null, ptr %12, align 8, !dbg !2156
+  call void @llvm.dbg.declare(metadata ptr %13, metadata !2157, metadata !DIExpression()), !dbg !2167
+  call void @llvm.dbg.declare(metadata ptr %14, metadata !2168, metadata !DIExpression()), !dbg !2169
+  call void @llvm.dbg.declare(metadata ptr %15, metadata !2170, metadata !DIExpression()), !dbg !2171
+  store i64 -4611684918915760128, ptr %15, align 8, !dbg !2171
+  call void @llvm.dbg.declare(metadata ptr %16, metadata !2172, metadata !DIExpression()), !dbg !2173
+  store ptr null, ptr %16, align 8, !dbg !2173
+  call void @llvm.dbg.declare(metadata ptr %17, metadata !2174, metadata !DIExpression()), !dbg !2175
+  call void @llvm.dbg.declare(metadata ptr %18, metadata !2176, metadata !DIExpression()), !dbg !2177
+  store i8 0, ptr %18, align 1, !dbg !2177
+  %21 = load i64, ptr %4, align 8, !dbg !2178
+  store i64 %21, ptr %8, align 8, !dbg !2179
+  %22 = load i64, ptr %5, align 8, !dbg !2180
+  store i64 %22, ptr %13, align 8, !dbg !2181
+  %23 = getelementptr inbounds %union.pa_u, ptr %8, i32 0, i32 0, !dbg !2182
+  %24 = getelementptr inbounds %struct.anon, ptr %23, i32 0, i32 0, !dbg !2182
+  %25 = load i64, ptr %24, align 8, !dbg !2182
+  %26 = call i64 @check_lock_and_map_explicit_tdr(i64 %25, i64 noundef 1, i32 noundef 0, i32 noundef 2, i32 noundef 4, ptr noundef %9, ptr noundef %11, ptr noundef %7) #4, !dbg !2182
+  store i64 %26, ptr %15, align 8, !dbg !2183
+  %27 = load i64, ptr %15, align 8, !dbg !2184
+  %28 = icmp ne i64 %27, 0, !dbg !2186
+  br i1 %28, label %29, label %30, !dbg !2187
 
 29:                                               ; preds = %3
-  br label %223
+  br label %223, !dbg !2188
 
 30:                                               ; preds = %3
-  %31 = load ptr, ptr %7, align 8
-  %32 = call i64 @check_state_map_tdcs_and_lock(ptr noundef %31, i32 noundef 1, i32 noundef 0, i8 noundef zeroext 0, i32 noundef 80, ptr noundef %10) #3
-  store i64 %32, ptr %15, align 8
-  %33 = load i64, ptr %15, align 8
-  %34 = icmp ne i64 %33, 0
-  br i1 %34, label %35, label %36
+  %31 = load ptr, ptr %7, align 8, !dbg !2190
+  %32 = call i64 @check_state_map_tdcs_and_lock(ptr noundef %31, i32 noundef 1, i32 noundef 0, i8 noundef zeroext 0, i32 noundef 80, ptr noundef %10) #4, !dbg !2191
+  store i64 %32, ptr %15, align 8, !dbg !2192
+  %33 = load i64, ptr %15, align 8, !dbg !2193
+  %34 = icmp ne i64 %33, 0, !dbg !2195
+  br i1 %34, label %35, label %36, !dbg !2196
 
 35:                                               ; preds = %30
-  br label %223
+  br label %223, !dbg !2197
 
 36:                                               ; preds = %30
-  %37 = load i64, ptr %6, align 8
-  %38 = icmp ne i64 %37, 0
-  br i1 %38, label %39, label %41
+  %37 = load i64, ptr %6, align 8, !dbg !2199
+  %38 = icmp ne i64 %37, 0, !dbg !2201
+  br i1 %38, label %39, label %41, !dbg !2202
 
 39:                                               ; preds = %36
-  %40 = call i64 @api_error_with_operand_id(i64 noundef -4611684918915760128, i64 noundef 10) #3
-  store i64 %40, ptr %15, align 8
-  br label %223
+  %40 = call i64 @api_error_with_operand_id(i64 noundef -4611684918915760128, i64 noundef 10) #4, !dbg !2203
+  store i64 %40, ptr %15, align 8, !dbg !2205
+  br label %223, !dbg !2206
 
 41:                                               ; preds = %36
-  %42 = load i64, ptr %13, align 8
-  %43 = lshr i64 %42, 52
-  %44 = icmp ult i64 %43, 48
-  br i1 %44, label %45, label %47
+  %42 = load i64, ptr %13, align 8, !dbg !2207
+  %43 = lshr i64 %42, 52, !dbg !2207
+  %44 = icmp ult i64 %43, 48, !dbg !2209
+  br i1 %44, label %45, label %47, !dbg !2210
 
 45:                                               ; preds = %41
-  %46 = call i64 @api_error_with_operand_id(i64 noundef -4611684918915760128, i64 noundef 8) #3
-  store i64 %46, ptr %15, align 8
-  br label %223
+  %46 = call i64 @api_error_with_operand_id(i64 noundef -4611684918915760128, i64 noundef 8) #4, !dbg !2211
+  store i64 %46, ptr %15, align 8, !dbg !2213
+  br label %223, !dbg !2214
 
 47:                                               ; preds = %41
-  %48 = load i64, ptr %13, align 8
-  %49 = and i64 %48, 4503599627370495
-  %50 = or i64 %49, 0
-  store i64 %50, ptr %13, align 8
-  %51 = load i64, ptr %13, align 8
-  store i64 %51, ptr %19, align 8
-  %52 = getelementptr inbounds %union.pa_u, ptr %19, i32 0, i32 0
-  %53 = getelementptr inbounds %struct.anon, ptr %52, i32 0, i32 0
-  %54 = load i64, ptr %53, align 8
-  %55 = call i64 @shared_hpa_check_with_pwr_2_alignment(i64 %54, i64 noundef 128) #3
-  store i64 %55, ptr %15, align 8
-  %56 = icmp ne i64 %55, 0
-  br i1 %56, label %57, label %60
+  %48 = load i64, ptr %13, align 8, !dbg !2215
+  %49 = and i64 %48, 4503599627370495, !dbg !2215
+  %50 = or i64 %49, 0, !dbg !2215
+  store i64 %50, ptr %13, align 8, !dbg !2215
+  call void @llvm.dbg.declare(metadata ptr %19, metadata !2216, metadata !DIExpression()), !dbg !2217
+  %51 = load i64, ptr %13, align 8, !dbg !2218
+  store i64 %51, ptr %19, align 8, !dbg !2219
+  %52 = getelementptr inbounds %union.pa_u, ptr %19, i32 0, i32 0, !dbg !2220
+  %53 = getelementptr inbounds %struct.anon, ptr %52, i32 0, i32 0, !dbg !2220
+  %54 = load i64, ptr %53, align 8, !dbg !2220
+  %55 = call i64 @shared_hpa_check_with_pwr_2_alignment(i64 %54, i64 noundef 128) #4, !dbg !2220
+  store i64 %55, ptr %15, align 8, !dbg !2222
+  %56 = icmp ne i64 %55, 0, !dbg !2223
+  br i1 %56, label %57, label %60, !dbg !2224
 
 57:                                               ; preds = %47
-  %58 = load i64, ptr %15, align 8
-  %59 = call i64 @api_error_with_operand_id(i64 noundef %58, i64 noundef 8) #3
-  store i64 %59, ptr %15, align 8
-  br label %223
+  %58 = load i64, ptr %15, align 8, !dbg !2225
+  %59 = call i64 @api_error_with_operand_id(i64 noundef %58, i64 noundef 8) #4, !dbg !2227
+  store i64 %59, ptr %15, align 8, !dbg !2228
+  br label %223, !dbg !2229
 
 60:                                               ; preds = %47
-  call void @lfence() #3
-  %61 = load ptr, ptr %10, align 8
-  %62 = getelementptr inbounds %struct.tdcs_s, ptr %61, i32 0, i32 16
-  %63 = getelementptr inbounds %struct.anon.40, ptr %62, i32 0, i32 0
-  %64 = call zeroext i8 @migsc_lock(ptr noundef %63) #3
-  %65 = icmp ne i8 %64, 0
-  br i1 %65, label %68, label %66
+  call void @lfence() #4, !dbg !2230
+  %61 = load ptr, ptr %10, align 8, !dbg !2231
+  %62 = getelementptr inbounds %struct.tdcs_s, ptr %61, i32 0, i32 16, !dbg !2233
+  %63 = getelementptr inbounds %struct.anon.49, ptr %62, i32 0, i32 0, !dbg !2233
+  %64 = call zeroext i8 @migsc_lock(ptr noundef %63) #4, !dbg !2234
+  %65 = icmp ne i8 %64, 0, !dbg !2234
+  br i1 %65, label %68, label %66, !dbg !2235
 
 66:                                               ; preds = %60
-  %67 = call i64 @api_error_with_operand_id(i64 noundef -9223369837831520256, i64 noundef 171) #3
-  store i64 %67, ptr %15, align 8
-  br label %223
+  %67 = call i64 @api_error_with_operand_id(i64 noundef -9223369837831520256, i64 noundef 171) #4, !dbg !2236
+  store i64 %67, ptr %15, align 8, !dbg !2238
+  br label %223, !dbg !2239
 
 68:                                               ; preds = %60
-  store i8 1, ptr %18, align 1
-  %69 = load ptr, ptr %10, align 8
-  %70 = getelementptr inbounds %struct.tdcs_s, ptr %69, i32 0, i32 8
-  %71 = getelementptr inbounds %struct.tdcs_execution_control2_field_s, ptr %70, i32 0, i32 9
-  %72 = load i32, ptr %71, align 4
-  %73 = trunc i32 %72 to i8
-  %74 = zext i8 %73 to i64
-  %75 = and i64 %74, 16
-  %76 = icmp ne i64 %75, 0
-  br i1 %76, label %77, label %105
+  store i8 1, ptr %18, align 1, !dbg !2240
+  %69 = load ptr, ptr %10, align 8, !dbg !2241
+  %70 = getelementptr inbounds %struct.tdcs_s, ptr %69, i32 0, i32 8, !dbg !2243
+  %71 = getelementptr inbounds %struct.tdcs_execution_control2_field_s, ptr %70, i32 0, i32 9, !dbg !2244
+  %72 = load i32, ptr %71, align 4, !dbg !2244
+  %73 = trunc i32 %72 to i8, !dbg !2245
+  %74 = zext i8 %73 to i64, !dbg !2245
+  %75 = and i64 %74, 16, !dbg !2246
+  %76 = icmp ne i64 %75, 0, !dbg !2246
+  br i1 %76, label %77, label %105, !dbg !2247
 
 77:                                               ; preds = %68
-  %78 = call ptr @get_global_data() #3
-  %79 = getelementptr inbounds %struct.tdx_module_global_s, ptr %78, i32 0, i32 18
-  %80 = load ptr, ptr %10, align 8
-  %81 = getelementptr inbounds %struct.tdcs_s, ptr %80, i32 0, i32 4
-  %82 = getelementptr inbounds %struct.tdcs_migration_fields_s, ptr %81, i32 0, i32 29
-  %83 = load i16, ptr %82, align 16
-  %84 = zext i16 %83 to i32
-  %85 = sub nsw i32 0, %84
-  %86 = trunc i32 %85 to i16
-  %87 = call zeroext i16 @_lock_xadd_16b(ptr noundef %79, i16 noundef zeroext %86) #3
-  store i16 %87, ptr %20, align 2
-  %88 = load i16, ptr %20, align 2
-  %89 = zext i16 %88 to i32
-  %90 = load ptr, ptr %10, align 8
-  %91 = getelementptr inbounds %struct.tdcs_s, ptr %90, i32 0, i32 4
-  %92 = getelementptr inbounds %struct.tdcs_migration_fields_s, ptr %91, i32 0, i32 29
-  %93 = load i16, ptr %92, align 16
-  %94 = zext i16 %93 to i32
-  %95 = icmp sge i32 %89, %94
-  %96 = xor i1 %95, true
-  %97 = zext i1 %96 to i32
-  %98 = sext i32 %97 to i64
-  %99 = icmp ne i64 %98, 0
-  br i1 %99, label %100, label %101
+  call void @llvm.dbg.declare(metadata ptr %20, metadata !2248, metadata !DIExpression()), !dbg !2250
+  %78 = call ptr @get_global_data() #4, !dbg !2251
+  %79 = getelementptr inbounds %struct.tdx_module_global_s, ptr %78, i32 0, i32 18, !dbg !2252
+  %80 = load ptr, ptr %10, align 8, !dbg !2253
+  %81 = getelementptr inbounds %struct.tdcs_s, ptr %80, i32 0, i32 4, !dbg !2254
+  %82 = getelementptr inbounds %struct.tdcs_migration_fields_s, ptr %81, i32 0, i32 29, !dbg !2255
+  %83 = load i16, ptr %82, align 16, !dbg !2255
+  %84 = zext i16 %83 to i32, !dbg !2256
+  %85 = sub nsw i32 0, %84, !dbg !2257
+  %86 = trunc i32 %85 to i16, !dbg !2257
+  %87 = call zeroext i16 @_lock_xadd_16b(ptr noundef %79, i16 noundef zeroext %86) #4, !dbg !2258
+  store i16 %87, ptr %20, align 2, !dbg !2250
+  %88 = load i16, ptr %20, align 2, !dbg !2259
+  %89 = zext i16 %88 to i32, !dbg !2259
+  %90 = load ptr, ptr %10, align 8, !dbg !2259
+  %91 = getelementptr inbounds %struct.tdcs_s, ptr %90, i32 0, i32 4, !dbg !2259
+  %92 = getelementptr inbounds %struct.tdcs_migration_fields_s, ptr %91, i32 0, i32 29, !dbg !2259
+  %93 = load i16, ptr %92, align 16, !dbg !2259
+  %94 = zext i16 %93 to i32, !dbg !2259
+  %95 = icmp sge i32 %89, %94, !dbg !2259
+  %96 = xor i1 %95, true, !dbg !2259
+  %97 = zext i1 %96 to i32, !dbg !2259
+  %98 = sext i32 %97 to i64, !dbg !2259
+  %99 = icmp ne i64 %98, 0, !dbg !2259
+  br i1 %99, label %100, label %101, !dbg !2261
 
 100:                                              ; preds = %77
-  call void @fatal_error(i32 noundef 369, i8 noundef zeroext 0, ptr noundef null) #3
-  br label %101
+  call void @fatal_error(i32 noundef 369, i8 noundef zeroext 0, ptr noundef null) #4, !dbg !2262
+  br label %101, !dbg !2262
 
 101:                                              ; preds = %100, %77
-  %102 = load ptr, ptr %10, align 8
-  %103 = getelementptr inbounds %struct.tdcs_s, ptr %102, i32 0, i32 4
-  %104 = getelementptr inbounds %struct.tdcs_migration_fields_s, ptr %103, i32 0, i32 29
-  store i16 0, ptr %104, align 16
-  br label %105
+  %102 = load ptr, ptr %10, align 8, !dbg !2264
+  %103 = getelementptr inbounds %struct.tdcs_s, ptr %102, i32 0, i32 4, !dbg !2265
+  %104 = getelementptr inbounds %struct.tdcs_migration_fields_s, ptr %103, i32 0, i32 29, !dbg !2266
+  store i16 0, ptr %104, align 16, !dbg !2267
+  br label %105, !dbg !2268
 
 105:                                              ; preds = %101, %68
-  %106 = load ptr, ptr %10, align 8
-  %107 = getelementptr inbounds %struct.tdcs_s, ptr %106, i32 0, i32 0
-  %108 = getelementptr inbounds %struct.tdcs_management_fields_s, ptr %107, i32 0, i32 2
-  store i32 10, ptr %108, align 8
-  %109 = load ptr, ptr %19, align 8
-  %110 = call ptr @map_pa(ptr noundef %109, i32 noundef 1) #3
-  store ptr %110, ptr %12, align 8
-  store i64 0, ptr %17, align 8
-  %111 = load ptr, ptr %10, align 8
-  %112 = getelementptr inbounds %struct.tdcs_s, ptr %111, i32 0, i32 16
-  %113 = getelementptr inbounds %struct.anon.40, ptr %112, i32 0, i32 0
-  %114 = load i64, ptr %113, align 4096
-  %115 = lshr i64 %114, 12
-  %116 = and i64 %115, 1099511627775
-  %117 = getelementptr inbounds %struct.anon, ptr %17, i32 0, i32 0
-  %118 = load i64, ptr %117, align 8
-  %119 = and i64 %116, 1099511627775
-  %120 = shl i64 %119, 12
-  %121 = and i64 %118, -4503599627366401
-  %122 = or i64 %121, %120
-  store i64 %122, ptr %117, align 8
-  %123 = load ptr, ptr %17, align 8
-  %124 = load ptr, ptr %7, align 8
-  %125 = getelementptr inbounds %struct.tdr_s, ptr %124, i32 0, i32 1
-  %126 = getelementptr inbounds %struct.tdr_key_managment_fields_s, ptr %125, i32 0, i32 0
-  %127 = load i16, ptr %126, align 256
-  %128 = call ptr @map_pa_with_hkid(ptr noundef %123, i16 noundef zeroext %127, i32 noundef 1) #3
-  store ptr %128, ptr %16, align 8
-  %129 = load ptr, ptr %10, align 8
-  %130 = getelementptr inbounds %struct.tdcs_s, ptr %129, i32 0, i32 16
-  %131 = getelementptr inbounds %struct.anon.40, ptr %130, i32 0, i32 0
-  %132 = load i64, ptr %131, align 4096
-  %133 = lshr i64 %132, 1
-  %134 = and i64 %133, 1
-  %135 = icmp ne i64 %134, 0
-  br i1 %135, label %147, label %136
+  %106 = load ptr, ptr %10, align 8, !dbg !2269
+  %107 = getelementptr inbounds %struct.tdcs_s, ptr %106, i32 0, i32 0, !dbg !2270
+  %108 = getelementptr inbounds %struct.tdcs_management_fields_s, ptr %107, i32 0, i32 2, !dbg !2271
+  store i32 10, ptr %108, align 8, !dbg !2272
+  %109 = load ptr, ptr %19, align 8, !dbg !2273
+  %110 = call ptr @map_pa(ptr noundef %109, i32 noundef 1) #4, !dbg !2274
+  store ptr %110, ptr %12, align 8, !dbg !2275
+  store i64 0, ptr %17, align 8, !dbg !2276
+  %111 = load ptr, ptr %10, align 8, !dbg !2277
+  %112 = getelementptr inbounds %struct.tdcs_s, ptr %111, i32 0, i32 16, !dbg !2278
+  %113 = getelementptr inbounds %struct.anon.49, ptr %112, i32 0, i32 0, !dbg !2278
+  %114 = load i64, ptr %113, align 4096, !dbg !2279
+  %115 = lshr i64 %114, 12, !dbg !2279
+  %116 = and i64 %115, 1099511627775, !dbg !2279
+  %117 = getelementptr inbounds %struct.anon, ptr %17, i32 0, i32 0, !dbg !2280
+  %118 = load i64, ptr %117, align 8, !dbg !2281
+  %119 = and i64 %116, 1099511627775, !dbg !2281
+  %120 = shl i64 %119, 12, !dbg !2281
+  %121 = and i64 %118, -4503599627366401, !dbg !2281
+  %122 = or i64 %121, %120, !dbg !2281
+  store i64 %122, ptr %117, align 8, !dbg !2281
+  %123 = load ptr, ptr %17, align 8, !dbg !2282
+  %124 = load ptr, ptr %7, align 8, !dbg !2283
+  %125 = getelementptr inbounds %struct.tdr_s, ptr %124, i32 0, i32 1, !dbg !2284
+  %126 = getelementptr inbounds %struct.tdr_key_managment_fields_s, ptr %125, i32 0, i32 0, !dbg !2285
+  %127 = load i16, ptr %126, align 256, !dbg !2285
+  %128 = call ptr @map_pa_with_hkid(ptr noundef %123, i16 noundef zeroext %127, i32 noundef 1) #4, !dbg !2286
+  store ptr %128, ptr %16, align 8, !dbg !2287
+  %129 = load ptr, ptr %10, align 8, !dbg !2288
+  %130 = getelementptr inbounds %struct.tdcs_s, ptr %129, i32 0, i32 16, !dbg !2290
+  %131 = getelementptr inbounds %struct.anon.49, ptr %130, i32 0, i32 0, !dbg !2290
+  %132 = load i64, ptr %131, align 4096, !dbg !2291
+  %133 = lshr i64 %132, 1, !dbg !2291
+  %134 = and i64 %133, 1, !dbg !2291
+  %135 = icmp ne i64 %134, 0, !dbg !2288
+  br i1 %135, label %147, label %136, !dbg !2292
 
 136:                                              ; preds = %105
-  %137 = load ptr, ptr %16, align 8
-  %138 = load ptr, ptr %10, align 8
-  %139 = getelementptr inbounds %struct.tdcs_s, ptr %138, i32 0, i32 4
-  %140 = getelementptr inbounds %struct.tdcs_migration_fields_s, ptr %139, i32 0, i32 9
-  call void @migsc_init(ptr noundef %137, ptr noundef %140) #3
-  %141 = load ptr, ptr %10, align 8
-  %142 = getelementptr inbounds %struct.tdcs_s, ptr %141, i32 0, i32 16
-  %143 = getelementptr inbounds %struct.anon.40, ptr %142, i32 0, i32 0
-  %144 = load i64, ptr %143, align 4096
-  %145 = and i64 %144, -3
-  %146 = or i64 %145, 2
-  store i64 %146, ptr %143, align 4096
-  br label %147
+  %137 = load ptr, ptr %16, align 8, !dbg !2293
+  %138 = load ptr, ptr %10, align 8, !dbg !2295
+  %139 = getelementptr inbounds %struct.tdcs_s, ptr %138, i32 0, i32 4, !dbg !2296
+  %140 = getelementptr inbounds %struct.tdcs_migration_fields_s, ptr %139, i32 0, i32 9, !dbg !2297
+  call void @migsc_init(ptr noundef %137, ptr noundef %140) #4, !dbg !2298
+  %141 = load ptr, ptr %10, align 8, !dbg !2299
+  %142 = getelementptr inbounds %struct.tdcs_s, ptr %141, i32 0, i32 16, !dbg !2300
+  %143 = getelementptr inbounds %struct.anon.49, ptr %142, i32 0, i32 0, !dbg !2300
+  %144 = load i64, ptr %143, align 4096, !dbg !2301
+  %145 = and i64 %144, -3, !dbg !2301
+  %146 = or i64 %145, 2, !dbg !2301
+  store i64 %146, ptr %143, align 4096, !dbg !2301
+  br label %147, !dbg !2302
 
 147:                                              ; preds = %136, %105
-  %148 = load ptr, ptr %16, align 8
-  %149 = getelementptr inbounds %struct.migsc_s, ptr %148, i32 0, i32 5
-  %150 = getelementptr inbounds %struct.anon.60, ptr %149, i32 0, i32 1
-  store i8 0, ptr %150, align 8
-  %151 = load ptr, ptr %16, align 8
-  %152 = getelementptr inbounds %struct.migsc_s, ptr %151, i32 0, i32 2
-  %153 = load i64, ptr %152, align 8
-  %154 = add i64 %153, 1
-  store i64 %154, ptr %152, align 8
-  %155 = load ptr, ptr %10, align 8
-  %156 = getelementptr inbounds %struct.tdcs_s, ptr %155, i32 0, i32 4
-  %157 = getelementptr inbounds %struct.tdcs_migration_fields_s, ptr %156, i32 0, i32 11
-  %158 = load i16, ptr %157, align 2
-  %159 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %160 = getelementptr inbounds %struct.mbmd_header_s, ptr %159, i32 0, i32 0
-  %161 = getelementptr inbounds %struct.anon.13, ptr %160, i32 0, i32 1
-  store i16 %158, ptr %161, align 1
-  %162 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %163 = getelementptr inbounds %struct.mbmd_header_s, ptr %162, i32 0, i32 0
-  %164 = getelementptr inbounds %struct.anon.13, ptr %163, i32 0, i32 0
-  store i16 48, ptr %164, align 1
-  %165 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %166 = getelementptr inbounds %struct.mbmd_header_s, ptr %165, i32 0, i32 0
-  %167 = getelementptr inbounds %struct.anon.13, ptr %166, i32 0, i32 2
-  store i16 0, ptr %167, align 1
-  %168 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %169 = getelementptr inbounds %struct.mbmd_header_s, ptr %168, i32 0, i32 0
-  %170 = getelementptr inbounds %struct.anon.13, ptr %169, i32 0, i32 3
-  store i8 33, ptr %170, align 1
-  %171 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %172 = getelementptr inbounds %struct.mbmd_header_s, ptr %171, i32 0, i32 0
-  %173 = getelementptr inbounds %struct.anon.13, ptr %172, i32 0, i32 4
-  store i8 0, ptr %173, align 1
-  %174 = load ptr, ptr %16, align 8
-  %175 = getelementptr inbounds %struct.migsc_s, ptr %174, i32 0, i32 3
-  %176 = load i32, ptr %175, align 16
-  %177 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %178 = getelementptr inbounds %struct.mbmd_header_s, ptr %177, i32 0, i32 0
-  %179 = getelementptr inbounds %struct.anon.13, ptr %178, i32 0, i32 5
-  store i32 %176, ptr %179, align 1
-  %180 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %181 = getelementptr inbounds %struct.mbmd_header_s, ptr %180, i32 0, i32 0
-  %182 = getelementptr inbounds %struct.anon.13, ptr %181, i32 0, i32 7
-  store i64 0, ptr %182, align 1
-  %183 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %184 = getelementptr inbounds %struct.mbmd_header_s, ptr %183, i32 0, i32 0
-  %185 = getelementptr inbounds %struct.anon.13, ptr %184, i32 0, i32 6
-  store i32 0, ptr %185, align 1
-  %186 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %187 = getelementptr inbounds %struct.mbmd_abort_token_s, ptr %186, i32 0, i32 1
-  store i64 0, ptr %187, align 1
-  %188 = load ptr, ptr %16, align 8
-  %189 = load ptr, ptr %16, align 8
-  %190 = getelementptr inbounds %struct.migsc_s, ptr %189, i32 0, i32 2
-  %191 = load i64, ptr %190, align 8
-  call void @reset_to_next_iv(ptr noundef %188, i64 noundef %191, i16 noundef zeroext 0) #3
-  %192 = load ptr, ptr %16, align 8
-  %193 = getelementptr inbounds %struct.migsc_s, ptr %192, i32 0, i32 8
-  %194 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %195 = call i32 @aes_gcm_process_aad(ptr noundef %193, ptr noundef %194, i32 noundef 32) #3
-  %196 = icmp ne i32 %195, 0
-  br i1 %196, label %197, label %198
+  %148 = load ptr, ptr %16, align 8, !dbg !2303
+  %149 = getelementptr inbounds %struct.migsc_s, ptr %148, i32 0, i32 5, !dbg !2304
+  %150 = getelementptr inbounds %struct.anon.69, ptr %149, i32 0, i32 1, !dbg !2305
+  store i8 0, ptr %150, align 8, !dbg !2306
+  %151 = load ptr, ptr %16, align 8, !dbg !2307
+  %152 = getelementptr inbounds %struct.migsc_s, ptr %151, i32 0, i32 2, !dbg !2308
+  %153 = load i64, ptr %152, align 8, !dbg !2309
+  %154 = add i64 %153, 1, !dbg !2309
+  store i64 %154, ptr %152, align 8, !dbg !2309
+  %155 = load ptr, ptr %10, align 8, !dbg !2310
+  %156 = getelementptr inbounds %struct.tdcs_s, ptr %155, i32 0, i32 4, !dbg !2311
+  %157 = getelementptr inbounds %struct.tdcs_migration_fields_s, ptr %156, i32 0, i32 11, !dbg !2312
+  %158 = load i16, ptr %157, align 2, !dbg !2312
+  %159 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2313
+  %160 = getelementptr inbounds %struct.mbmd_header_s, ptr %159, i32 0, i32 0, !dbg !2314
+  %161 = getelementptr inbounds %struct.anon.32, ptr %160, i32 0, i32 1, !dbg !2314
+  store i16 %158, ptr %161, align 1, !dbg !2315
+  %162 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2316
+  %163 = getelementptr inbounds %struct.mbmd_header_s, ptr %162, i32 0, i32 0, !dbg !2317
+  %164 = getelementptr inbounds %struct.anon.32, ptr %163, i32 0, i32 0, !dbg !2317
+  store i16 48, ptr %164, align 1, !dbg !2318
+  %165 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2319
+  %166 = getelementptr inbounds %struct.mbmd_header_s, ptr %165, i32 0, i32 0, !dbg !2320
+  %167 = getelementptr inbounds %struct.anon.32, ptr %166, i32 0, i32 2, !dbg !2320
+  store i16 0, ptr %167, align 1, !dbg !2321
+  %168 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2322
+  %169 = getelementptr inbounds %struct.mbmd_header_s, ptr %168, i32 0, i32 0, !dbg !2323
+  %170 = getelementptr inbounds %struct.anon.32, ptr %169, i32 0, i32 3, !dbg !2323
+  store i8 33, ptr %170, align 1, !dbg !2324
+  %171 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2325
+  %172 = getelementptr inbounds %struct.mbmd_header_s, ptr %171, i32 0, i32 0, !dbg !2326
+  %173 = getelementptr inbounds %struct.anon.32, ptr %172, i32 0, i32 4, !dbg !2326
+  store i8 0, ptr %173, align 1, !dbg !2327
+  %174 = load ptr, ptr %16, align 8, !dbg !2328
+  %175 = getelementptr inbounds %struct.migsc_s, ptr %174, i32 0, i32 3, !dbg !2329
+  %176 = load i32, ptr %175, align 16, !dbg !2329
+  %177 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2330
+  %178 = getelementptr inbounds %struct.mbmd_header_s, ptr %177, i32 0, i32 0, !dbg !2331
+  %179 = getelementptr inbounds %struct.anon.32, ptr %178, i32 0, i32 5, !dbg !2331
+  store i32 %176, ptr %179, align 1, !dbg !2332
+  %180 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2333
+  %181 = getelementptr inbounds %struct.mbmd_header_s, ptr %180, i32 0, i32 0, !dbg !2334
+  %182 = getelementptr inbounds %struct.anon.32, ptr %181, i32 0, i32 7, !dbg !2334
+  store i64 0, ptr %182, align 1, !dbg !2335
+  %183 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2336
+  %184 = getelementptr inbounds %struct.mbmd_header_s, ptr %183, i32 0, i32 0, !dbg !2337
+  %185 = getelementptr inbounds %struct.anon.32, ptr %184, i32 0, i32 6, !dbg !2337
+  store i32 0, ptr %185, align 1, !dbg !2338
+  %186 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2339
+  %187 = getelementptr inbounds %struct.mbmd_abort_token_s, ptr %186, i32 0, i32 1, !dbg !2340
+  store i64 0, ptr %187, align 1, !dbg !2341
+  %188 = load ptr, ptr %16, align 8, !dbg !2342
+  %189 = load ptr, ptr %16, align 8, !dbg !2343
+  %190 = getelementptr inbounds %struct.migsc_s, ptr %189, i32 0, i32 2, !dbg !2344
+  %191 = load i64, ptr %190, align 8, !dbg !2344
+  call void @reset_to_next_iv(ptr noundef %188, i64 noundef %191, i16 noundef zeroext 0) #4, !dbg !2345
+  %192 = load ptr, ptr %16, align 8, !dbg !2346
+  %193 = getelementptr inbounds %struct.migsc_s, ptr %192, i32 0, i32 8, !dbg !2348
+  %194 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2349
+  %195 = call i32 @aes_gcm_process_aad(ptr noundef %193, ptr noundef %194, i32 noundef 32) #4, !dbg !2350
+  %196 = icmp ne i32 %195, 0, !dbg !2351
+  br i1 %196, label %197, label %198, !dbg !2352
 
 197:                                              ; preds = %147
-  call void @fatal_error(i32 noundef 146, i8 noundef zeroext 0, ptr noundef null) #3
-  br label %198
+  call void @fatal_error(i32 noundef 146, i8 noundef zeroext 0, ptr noundef null) #4, !dbg !2353
+  br label %198, !dbg !2355
 
 198:                                              ; preds = %197, %147
-  %199 = load ptr, ptr %16, align 8
-  %200 = getelementptr inbounds %struct.migsc_s, ptr %199, i32 0, i32 8
-  %201 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %202 = getelementptr inbounds %struct.mbmd_abort_token_s, ptr %201, i32 0, i32 2
-  %203 = getelementptr inbounds [16 x i8], ptr %202, i64 0, i64 0
-  %204 = call i32 @aes_gcm_finalize(ptr noundef %200, ptr noundef %203) #3
-  %205 = icmp ne i32 %204, 0
-  br i1 %205, label %206, label %207
+  %199 = load ptr, ptr %16, align 8, !dbg !2356
+  %200 = getelementptr inbounds %struct.migsc_s, ptr %199, i32 0, i32 8, !dbg !2358
+  %201 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2359
+  %202 = getelementptr inbounds %struct.mbmd_abort_token_s, ptr %201, i32 0, i32 2, !dbg !2360
+  %203 = getelementptr inbounds [16 x i8], ptr %202, i64 0, i64 0, !dbg !2361
+  %204 = call i32 @aes_gcm_finalize(ptr noundef %200, ptr noundef %203) #4, !dbg !2362
+  %205 = icmp ne i32 %204, 0, !dbg !2362
+  br i1 %205, label %206, label %207, !dbg !2363
 
 206:                                              ; preds = %198
-  call void @fatal_error(i32 noundef 147, i8 noundef zeroext 0, ptr noundef null) #3
-  br label %207
+  call void @fatal_error(i32 noundef 147, i8 noundef zeroext 0, ptr noundef null) #4, !dbg !2364
+  br label %207, !dbg !2366
 
 207:                                              ; preds = %206, %198
-  %208 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %209 = getelementptr inbounds %struct.mbmd_header_s, ptr %208, i32 0, i32 0
-  %210 = getelementptr inbounds %struct.anon.13, ptr %209, i32 0, i32 2
-  store i16 0, ptr %210, align 1
-  %211 = load ptr, ptr %16, align 8
-  %212 = getelementptr inbounds %struct.migsc_s, ptr %211, i32 0, i32 2
-  %213 = load i64, ptr %212, align 8
-  %214 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0
-  %215 = getelementptr inbounds %struct.mbmd_header_s, ptr %214, i32 0, i32 0
-  %216 = getelementptr inbounds %struct.anon.13, ptr %215, i32 0, i32 7
-  store i64 %213, ptr %216, align 1
-  %217 = load ptr, ptr %12, align 8
-  call void @copy_mbmd(ptr noundef %217, ptr noundef %14) #3
-  %218 = load ptr, ptr %16, align 8
-  %219 = getelementptr inbounds %struct.migsc_s, ptr %218, i32 0, i32 3
-  %220 = load i32, ptr %219, align 16
-  %221 = add i32 %220, 1
-  store i32 %221, ptr %219, align 16
-  %222 = call i64 @api_error_fatal(i64 noundef 0) #3
-  store i64 %222, ptr %15, align 8
-  br label %223
+  %208 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2367
+  %209 = getelementptr inbounds %struct.mbmd_header_s, ptr %208, i32 0, i32 0, !dbg !2368
+  %210 = getelementptr inbounds %struct.anon.32, ptr %209, i32 0, i32 2, !dbg !2368
+  store i16 0, ptr %210, align 1, !dbg !2369
+  %211 = load ptr, ptr %16, align 8, !dbg !2370
+  %212 = getelementptr inbounds %struct.migsc_s, ptr %211, i32 0, i32 2, !dbg !2371
+  %213 = load i64, ptr %212, align 8, !dbg !2371
+  %214 = getelementptr inbounds %struct.mbmd_s, ptr %14, i32 0, i32 0, !dbg !2372
+  %215 = getelementptr inbounds %struct.mbmd_header_s, ptr %214, i32 0, i32 0, !dbg !2373
+  %216 = getelementptr inbounds %struct.anon.32, ptr %215, i32 0, i32 7, !dbg !2373
+  store i64 %213, ptr %216, align 1, !dbg !2374
+  %217 = load ptr, ptr %12, align 8, !dbg !2375
+  call void @copy_mbmd(ptr noundef %217, ptr noundef %14) #4, !dbg !2376
+  %218 = load ptr, ptr %16, align 8, !dbg !2377
+  %219 = getelementptr inbounds %struct.migsc_s, ptr %218, i32 0, i32 3, !dbg !2378
+  %220 = load i32, ptr %219, align 16, !dbg !2379
+  %221 = add i32 %220, 1, !dbg !2379
+  store i32 %221, ptr %219, align 16, !dbg !2379
+  %222 = call i64 @api_error_fatal(i64 noundef 0) #4, !dbg !2380
+  store i64 %222, ptr %15, align 8, !dbg !2381
+  br label %223, !dbg !2382
 
 223:                                              ; preds = %207, %66, %57, %45, %39, %35, %29
-  %224 = load ptr, ptr %16, align 8
-  %225 = icmp ne ptr %224, null
-  br i1 %225, label %226, label %228
+  call void @llvm.dbg.label(metadata !2383), !dbg !2384
+  %224 = load ptr, ptr %16, align 8, !dbg !2385
+  %225 = icmp ne ptr %224, null, !dbg !2387
+  br i1 %225, label %226, label %228, !dbg !2388
 
 226:                                              ; preds = %223
-  %227 = load ptr, ptr %16, align 8
-  call void @free_la(ptr noundef %227) #3
-  br label %228
+  %227 = load ptr, ptr %16, align 8, !dbg !2389
+  call void @free_la(ptr noundef %227) #4, !dbg !2391
+  br label %228, !dbg !2392
 
 228:                                              ; preds = %226, %223
-  %229 = load ptr, ptr %12, align 8
-  %230 = icmp ne ptr %229, null
-  br i1 %230, label %231, label %233
+  %229 = load ptr, ptr %12, align 8, !dbg !2393
+  %230 = icmp ne ptr %229, null, !dbg !2395
+  br i1 %230, label %231, label %233, !dbg !2396
 
 231:                                              ; preds = %228
-  %232 = load ptr, ptr %12, align 8
-  call void @free_la(ptr noundef %232) #3
-  br label %233
+  %232 = load ptr, ptr %12, align 8, !dbg !2397
+  call void @free_la(ptr noundef %232) #4, !dbg !2399
+  br label %233, !dbg !2400
 
 233:                                              ; preds = %231, %228
-  %234 = load i8, ptr %18, align 1
-  %235 = icmp ne i8 %234, 0
-  br i1 %235, label %236, label %240
+  %234 = load i8, ptr %18, align 1, !dbg !2401
+  %235 = icmp ne i8 %234, 0, !dbg !2401
+  br i1 %235, label %236, label %240, !dbg !2403
 
 236:                                              ; preds = %233
-  %237 = load ptr, ptr %10, align 8
-  %238 = getelementptr inbounds %struct.tdcs_s, ptr %237, i32 0, i32 16
-  %239 = getelementptr inbounds %struct.anon.40, ptr %238, i32 0, i32 0
-  call void @migsc_unlock(ptr noundef %239) #3
-  br label %240
+  %237 = load ptr, ptr %10, align 8, !dbg !2404
+  %238 = getelementptr inbounds %struct.tdcs_s, ptr %237, i32 0, i32 16, !dbg !2406
+  %239 = getelementptr inbounds %struct.anon.49, ptr %238, i32 0, i32 0, !dbg !2406
+  call void @migsc_unlock(ptr noundef %239) #4, !dbg !2407
+  br label %240, !dbg !2408
 
 240:                                              ; preds = %236, %233
-  %241 = load ptr, ptr %10, align 8
-  %242 = icmp ne ptr %241, null
-  br i1 %242, label %243, label %245
+  %241 = load ptr, ptr %10, align 8, !dbg !2409
+  %242 = icmp ne ptr %241, null, !dbg !2411
+  br i1 %242, label %243, label %245, !dbg !2412
 
 243:                                              ; preds = %240
-  %244 = load ptr, ptr %10, align 8
-  call void @free_la(ptr noundef %244) #3
-  br label %245
+  %244 = load ptr, ptr %10, align 8, !dbg !2413
+  call void @free_la(ptr noundef %244) #4, !dbg !2415
+  br label %245, !dbg !2416
 
 245:                                              ; preds = %243, %240
-  %246 = load i8, ptr %11, align 1
-  %247 = icmp ne i8 %246, 0
-  br i1 %247, label %248, label %250
+  %246 = load i8, ptr %11, align 1, !dbg !2417
+  %247 = icmp ne i8 %246, 0, !dbg !2417
+  br i1 %247, label %248, label %250, !dbg !2419
 
 248:                                              ; preds = %245
-  call void @pamt_unwalk(ptr noundef %9) #3
-  %249 = load ptr, ptr %7, align 8
-  call void @free_la(ptr noundef %249) #3
-  br label %250
+  call void @pamt_unwalk(ptr noundef %9) #4, !dbg !2420
+  %249 = load ptr, ptr %7, align 8, !dbg !2422
+  call void @free_la(ptr noundef %249) #4, !dbg !2423
+  br label %250, !dbg !2424
 
 250:                                              ; preds = %248, %245
-  %251 = load i64, ptr %15, align 8
-  ret i64 %251
+  %251 = load i64, ptr %15, align 8, !dbg !2425
+  ret i64 %251, !dbg !2426
 }
 
-declare i64 @check_lock_and_map_explicit_tdr(i64, i64 noundef, i32 noundef, i32 noundef, i32 noundef, ptr noundef, ptr noundef, ptr noundef) #1
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
 
-declare i64 @check_state_map_tdcs_and_lock(ptr noundef, i32 noundef, i32 noundef, i8 noundef zeroext, i32 noundef, ptr noundef) #1
+declare i64 @check_lock_and_map_explicit_tdr(i64, i64 noundef, i32 noundef, i32 noundef, i32 noundef, ptr noundef, ptr noundef, ptr noundef) #2
+
+declare i64 @check_state_map_tdcs_and_lock(ptr noundef, i32 noundef, i32 noundef, i8 noundef zeroext, i32 noundef, ptr noundef) #2
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define internal i64 @api_error_with_operand_id(i64 noundef %0, i64 noundef %1) #0 {
+define internal i64 @api_error_with_operand_id(i64 noundef %0, i64 noundef %1) #0 !dbg !2427 {
   %3 = alloca i64, align 8
   %4 = alloca i64, align 8
   %5 = alloca %union.api_error_code_u, align 1
   store i64 %0, ptr %3, align 8
+  call void @llvm.dbg.declare(metadata ptr %3, metadata !2430, metadata !DIExpression()), !dbg !2431
   store i64 %1, ptr %4, align 8
-  %6 = load i64, ptr %3, align 8
-  store i64 %6, ptr %5, align 1
-  %7 = load i64, ptr %4, align 8
-  %8 = trunc i64 %7 to i32
-  %9 = getelementptr inbounds %struct.anon.70, ptr %5, i32 0, i32 0
-  store i32 %8, ptr %9, align 1
-  %10 = load i64, ptr %5, align 1
-  ret i64 %10
+  call void @llvm.dbg.declare(metadata ptr %4, metadata !2432, metadata !DIExpression()), !dbg !2433
+  call void @llvm.dbg.declare(metadata ptr %5, metadata !2434, metadata !DIExpression()), !dbg !2467
+  %6 = load i64, ptr %3, align 8, !dbg !2468
+  store i64 %6, ptr %5, align 1, !dbg !2469
+  %7 = load i64, ptr %4, align 8, !dbg !2470
+  %8 = trunc i64 %7 to i32, !dbg !2471
+  %9 = getelementptr inbounds %struct.anon.73, ptr %5, i32 0, i32 0, !dbg !2472
+  store i32 %8, ptr %9, align 1, !dbg !2473
+  %10 = load i64, ptr %5, align 1, !dbg !2474
+  ret i64 %10, !dbg !2475
 }
 
-declare i64 @shared_hpa_check_with_pwr_2_alignment(i64, i64 noundef) #1
+declare i64 @shared_hpa_check_with_pwr_2_alignment(i64, i64 noundef) #2
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define internal void @lfence() #0 {
-  call void asm sideeffect "lfence", "~{memory},~{dirflag},~{fpsr},~{flags}"() #4, !srcloc !9
-  ret void
+define internal void @lfence() #0 !dbg !2476 {
+  call void asm sideeffect "lfence", "~{memory},~{dirflag},~{fpsr},~{flags}"() #5, !dbg !2480, !srcloc !2481
+  ret void, !dbg !2482
 }
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define internal zeroext i8 @migsc_lock(ptr noundef %0) #0 {
+define internal zeroext i8 @migsc_lock(ptr noundef %0) #0 !dbg !2483 {
   %2 = alloca ptr, align 8
   store ptr %0, ptr %2, align 8
-  %3 = load ptr, ptr %2, align 8
-  %4 = call zeroext i8 @_lock_bts_64b(ptr noundef %3, i64 noundef 0) #3
-  %5 = zext i8 %4 to i32
-  %6 = icmp eq i32 %5, 0
-  %7 = zext i1 %6 to i32
-  %8 = trunc i32 %7 to i8
-  ret i8 %8
+  call void @llvm.dbg.declare(metadata ptr %2, metadata !2487, metadata !DIExpression()), !dbg !2488
+  %3 = load ptr, ptr %2, align 8, !dbg !2489
+  %4 = call zeroext i8 @_lock_bts_64b(ptr noundef %3, i64 noundef 0) #4, !dbg !2490
+  %5 = zext i8 %4 to i32, !dbg !2490
+  %6 = icmp eq i32 %5, 0, !dbg !2491
+  %7 = zext i1 %6 to i32, !dbg !2491
+  %8 = trunc i32 %7 to i8, !dbg !2490
+  ret i8 %8, !dbg !2492
 }
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define internal zeroext i16 @_lock_xadd_16b(ptr noundef %0, i16 noundef zeroext %1) #0 {
+define internal zeroext i16 @_lock_xadd_16b(ptr noundef %0, i16 noundef zeroext %1) #0 !dbg !2493 {
   %3 = alloca ptr, align 8
   %4 = alloca i16, align 2
   store ptr %0, ptr %3, align 8
+  call void @llvm.dbg.declare(metadata ptr %3, metadata !2497, metadata !DIExpression()), !dbg !2498
   store i16 %1, ptr %4, align 2
-  %5 = load ptr, ptr %3, align 8
-  %6 = load i16, ptr %4, align 2
-  %7 = call i16 asm sideeffect "lock; xaddw $2, $0", "=*m,={ax},{ax},~{memory},~{cc},~{dirflag},~{fpsr},~{flags}"(ptr elementtype(i16) %5, i16 %6) #4, !srcloc !10
-  store i16 %7, ptr %4, align 2
-  %8 = load i16, ptr %4, align 2
-  ret i16 %8
+  call void @llvm.dbg.declare(metadata ptr %4, metadata !2499, metadata !DIExpression()), !dbg !2500
+  %5 = load ptr, ptr %3, align 8, !dbg !2501
+  %6 = load i16, ptr %4, align 2, !dbg !2502
+  %7 = call i16 asm sideeffect "lock; xaddw $2, $0", "=*m,={ax},{ax},~{memory},~{cc},~{dirflag},~{fpsr},~{flags}"(ptr elementtype(i16) %5, i16 %6) #5, !dbg !2503, !srcloc !2504
+  store i16 %7, ptr %4, align 2, !dbg !2503
+  %8 = load i16, ptr %4, align 2, !dbg !2505
+  ret i16 %8, !dbg !2506
 }
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define internal ptr @get_global_data() #0 {
+define internal ptr @get_global_data() #0 !dbg !2507 {
   %1 = alloca i64, align 8
-  %2 = call i64 asm "movq %gs:${1:c}, $0\0A\09", "=r,i,~{dirflag},~{fpsr},~{flags}"(i64 4000) #5, !srcloc !11
-  store i64 %2, ptr %1, align 8
-  %3 = load i64, ptr %1, align 8
-  %4 = inttoptr i64 %3 to ptr
-  ret ptr %4
+  call void @llvm.dbg.declare(metadata ptr %1, metadata !2511, metadata !DIExpression()), !dbg !2512
+  %2 = call i64 asm "movq %gs:${1:c}, $0\0A\09", "=r,i,~{dirflag},~{fpsr},~{flags}"(i64 4000) #6, !dbg !2513, !srcloc !2514
+  store i64 %2, ptr %1, align 8, !dbg !2513
+  %3 = load i64, ptr %1, align 8, !dbg !2515
+  %4 = inttoptr i64 %3 to ptr, !dbg !2516
+  ret ptr %4, !dbg !2517
 }
 
-declare void @fatal_error(i32 noundef, i8 noundef zeroext, ptr noundef) #1
+declare void @fatal_error(i32 noundef, i8 noundef zeroext, ptr noundef) #2
 
-declare ptr @map_pa(ptr noundef, i32 noundef) #1
+declare ptr @map_pa(ptr noundef, i32 noundef) #2
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define internal ptr @map_pa_with_hkid(ptr noundef %0, i16 noundef zeroext %1, i32 noundef %2) #0 {
+define internal ptr @map_pa_with_hkid(ptr noundef %0, i16 noundef zeroext %1, i32 noundef %2) #0 !dbg !2518 {
   %4 = alloca ptr, align 8
   %5 = alloca i16, align 2
   %6 = alloca i32, align 4
   %7 = alloca %union.pa_u, align 8
   %8 = alloca %union.pa_u, align 8
   store ptr %0, ptr %4, align 8
+  call void @llvm.dbg.declare(metadata ptr %4, metadata !2523, metadata !DIExpression()), !dbg !2524
   store i16 %1, ptr %5, align 2
+  call void @llvm.dbg.declare(metadata ptr %5, metadata !2525, metadata !DIExpression()), !dbg !2526
   store i32 %2, ptr %6, align 4
-  %9 = load ptr, ptr %4, align 8
-  store ptr %9, ptr %7, align 8
-  %10 = load i16, ptr %5, align 2
-  %11 = getelementptr inbounds %union.pa_u, ptr %7, i32 0, i32 0
-  %12 = getelementptr inbounds %struct.anon, ptr %11, i32 0, i32 0
-  %13 = load i64, ptr %12, align 8
-  %14 = call i64 @set_hkid_to_pa(i64 %13, i16 noundef zeroext %10) #3
-  %15 = getelementptr inbounds %union.pa_u, ptr %8, i32 0, i32 0
-  %16 = getelementptr inbounds %struct.anon, ptr %15, i32 0, i32 0
-  store i64 %14, ptr %16, align 8
-  %17 = load i64, ptr %8, align 8
-  %18 = inttoptr i64 %17 to ptr
-  %19 = load i32, ptr %6, align 4
-  %20 = call ptr @map_pa(ptr noundef %18, i32 noundef %19) #3
-  ret ptr %20
+  call void @llvm.dbg.declare(metadata ptr %6, metadata !2527, metadata !DIExpression()), !dbg !2528
+  call void @llvm.dbg.declare(metadata ptr %7, metadata !2529, metadata !DIExpression()), !dbg !2530
+  %9 = load ptr, ptr %4, align 8, !dbg !2531
+  store ptr %9, ptr %7, align 8, !dbg !2532
+  call void @llvm.dbg.declare(metadata ptr %8, metadata !2533, metadata !DIExpression()), !dbg !2534
+  %10 = load i16, ptr %5, align 2, !dbg !2535
+  %11 = getelementptr inbounds %union.pa_u, ptr %7, i32 0, i32 0, !dbg !2536
+  %12 = getelementptr inbounds %struct.anon, ptr %11, i32 0, i32 0, !dbg !2536
+  %13 = load i64, ptr %12, align 8, !dbg !2536
+  %14 = call i64 @set_hkid_to_pa(i64 %13, i16 noundef zeroext %10) #4, !dbg !2536
+  %15 = getelementptr inbounds %union.pa_u, ptr %8, i32 0, i32 0, !dbg !2536
+  %16 = getelementptr inbounds %struct.anon, ptr %15, i32 0, i32 0, !dbg !2536
+  store i64 %14, ptr %16, align 8, !dbg !2536
+  %17 = load i64, ptr %8, align 8, !dbg !2537
+  %18 = inttoptr i64 %17 to ptr, !dbg !2538
+  %19 = load i32, ptr %6, align 4, !dbg !2539
+  %20 = call ptr @map_pa(ptr noundef %18, i32 noundef %19) #4, !dbg !2540
+  ret ptr %20, !dbg !2541
 }
 
-declare void @migsc_init(ptr noundef, ptr noundef) #1
+declare void @migsc_init(ptr noundef, ptr noundef) #2
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define internal void @reset_to_next_iv(ptr noundef %0, i64 noundef %1, i16 noundef zeroext %2) #0 {
+define internal void @reset_to_next_iv(ptr noundef %0, i64 noundef %1, i16 noundef zeroext %2) #0 !dbg !2542 {
   %4 = alloca ptr, align 8
   %5 = alloca i64, align 8
   %6 = alloca i16, align 2
   %7 = alloca %union.migs_iv_s, align 1
   store ptr %0, ptr %4, align 8
+  call void @llvm.dbg.declare(metadata ptr %4, metadata !2545, metadata !DIExpression()), !dbg !2546
   store i64 %1, ptr %5, align 8
+  call void @llvm.dbg.declare(metadata ptr %5, metadata !2547, metadata !DIExpression()), !dbg !2548
   store i16 %2, ptr %6, align 2
-  %8 = load i64, ptr %5, align 8
-  %9 = getelementptr inbounds %struct.anon.74, ptr %7, i32 0, i32 0
-  store i64 %8, ptr %9, align 1
-  %10 = load i16, ptr %6, align 2
-  %11 = getelementptr inbounds %struct.anon.74, ptr %7, i32 0, i32 1
-  store i16 %10, ptr %11, align 1
-  %12 = getelementptr inbounds %struct.anon.74, ptr %7, i32 0, i32 2
-  store i16 0, ptr %12, align 1
-  %13 = load ptr, ptr %4, align 8
-  %14 = getelementptr inbounds %struct.migsc_s, ptr %13, i32 0, i32 8
-  %15 = call i32 @aes_gcm_refresh_context(ptr noundef %14) #3
-  %16 = icmp ne i32 %15, 0
-  br i1 %16, label %17, label %18
+  call void @llvm.dbg.declare(metadata ptr %6, metadata !2549, metadata !DIExpression()), !dbg !2550
+  call void @llvm.dbg.declare(metadata ptr %7, metadata !2551, metadata !DIExpression()), !dbg !2566
+  %8 = load i64, ptr %5, align 8, !dbg !2567
+  %9 = getelementptr inbounds %struct.anon.77, ptr %7, i32 0, i32 0, !dbg !2568
+  store i64 %8, ptr %9, align 1, !dbg !2569
+  %10 = load i16, ptr %6, align 2, !dbg !2570
+  %11 = getelementptr inbounds %struct.anon.77, ptr %7, i32 0, i32 1, !dbg !2571
+  store i16 %10, ptr %11, align 1, !dbg !2572
+  %12 = getelementptr inbounds %struct.anon.77, ptr %7, i32 0, i32 2, !dbg !2573
+  store i16 0, ptr %12, align 1, !dbg !2574
+  %13 = load ptr, ptr %4, align 8, !dbg !2575
+  %14 = getelementptr inbounds %struct.migsc_s, ptr %13, i32 0, i32 8, !dbg !2577
+  %15 = call i32 @aes_gcm_refresh_context(ptr noundef %14) #4, !dbg !2578
+  %16 = icmp ne i32 %15, 0, !dbg !2579
+  br i1 %16, label %17, label %18, !dbg !2580
 
 17:                                               ; preds = %3
-  call void @fatal_error(i32 noundef 41, i8 noundef zeroext 0, ptr noundef null) #3
-  br label %18
+  call void @fatal_error(i32 noundef 41, i8 noundef zeroext 0, ptr noundef null) #4, !dbg !2581
+  br label %18, !dbg !2583
 
 18:                                               ; preds = %17, %3
-  %19 = load ptr, ptr %4, align 8
-  %20 = getelementptr inbounds %struct.migsc_s, ptr %19, i32 0, i32 8
-  %21 = call i32 @aes_gcm_reset(ptr noundef %20, ptr noundef %7) #3
-  %22 = icmp ne i32 %21, 0
-  br i1 %22, label %23, label %24
+  %19 = load ptr, ptr %4, align 8, !dbg !2584
+  %20 = getelementptr inbounds %struct.migsc_s, ptr %19, i32 0, i32 8, !dbg !2586
+  %21 = call i32 @aes_gcm_reset(ptr noundef %20, ptr noundef %7) #4, !dbg !2587
+  %22 = icmp ne i32 %21, 0, !dbg !2588
+  br i1 %22, label %23, label %24, !dbg !2589
 
 23:                                               ; preds = %18
-  call void @fatal_error(i32 noundef 42, i8 noundef zeroext 0, ptr noundef null) #3
-  br label %24
+  call void @fatal_error(i32 noundef 42, i8 noundef zeroext 0, ptr noundef null) #4, !dbg !2590
+  br label %24, !dbg !2592
 
 24:                                               ; preds = %23, %18
-  ret void
+  ret void, !dbg !2593
 }
 
-declare i32 @aes_gcm_process_aad(ptr noundef, ptr noundef, i32 noundef) #1
+declare i32 @aes_gcm_process_aad(ptr noundef, ptr noundef, i32 noundef) #2
 
-declare i32 @aes_gcm_finalize(ptr noundef, ptr noundef) #1
+declare i32 @aes_gcm_finalize(ptr noundef, ptr noundef) #2
 
-declare void @copy_mbmd(ptr noundef, ptr noundef) #1
+declare void @copy_mbmd(ptr noundef, ptr noundef) #2
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define internal i64 @api_error_fatal(i64 noundef %0) #0 {
+define internal i64 @api_error_fatal(i64 noundef %0) #0 !dbg !2594 {
   %2 = alloca i64, align 8
   %3 = alloca %union.api_error_code_u, align 1
   store i64 %0, ptr %2, align 8
-  %4 = load i64, ptr %2, align 8
-  store i64 %4, ptr %3, align 1
-  %5 = getelementptr inbounds %struct.anon.70, ptr %3, i32 0, i32 1
-  %6 = load i32, ptr %5, align 1
-  %7 = and i32 %6, -536870913
-  %8 = or i32 %7, 536870912
-  store i32 %8, ptr %5, align 1
-  %9 = load i64, ptr %3, align 1
-  ret i64 %9
+  call void @llvm.dbg.declare(metadata ptr %2, metadata !2597, metadata !DIExpression()), !dbg !2598
+  call void @llvm.dbg.declare(metadata ptr %3, metadata !2599, metadata !DIExpression()), !dbg !2600
+  %4 = load i64, ptr %2, align 8, !dbg !2601
+  store i64 %4, ptr %3, align 1, !dbg !2602
+  %5 = getelementptr inbounds %struct.anon.73, ptr %3, i32 0, i32 1, !dbg !2603
+  %6 = load i32, ptr %5, align 1, !dbg !2604
+  %7 = and i32 %6, -536870913, !dbg !2604
+  %8 = or i32 %7, 536870912, !dbg !2604
+  store i32 %8, ptr %5, align 1, !dbg !2604
+  %9 = load i64, ptr %3, align 1, !dbg !2605
+  ret i64 %9, !dbg !2606
 }
 
-declare void @free_la(ptr noundef) #1
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare void @llvm.dbg.label(metadata) #1
+
+declare void @free_la(ptr noundef) #2
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define internal void @migsc_unlock(ptr noundef %0) #0 {
+define internal void @migsc_unlock(ptr noundef %0) #0 !dbg !2607 {
   %2 = alloca ptr, align 8
   %3 = alloca i8, align 1
   store ptr %0, ptr %2, align 8
-  %4 = load ptr, ptr %2, align 8
-  %5 = call zeroext i8 @_lock_btr_64b(ptr noundef %4, i64 noundef 0) #3
-  store i8 %5, ptr %3, align 1
-  %6 = load i8, ptr %3, align 1
-  %7 = icmp ne i8 %6, 0
-  %8 = xor i1 %7, true
-  %9 = zext i1 %8 to i32
-  %10 = sext i32 %9 to i64
-  %11 = icmp ne i64 %10, 0
-  br i1 %11, label %12, label %13
+  call void @llvm.dbg.declare(metadata ptr %2, metadata !2610, metadata !DIExpression()), !dbg !2611
+  call void @llvm.dbg.declare(metadata ptr %3, metadata !2612, metadata !DIExpression()), !dbg !2613
+  %4 = load ptr, ptr %2, align 8, !dbg !2614
+  %5 = call zeroext i8 @_lock_btr_64b(ptr noundef %4, i64 noundef 0) #4, !dbg !2615
+  store i8 %5, ptr %3, align 1, !dbg !2616
+  %6 = load i8, ptr %3, align 1, !dbg !2617
+  %7 = icmp ne i8 %6, 0, !dbg !2617
+  %8 = xor i1 %7, true, !dbg !2617
+  %9 = zext i1 %8 to i32, !dbg !2617
+  %10 = sext i32 %9 to i64, !dbg !2617
+  %11 = icmp ne i64 %10, 0, !dbg !2617
+  br i1 %11, label %12, label %13, !dbg !2619
 
 12:                                               ; preds = %1
-  call void @fatal_error(i32 noundef 187, i8 noundef zeroext 0, ptr noundef null) #3
-  br label %13
+  call void @fatal_error(i32 noundef 187, i8 noundef zeroext 0, ptr noundef null) #4, !dbg !2620
+  br label %13, !dbg !2620
 
 13:                                               ; preds = %12, %1
-  ret void
+  ret void, !dbg !2622
 }
 
-declare void @pamt_unwalk(ptr noundef) #1
+declare void @pamt_unwalk(ptr noundef) #2
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define internal zeroext i8 @_lock_bts_64b(ptr noundef %0, i64 noundef %1) #0 {
+define internal zeroext i8 @_lock_bts_64b(ptr noundef %0, i64 noundef %1) #0 !dbg !2623 {
   %3 = alloca ptr, align 8
   %4 = alloca i64, align 8
   %5 = alloca i8, align 1
   store ptr %0, ptr %3, align 8
+  call void @llvm.dbg.declare(metadata ptr %3, metadata !2628, metadata !DIExpression()), !dbg !2629
   store i64 %1, ptr %4, align 8
-  %6 = load ptr, ptr %3, align 8
-  %7 = load i64, ptr %4, align 8
-  %8 = call i8 asm sideeffect "lock; btsq $2, $0; adc $1,$1", "=*m,={bx},{ax},{bx},~{cc},~{memory},~{dirflag},~{fpsr},~{flags}"(ptr elementtype(i64) %6, i64 %7, i32 0) #4, !srcloc !12
-  store i8 %8, ptr %5, align 1
-  %9 = load i8, ptr %5, align 1
-  ret i8 %9
+  call void @llvm.dbg.declare(metadata ptr %4, metadata !2630, metadata !DIExpression()), !dbg !2631
+  call void @llvm.dbg.declare(metadata ptr %5, metadata !2632, metadata !DIExpression()), !dbg !2633
+  %6 = load ptr, ptr %3, align 8, !dbg !2634
+  %7 = load i64, ptr %4, align 8, !dbg !2635
+  %8 = call i8 asm sideeffect "lock; btsq $2, $0; adc $1,$1", "=*m,={bx},{ax},{bx},~{cc},~{memory},~{dirflag},~{fpsr},~{flags}"(ptr elementtype(i64) %6, i64 %7, i32 0) #5, !dbg !2636, !srcloc !2637
+  store i8 %8, ptr %5, align 1, !dbg !2636
+  %9 = load i8, ptr %5, align 1, !dbg !2638
+  ret i8 %9, !dbg !2639
 }
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define internal i64 @set_hkid_to_pa(i64 %0, i16 noundef zeroext %1) #0 {
+define internal i64 @set_hkid_to_pa(i64 %0, i16 noundef zeroext %1) #0 !dbg !2640 {
   %3 = alloca %union.pa_u, align 8
   %4 = alloca %union.pa_u, align 8
   %5 = alloca i16, align 2
@@ -740,88 +787,2759 @@ define internal i64 @set_hkid_to_pa(i64 %0, i16 noundef zeroext %1) #0 {
   %7 = getelementptr inbounds %union.pa_u, ptr %4, i32 0, i32 0
   %8 = getelementptr inbounds %struct.anon, ptr %7, i32 0, i32 0
   store i64 %0, ptr %8, align 8
+  call void @llvm.dbg.declare(metadata ptr %4, metadata !2643, metadata !DIExpression()), !dbg !2644
   store i16 %1, ptr %5, align 2
-  %9 = call ptr @get_global_data() #3
-  store ptr %9, ptr %6, align 8
-  %10 = load ptr, ptr %6, align 8
-  %11 = getelementptr inbounds %struct.tdx_module_global_s, ptr %10, i32 0, i32 3
-  %12 = load i64, ptr %11, align 8
-  %13 = xor i64 %12, -1
-  %14 = getelementptr inbounds %struct.anon, ptr %4, i32 0, i32 0
-  %15 = load i64, ptr %14, align 8
-  %16 = and i64 %15, 4503599627370495
-  %17 = and i64 %16, %13
-  %18 = load i64, ptr %14, align 8
-  %19 = and i64 %17, 4503599627370495
-  %20 = and i64 %18, -4503599627370496
-  %21 = or i64 %20, %19
-  store i64 %21, ptr %14, align 8
-  %22 = load i16, ptr %5, align 2
-  %23 = zext i16 %22 to i64
-  %24 = load ptr, ptr %6, align 8
-  %25 = getelementptr inbounds %struct.tdx_module_global_s, ptr %24, i32 0, i32 4
-  %26 = load i32, ptr %25, align 16
-  %27 = zext i32 %26 to i64
-  %28 = shl i64 %23, %27
-  %29 = getelementptr inbounds %struct.anon, ptr %4, i32 0, i32 0
-  %30 = load i64, ptr %29, align 8
-  %31 = and i64 %30, 4503599627370495
-  %32 = or i64 %31, %28
-  %33 = load i64, ptr %29, align 8
-  %34 = and i64 %32, 4503599627370495
-  %35 = and i64 %33, -4503599627370496
-  %36 = or i64 %35, %34
-  store i64 %36, ptr %29, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %3, ptr align 8 %4, i64 8, i1 false)
-  %37 = getelementptr inbounds %union.pa_u, ptr %3, i32 0, i32 0
-  %38 = getelementptr inbounds %struct.anon, ptr %37, i32 0, i32 0
-  %39 = load i64, ptr %38, align 8
-  ret i64 %39
+  call void @llvm.dbg.declare(metadata ptr %5, metadata !2645, metadata !DIExpression()), !dbg !2646
+  call void @llvm.dbg.declare(metadata ptr %6, metadata !2647, metadata !DIExpression()), !dbg !2648
+  %9 = call ptr @get_global_data() #4, !dbg !2649
+  store ptr %9, ptr %6, align 8, !dbg !2648
+  %10 = load ptr, ptr %6, align 8, !dbg !2650
+  %11 = getelementptr inbounds %struct.tdx_module_global_s, ptr %10, i32 0, i32 3, !dbg !2651
+  %12 = load i64, ptr %11, align 8, !dbg !2651
+  %13 = xor i64 %12, -1, !dbg !2652
+  %14 = getelementptr inbounds %struct.anon, ptr %4, i32 0, i32 0, !dbg !2653
+  %15 = load i64, ptr %14, align 8, !dbg !2654
+  %16 = and i64 %15, 4503599627370495, !dbg !2654
+  %17 = and i64 %16, %13, !dbg !2654
+  %18 = load i64, ptr %14, align 8, !dbg !2654
+  %19 = and i64 %17, 4503599627370495, !dbg !2654
+  %20 = and i64 %18, -4503599627370496, !dbg !2654
+  %21 = or i64 %20, %19, !dbg !2654
+  store i64 %21, ptr %14, align 8, !dbg !2654
+  %22 = load i16, ptr %5, align 2, !dbg !2655
+  %23 = zext i16 %22 to i64, !dbg !2656
+  %24 = load ptr, ptr %6, align 8, !dbg !2657
+  %25 = getelementptr inbounds %struct.tdx_module_global_s, ptr %24, i32 0, i32 4, !dbg !2658
+  %26 = load i32, ptr %25, align 16, !dbg !2658
+  %27 = zext i32 %26 to i64, !dbg !2659
+  %28 = shl i64 %23, %27, !dbg !2659
+  %29 = getelementptr inbounds %struct.anon, ptr %4, i32 0, i32 0, !dbg !2660
+  %30 = load i64, ptr %29, align 8, !dbg !2661
+  %31 = and i64 %30, 4503599627370495, !dbg !2661
+  %32 = or i64 %31, %28, !dbg !2661
+  %33 = load i64, ptr %29, align 8, !dbg !2661
+  %34 = and i64 %32, 4503599627370495, !dbg !2661
+  %35 = and i64 %33, -4503599627370496, !dbg !2661
+  %36 = or i64 %35, %34, !dbg !2661
+  store i64 %36, ptr %29, align 8, !dbg !2661
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %3, ptr align 8 %4, i64 8, i1 false), !dbg !2662
+  %37 = getelementptr inbounds %union.pa_u, ptr %3, i32 0, i32 0, !dbg !2663
+  %38 = getelementptr inbounds %struct.anon, ptr %37, i32 0, i32 0, !dbg !2663
+  %39 = load i64, ptr %38, align 8, !dbg !2663
+  ret i64 %39, !dbg !2663
 }
 
 ; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.memcpy.p0.p0.i64(ptr noalias nocapture writeonly, ptr noalias nocapture readonly, i64, i1 immarg) #2
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias nocapture writeonly, ptr noalias nocapture readonly, i64, i1 immarg) #3
 
-declare i32 @aes_gcm_refresh_context(ptr noundef) #1
+declare i32 @aes_gcm_refresh_context(ptr noundef) #2
 
-declare i32 @aes_gcm_reset(ptr noundef, ptr noundef) #1
+declare i32 @aes_gcm_reset(ptr noundef, ptr noundef) #2
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
-define internal zeroext i8 @_lock_btr_64b(ptr noundef %0, i64 noundef %1) #0 {
+define internal zeroext i8 @_lock_btr_64b(ptr noundef %0, i64 noundef %1) #0 !dbg !2664 {
   %3 = alloca ptr, align 8
   %4 = alloca i64, align 8
   %5 = alloca i8, align 1
   store ptr %0, ptr %3, align 8
+  call void @llvm.dbg.declare(metadata ptr %3, metadata !2665, metadata !DIExpression()), !dbg !2666
   store i64 %1, ptr %4, align 8
-  %6 = load ptr, ptr %3, align 8
-  %7 = load i64, ptr %4, align 8
-  %8 = call i8 asm sideeffect "lock; btrq $2, $0; adc $1,$1", "=*m,={bx},{ax},{bx},~{cc},~{memory},~{dirflag},~{fpsr},~{flags}"(ptr elementtype(i64) %6, i64 %7, i32 0) #4, !srcloc !13
-  store i8 %8, ptr %5, align 1
-  %9 = load i8, ptr %5, align 1
-  ret i8 %9
+  call void @llvm.dbg.declare(metadata ptr %4, metadata !2667, metadata !DIExpression()), !dbg !2668
+  call void @llvm.dbg.declare(metadata ptr %5, metadata !2669, metadata !DIExpression()), !dbg !2670
+  %6 = load ptr, ptr %3, align 8, !dbg !2671
+  %7 = load i64, ptr %4, align 8, !dbg !2672
+  %8 = call i8 asm sideeffect "lock; btrq $2, $0; adc $1,$1", "=*m,={bx},{ax},{bx},~{cc},~{memory},~{dirflag},~{fpsr},~{flags}"(ptr elementtype(i64) %6, i64 %7, i32 0) #5, !dbg !2673, !srcloc !2674
+  store i8 %8, ptr %5, align 1, !dbg !2673
+  %9 = load i8, ptr %5, align 1, !dbg !2675
+  ret i8 %9, !dbg !2676
 }
 
 attributes #0 = { noinline nounwind optnone sspstrong uwtable "disable-tail-calls"="true" "frame-pointer"="all" "min-legal-vector-width"="0" "no-builtin-memset" "no-jump-tables"="true" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "stackrealign" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+shstk,+x87,-3dnow,-3dnowa,-aes,-avx,-avx10.1-256,-avx10.1-512,-avx2,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512fp16,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-avxifma,-avxneconvert,-avxvnni,-avxvnniint16,-avxvnniint8,-f16c,-fma,-fma4,-gfni,-kl,-mmx,-pclmul,-sha,-sha512,-sm3,-sm4,-sse,-sse2,-sse3,-sse4.1,-sse4.2,-sse4a,-ssse3,-vaes,-vpclmulqdq,-widekl,-xop" "tune-cpu"="generic" }
-attributes #1 = { "disable-tail-calls"="true" "frame-pointer"="all" "no-builtin-memset" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "stackrealign" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+shstk,+x87,-3dnow,-3dnowa,-aes,-avx,-avx10.1-256,-avx10.1-512,-avx2,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512fp16,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-avxifma,-avxneconvert,-avxvnni,-avxvnniint16,-avxvnniint8,-f16c,-fma,-fma4,-gfni,-kl,-mmx,-pclmul,-sha,-sha512,-sm3,-sm4,-sse,-sse2,-sse3,-sse4.1,-sse4.2,-sse4a,-ssse3,-vaes,-vpclmulqdq,-widekl,-xop" "tune-cpu"="generic" }
-attributes #2 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
-attributes #3 = { "no-builtin-memset" }
-attributes #4 = { nounwind }
-attributes #5 = { nounwind memory(none) }
+attributes #1 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #2 = { "disable-tail-calls"="true" "frame-pointer"="all" "no-builtin-memset" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "stackrealign" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+shstk,+x87,-3dnow,-3dnowa,-aes,-avx,-avx10.1-256,-avx10.1-512,-avx2,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512fp16,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-avxifma,-avxneconvert,-avxvnni,-avxvnniint16,-avxvnniint8,-f16c,-fma,-fma4,-gfni,-kl,-mmx,-pclmul,-sha,-sha512,-sm3,-sm4,-sse,-sse2,-sse3,-sse4.1,-sse4.2,-sse4a,-ssse3,-vaes,-vpclmulqdq,-widekl,-xop" "tune-cpu"="generic" }
+attributes #3 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
+attributes #4 = { "no-builtin-memset" }
+attributes #5 = { nounwind }
+attributes #6 = { nounwind memory(none) }
 
-!llvm.module.flags = !{!0, !1, !2, !3, !4, !5, !6, !7}
-!llvm.ident = !{!8}
+!llvm.dbg.cu = !{!0}
+!llvm.module.flags = !{!1517, !1518, !1519, !1520, !1521, !1522, !1523, !1524, !1525, !1526}
+!llvm.ident = !{!1527}
 
-!0 = !{i32 1, !"wchar_size", i32 4}
-!1 = !{i32 8, !"cf-protection-return", i32 1}
-!2 = !{i32 8, !"cf-protection-branch", i32 1}
-!3 = !{i32 8, !"PIC Level", i32 2}
-!4 = !{i32 1, !"Code Model", i32 1}
-!5 = !{i32 7, !"uwtable", i32 2}
-!6 = !{i32 7, !"frame-pointer", i32 2}
-!7 = !{i32 1, !"override-stack-alignment", i32 16}
-!8 = !{!"Ubuntu clang version 18.1.3 (1ubuntu1)"}
-!9 = !{i64 234738}
-!10 = !{i64 230603}
-!11 = !{i64 272632, i64 272664}
-!12 = !{i64 233131}
-!13 = !{i64 233372}
+!0 = distinct !DICompileUnit(language: DW_LANG_C11, file: !1, producer: "Ubuntu clang version 18.1.3 (1ubuntu1)", isOptimized: false, runtimeVersion: 0, emissionKind: FullDebug, enums: !2, retainedTypes: !524, splitDebugInlining: false, nameTableKind: None)
+!1 = !DIFile(filename: "/Users/sz7155/tdx-module/src/vmm_dispatcher/migration_api_calls/tdh_import_abort.c", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "8de71d454aaa072df881650606da0500")
+!2 = !{!3, !11, !17, !27, !33, !48, !53, !127, !130, !504, !514}
+!3 = !DICompositeType(tag: DW_TAG_enumeration_type, file: !4, line: 57, baseType: !5, size: 32, elements: !6)
+!4 = !DIFile(filename: "src/common/data_structures/td_control_structures.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "ff06277db81aad67f38185c6529dc6d9")
+!5 = !DIBasicType(name: "unsigned int", size: 32, encoding: DW_ATE_unsigned)
+!6 = !{!7, !8, !9, !10}
+!7 = !DIEnumerator(name: "TD_HKID_ASSIGNED", value: 0)
+!8 = !DIEnumerator(name: "TD_KEYS_CONFIGURED", value: 1)
+!9 = !DIEnumerator(name: "TD_BLOCKED", value: 2)
+!10 = !DIEnumerator(name: "TD_TEARDOWN", value: 3)
+!11 = !DICompositeType(tag: DW_TAG_enumeration_type, file: !12, line: 59, baseType: !5, size: 32, elements: !13)
+!12 = !DIFile(filename: "src/common/memory_handlers/pamt_manager.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "6f6326b0f7dd4e81cc609ad6a90d2935")
+!13 = !{!14, !15, !16}
+!14 = !DIEnumerator(name: "PT_4KB", value: 0)
+!15 = !DIEnumerator(name: "PT_2MB", value: 1)
+!16 = !DIEnumerator(name: "PT_1GB", value: 2)
+!17 = !DICompositeType(tag: DW_TAG_enumeration_type, file: !12, line: 44, baseType: !5, size: 32, elements: !18)
+!18 = !{!19, !20, !21, !22, !23, !24, !25, !26}
+!19 = !DIEnumerator(name: "PT_NDA", value: 0)
+!20 = !DIEnumerator(name: "PT_RSVD", value: 1)
+!21 = !DIEnumerator(name: "PT_REG", value: 3)
+!22 = !DIEnumerator(name: "PT_TDR", value: 4)
+!23 = !DIEnumerator(name: "PT_TDCX", value: 5)
+!24 = !DIEnumerator(name: "PT_TDVPR", value: 6)
+!25 = !DIEnumerator(name: "PT_EPT", value: 8)
+!26 = !DIEnumerator(name: "PT_PAMT", value: 15)
+!27 = !DICompositeType(tag: DW_TAG_enumeration_type, file: !28, line: 41, baseType: !5, size: 32, elements: !29)
+!28 = !DIFile(filename: "src/common/helpers/tdx_locks.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "ac08c1ed52ccf656660ccdcd610cdf35")
+!29 = !{!30, !31, !32}
+!30 = !DIEnumerator(name: "TDX_LOCK_NO_LOCK", value: 0)
+!31 = !DIEnumerator(name: "TDX_LOCK_SHARED", value: 1)
+!32 = !DIEnumerator(name: "TDX_LOCK_EXCLUSIVE", value: 2)
+!33 = !DICompositeType(tag: DW_TAG_enumeration_type, file: !34, line: 42, baseType: !5, size: 32, elements: !35)
+!34 = !DIFile(filename: "include/auto_gen_1_5/op_state_lookup.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "dede5e8456534de9d48dd7de8ffcd21b")
+!35 = !{!36, !37, !38, !39, !40, !41, !42, !43, !44, !45, !46, !47}
+!36 = !DIEnumerator(name: "OP_STATE_UNINITIALIZED", value: 0)
+!37 = !DIEnumerator(name: "OP_STATE_INITIALIZED", value: 1)
+!38 = !DIEnumerator(name: "OP_STATE_RUNNABLE", value: 2)
+!39 = !DIEnumerator(name: "OP_STATE_LIVE_EXPORT", value: 3)
+!40 = !DIEnumerator(name: "OP_STATE_PAUSED_EXPORT", value: 4)
+!41 = !DIEnumerator(name: "OP_STATE_POST_EXPORT", value: 5)
+!42 = !DIEnumerator(name: "OP_STATE_MEMORY_IMPORT", value: 6)
+!43 = !DIEnumerator(name: "OP_STATE_STATE_IMPORT", value: 7)
+!44 = !DIEnumerator(name: "OP_STATE_POST_IMPORT", value: 8)
+!45 = !DIEnumerator(name: "OP_STATE_LIVE_IMPORT", value: 9)
+!46 = !DIEnumerator(name: "OP_STATE_FAILED_IMPORT", value: 10)
+!47 = !DIEnumerator(name: "OP_STATE_START_IMPORT", value: 11)
+!48 = !DICompositeType(tag: DW_TAG_enumeration_type, file: !49, line: 58, baseType: !5, size: 32, elements: !50)
+!49 = !DIFile(filename: "src/common/memory_handlers/keyhole_manager.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "7751757393c72456e9f6c28002cee214")
+!50 = !{!51, !52}
+!51 = !DIEnumerator(name: "TDX_RANGE_RO", value: 0)
+!52 = !DIEnumerator(name: "TDX_RANGE_RW", value: 1)
+!53 = !DICompositeType(tag: DW_TAG_enumeration_type, name: "seamcall_leaf_opcode_e", file: !54, line: 39, baseType: !5, size: 32, elements: !55)
+!54 = !DIFile(filename: "include/tdx_api_defs.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "5b8071e56507e0e4456d838670827453")
+!55 = !{!56, !57, !58, !59, !60, !61, !62, !63, !64, !65, !66, !67, !68, !69, !70, !71, !72, !73, !74, !75, !76, !77, !78, !79, !80, !81, !82, !83, !84, !85, !86, !87, !88, !89, !90, !91, !92, !93, !94, !95, !96, !97, !98, !99, !100, !101, !102, !103, !104, !105, !106, !107, !108, !109, !110, !111, !112, !113, !114, !115, !116, !117, !118, !119, !120, !121, !122, !123, !124, !125, !126}
+!56 = !DIEnumerator(name: "TDH_VP_ENTER_LEAF", value: 0)
+!57 = !DIEnumerator(name: "TDH_MNG_ADDCX_LEAF", value: 1)
+!58 = !DIEnumerator(name: "TDH_MEM_PAGE_ADD_LEAF", value: 2)
+!59 = !DIEnumerator(name: "TDH_MEM_SEPT_ADD_LEAF", value: 3)
+!60 = !DIEnumerator(name: "TDH_VP_ADDCX_LEAF", value: 4)
+!61 = !DIEnumerator(name: "TDH_MEM_PAGE_RELOCATE", value: 5)
+!62 = !DIEnumerator(name: "TDH_MEM_PAGE_AUG_LEAF", value: 6)
+!63 = !DIEnumerator(name: "TDH_MEM_RANGE_BLOCK_LEAF", value: 7)
+!64 = !DIEnumerator(name: "TDH_MNG_KEY_CONFIG_LEAF", value: 8)
+!65 = !DIEnumerator(name: "TDH_MNG_CREATE_LEAF", value: 9)
+!66 = !DIEnumerator(name: "TDH_VP_CREATE_LEAF", value: 10)
+!67 = !DIEnumerator(name: "TDH_MNG_RD_LEAF", value: 11)
+!68 = !DIEnumerator(name: "TDH_MEM_RD_LEAF", value: 12)
+!69 = !DIEnumerator(name: "TDH_MNG_WR_LEAF", value: 13)
+!70 = !DIEnumerator(name: "TDH_MEM_WR_LEAF", value: 14)
+!71 = !DIEnumerator(name: "TDH_MEM_PAGE_DEMOTE_LEAF", value: 15)
+!72 = !DIEnumerator(name: "TDH_MR_EXTEND_LEAF", value: 16)
+!73 = !DIEnumerator(name: "TDH_MR_FINALIZE_LEAF", value: 17)
+!74 = !DIEnumerator(name: "TDH_VP_FLUSH_LEAF", value: 18)
+!75 = !DIEnumerator(name: "TDH_MNG_VPFLUSHDONE_LEAF", value: 19)
+!76 = !DIEnumerator(name: "TDH_MNG_KEY_FREEID_LEAF", value: 20)
+!77 = !DIEnumerator(name: "TDH_MNG_INIT_LEAF", value: 21)
+!78 = !DIEnumerator(name: "TDH_VP_INIT_LEAF", value: 22)
+!79 = !DIEnumerator(name: "TDH_MEM_PAGE_PROMOTE_LEAF", value: 23)
+!80 = !DIEnumerator(name: "TDH_PHYMEM_PAGE_RDMD_LEAF", value: 24)
+!81 = !DIEnumerator(name: "TDH_MEM_SEPT_RD_LEAF", value: 25)
+!82 = !DIEnumerator(name: "TDH_VP_RD_LEAF", value: 26)
+!83 = !DIEnumerator(name: "TDH_MNG_KEY_RECLAIMID_LEAF", value: 27)
+!84 = !DIEnumerator(name: "TDH_PHYMEM_PAGE_RECLAIM_LEAF", value: 28)
+!85 = !DIEnumerator(name: "TDH_MEM_PAGE_REMOVE_LEAF", value: 29)
+!86 = !DIEnumerator(name: "TDH_MEM_SEPT_REMOVE_LEAF", value: 30)
+!87 = !DIEnumerator(name: "TDH_SYS_KEY_CONFIG_LEAF", value: 31)
+!88 = !DIEnumerator(name: "TDH_SYS_INFO_LEAF", value: 32)
+!89 = !DIEnumerator(name: "TDH_SYS_INIT_LEAF", value: 33)
+!90 = !DIEnumerator(name: "TDH_SYS_RD_LEAF", value: 34)
+!91 = !DIEnumerator(name: "TDH_SYS_LP_INIT_LEAF", value: 35)
+!92 = !DIEnumerator(name: "TDH_SYS_TDMR_INIT_LEAF", value: 36)
+!93 = !DIEnumerator(name: "TDH_SYS_RDALL_LEAF", value: 37)
+!94 = !DIEnumerator(name: "TDH_MEM_TRACK_LEAF", value: 38)
+!95 = !DIEnumerator(name: "TDH_MEM_RANGE_UNBLOCK_LEAF", value: 39)
+!96 = !DIEnumerator(name: "TDH_PHYMEM_CACHE_WB_LEAF", value: 40)
+!97 = !DIEnumerator(name: "TDH_PHYMEM_PAGE_WBINVD_LEAF", value: 41)
+!98 = !DIEnumerator(name: "TDH_MEM_SEPT_WR_LEAF", value: 42)
+!99 = !DIEnumerator(name: "TDH_VP_WR_LEAF", value: 43)
+!100 = !DIEnumerator(name: "TDH_SYS_LP_SHUTDOWN_LEAF", value: 44)
+!101 = !DIEnumerator(name: "TDH_SYS_CONFIG_LEAF", value: 45)
+!102 = !DIEnumerator(name: "TDH_SYS_SHUTDOWN_LEAF", value: 52)
+!103 = !DIEnumerator(name: "TDH_SYS_UPDATE_LEAF", value: 53)
+!104 = !DIEnumerator(name: "TDH_PHYMEM_PAMT_ADD_LEAF", value: 58)
+!105 = !DIEnumerator(name: "TDH_PHYMEM_PAMT_REMOVE_LEAF", value: 59)
+!106 = !DIEnumerator(name: "TDH_SERVTD_BIND_LEAF", value: 48)
+!107 = !DIEnumerator(name: "TDH_SERVTD_PREBIND_LEAF", value: 49)
+!108 = !DIEnumerator(name: "TDH_EXPORT_ABORT_LEAF", value: 64)
+!109 = !DIEnumerator(name: "TDH_EXPORT_BLOCKW_LEAF", value: 65)
+!110 = !DIEnumerator(name: "TDH_EXPORT_RESTORE_LEAF", value: 66)
+!111 = !DIEnumerator(name: "TDH_EXPORT_MEM_LEAF", value: 68)
+!112 = !DIEnumerator(name: "TDH_EXPORT_PAUSE_LEAF", value: 70)
+!113 = !DIEnumerator(name: "TDH_EXPORT_TRACK_LEAF", value: 71)
+!114 = !DIEnumerator(name: "TDH_EXPORT_STATE_IMMUTABLE_LEAF", value: 72)
+!115 = !DIEnumerator(name: "TDH_EXPORT_STATE_TD_LEAF", value: 73)
+!116 = !DIEnumerator(name: "TDH_EXPORT_STATE_VP_LEAF", value: 74)
+!117 = !DIEnumerator(name: "TDH_EXPORT_UNBLOCKW_LEAF", value: 75)
+!118 = !DIEnumerator(name: "TDH_IMPORT_ABORT_LEAF", value: 80)
+!119 = !DIEnumerator(name: "TDH_IMPORT_END_LEAF", value: 81)
+!120 = !DIEnumerator(name: "TDH_IMPORT_COMMIT_LEAF", value: 82)
+!121 = !DIEnumerator(name: "TDH_IMPORT_MEM_LEAF", value: 83)
+!122 = !DIEnumerator(name: "TDH_IMPORT_TRACK_LEAF", value: 84)
+!123 = !DIEnumerator(name: "TDH_IMPORT_STATE_IMMUTABLE_LEAF", value: 85)
+!124 = !DIEnumerator(name: "TDH_IMPORT_STATE_TD_LEAF", value: 86)
+!125 = !DIEnumerator(name: "TDH_IMPORT_STATE_VP_LEAF", value: 87)
+!126 = !DIEnumerator(name: "TDH_MIG_STREAM_CREATE_LEAF", value: 96)
+!127 = !DICompositeType(tag: DW_TAG_enumeration_type, file: !4, line: 192, baseType: !5, size: 32, elements: !128)
+!128 = !{!129}
+!129 = !DIEnumerator(name: "FIELD_SUPPORT_AT_INIT_MIG_INTERRUPTED_COUNT", value: 4)
+!130 = !DICompositeType(tag: DW_TAG_enumeration_type, file: !131, line: 198, baseType: !5, size: 32, elements: !132)
+!131 = !DIFile(filename: "src/common/helpers/fatal_info.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "1468d686bd9e568e3038f119bbd8a5fc")
+!132 = !{!133, !134, !135, !136, !137, !138, !139, !140, !141, !142, !143, !144, !145, !146, !147, !148, !149, !150, !151, !152, !153, !154, !155, !156, !157, !158, !159, !160, !161, !162, !163, !164, !165, !166, !167, !168, !169, !170, !171, !172, !173, !174, !175, !176, !177, !178, !179, !180, !181, !182, !183, !184, !185, !186, !187, !188, !189, !190, !191, !192, !193, !194, !195, !196, !197, !198, !199, !200, !201, !202, !203, !204, !205, !206, !207, !208, !209, !210, !211, !212, !213, !214, !215, !216, !217, !218, !219, !220, !221, !222, !223, !224, !225, !226, !227, !228, !229, !230, !231, !232, !233, !234, !235, !236, !237, !238, !239, !240, !241, !242, !243, !244, !245, !246, !247, !248, !249, !250, !251, !252, !253, !254, !255, !256, !257, !258, !259, !260, !261, !262, !263, !264, !265, !266, !267, !268, !269, !270, !271, !272, !273, !274, !275, !276, !277, !278, !279, !280, !281, !282, !283, !284, !285, !286, !287, !288, !289, !290, !291, !292, !293, !294, !295, !296, !297, !298, !299, !300, !301, !302, !303, !304, !305, !306, !307, !308, !309, !310, !311, !312, !313, !314, !315, !316, !317, !318, !319, !320, !321, !322, !323, !324, !325, !326, !327, !328, !329, !330, !331, !332, !333, !334, !335, !336, !337, !338, !339, !340, !341, !342, !343, !344, !345, !346, !347, !348, !349, !350, !351, !352, !353, !354, !355, !356, !357, !358, !359, !360, !361, !362, !363, !364, !365, !366, !367, !368, !369, !370, !371, !372, !373, !374, !375, !376, !377, !378, !379, !380, !381, !382, !383, !384, !385, !386, !387, !388, !389, !390, !391, !392, !393, !394, !395, !396, !397, !398, !399, !400, !401, !402, !403, !404, !405, !406, !407, !408, !409, !410, !411, !412, !413, !414, !415, !416, !417, !418, !419, !420, !421, !422, !423, !424, !425, !426, !427, !428, !429, !430, !431, !432, !433, !434, !435, !436, !437, !438, !439, !440, !441, !442, !443, !444, !445, !446, !447, !448, !449, !450, !451, !452, !453, !454, !455, !456, !457, !458, !459, !460, !461, !462, !463, !464, !465, !466, !467, !468, !469, !470, !471, !472, !473, !474, !475, !476, !477, !478, !479, !480, !481, !482, !483, !484, !485, !486, !487, !488, !489, !490, !491, !492, !493, !494, !495, !496, !497, !498, !499, !500, !501, !502, !503}
+!133 = !DIEnumerator(name: "FATAL_ERROR_ID_0", value: 0)
+!134 = !DIEnumerator(name: "FATAL_ERROR_ID_1", value: 1)
+!135 = !DIEnumerator(name: "FATAL_ERROR_ID_2", value: 2)
+!136 = !DIEnumerator(name: "FATAL_ERROR_ID_3", value: 3)
+!137 = !DIEnumerator(name: "FATAL_ERROR_ID_4", value: 4)
+!138 = !DIEnumerator(name: "FATAL_ERROR_ID_5", value: 5)
+!139 = !DIEnumerator(name: "FATAL_ERROR_ID_6", value: 6)
+!140 = !DIEnumerator(name: "FATAL_ERROR_ID_7", value: 7)
+!141 = !DIEnumerator(name: "FATAL_ERROR_ID_8", value: 8)
+!142 = !DIEnumerator(name: "FATAL_ERROR_ID_9", value: 9)
+!143 = !DIEnumerator(name: "FATAL_ERROR_ID_10", value: 10)
+!144 = !DIEnumerator(name: "FATAL_ERROR_ID_11", value: 11)
+!145 = !DIEnumerator(name: "FATAL_ERROR_ID_12", value: 12)
+!146 = !DIEnumerator(name: "FATAL_ERROR_ID_13", value: 13)
+!147 = !DIEnumerator(name: "FATAL_ERROR_ID_14", value: 14)
+!148 = !DIEnumerator(name: "FATAL_ERROR_ID_15", value: 15)
+!149 = !DIEnumerator(name: "FATAL_ERROR_ID_16", value: 16)
+!150 = !DIEnumerator(name: "FATAL_ERROR_ID_17", value: 17)
+!151 = !DIEnumerator(name: "FATAL_ERROR_ID_18", value: 18)
+!152 = !DIEnumerator(name: "FATAL_ERROR_ID_19", value: 19)
+!153 = !DIEnumerator(name: "FATAL_ERROR_ID_20", value: 20)
+!154 = !DIEnumerator(name: "FATAL_ERROR_ID_21", value: 21)
+!155 = !DIEnumerator(name: "FATAL_ERROR_ID_22", value: 22)
+!156 = !DIEnumerator(name: "FATAL_ERROR_ID_23", value: 23)
+!157 = !DIEnumerator(name: "FATAL_ERROR_ID_24", value: 24)
+!158 = !DIEnumerator(name: "FATAL_ERROR_ID_25", value: 25)
+!159 = !DIEnumerator(name: "FATAL_ERROR_ID_26", value: 26)
+!160 = !DIEnumerator(name: "FATAL_ERROR_ID_27", value: 27)
+!161 = !DIEnumerator(name: "FATAL_ERROR_ID_28", value: 28)
+!162 = !DIEnumerator(name: "FATAL_ERROR_ID_29", value: 29)
+!163 = !DIEnumerator(name: "FATAL_ERROR_ID_30", value: 30)
+!164 = !DIEnumerator(name: "FATAL_ERROR_ID_31", value: 31)
+!165 = !DIEnumerator(name: "FATAL_ERROR_ID_32", value: 32)
+!166 = !DIEnumerator(name: "FATAL_ERROR_ID_33", value: 33)
+!167 = !DIEnumerator(name: "FATAL_ERROR_ID_34", value: 34)
+!168 = !DIEnumerator(name: "FATAL_ERROR_ID_35", value: 35)
+!169 = !DIEnumerator(name: "FATAL_ERROR_ID_36", value: 36)
+!170 = !DIEnumerator(name: "FATAL_ERROR_ID_37", value: 37)
+!171 = !DIEnumerator(name: "FATAL_ERROR_ID_38", value: 38)
+!172 = !DIEnumerator(name: "FATAL_ERROR_ID_39", value: 39)
+!173 = !DIEnumerator(name: "FATAL_ERROR_ID_40", value: 40)
+!174 = !DIEnumerator(name: "FATAL_ERROR_ID_41", value: 41)
+!175 = !DIEnumerator(name: "FATAL_ERROR_ID_42", value: 42)
+!176 = !DIEnumerator(name: "FATAL_ERROR_ID_43", value: 43)
+!177 = !DIEnumerator(name: "FATAL_ERROR_ID_44", value: 44)
+!178 = !DIEnumerator(name: "FATAL_ERROR_ID_45", value: 45)
+!179 = !DIEnumerator(name: "FATAL_ERROR_ID_46", value: 46)
+!180 = !DIEnumerator(name: "FATAL_ERROR_ID_47", value: 47)
+!181 = !DIEnumerator(name: "FATAL_ERROR_ID_48", value: 48)
+!182 = !DIEnumerator(name: "FATAL_ERROR_ID_49", value: 49)
+!183 = !DIEnumerator(name: "FATAL_ERROR_ID_50", value: 50)
+!184 = !DIEnumerator(name: "FATAL_ERROR_ID_51", value: 51)
+!185 = !DIEnumerator(name: "FATAL_ERROR_ID_52", value: 52)
+!186 = !DIEnumerator(name: "FATAL_ERROR_ID_53", value: 53)
+!187 = !DIEnumerator(name: "FATAL_ERROR_ID_54", value: 54)
+!188 = !DIEnumerator(name: "FATAL_ERROR_ID_55", value: 55)
+!189 = !DIEnumerator(name: "FATAL_ERROR_ID_56", value: 56)
+!190 = !DIEnumerator(name: "FATAL_ERROR_ID_57", value: 57)
+!191 = !DIEnumerator(name: "FATAL_ERROR_ID_58", value: 58)
+!192 = !DIEnumerator(name: "FATAL_ERROR_ID_59", value: 59)
+!193 = !DIEnumerator(name: "FATAL_ERROR_ID_60", value: 60)
+!194 = !DIEnumerator(name: "FATAL_ERROR_ID_61", value: 61)
+!195 = !DIEnumerator(name: "FATAL_ERROR_ID_62", value: 62)
+!196 = !DIEnumerator(name: "FATAL_ERROR_ID_63", value: 63)
+!197 = !DIEnumerator(name: "FATAL_ERROR_ID_64", value: 64)
+!198 = !DIEnumerator(name: "FATAL_ERROR_ID_65", value: 65)
+!199 = !DIEnumerator(name: "FATAL_ERROR_ID_66", value: 66)
+!200 = !DIEnumerator(name: "FATAL_ERROR_ID_67", value: 67)
+!201 = !DIEnumerator(name: "FATAL_ERROR_ID_68", value: 68)
+!202 = !DIEnumerator(name: "FATAL_ERROR_ID_69", value: 69)
+!203 = !DIEnumerator(name: "FATAL_ERROR_ID_70", value: 70)
+!204 = !DIEnumerator(name: "FATAL_ERROR_ID_71", value: 71)
+!205 = !DIEnumerator(name: "FATAL_ERROR_ID_72", value: 72)
+!206 = !DIEnumerator(name: "FATAL_ERROR_ID_73", value: 73)
+!207 = !DIEnumerator(name: "FATAL_ERROR_ID_74", value: 74)
+!208 = !DIEnumerator(name: "FATAL_ERROR_ID_75", value: 75)
+!209 = !DIEnumerator(name: "FATAL_ERROR_ID_76", value: 76)
+!210 = !DIEnumerator(name: "FATAL_ERROR_ID_77", value: 77)
+!211 = !DIEnumerator(name: "FATAL_ERROR_ID_78", value: 78)
+!212 = !DIEnumerator(name: "FATAL_ERROR_ID_79", value: 79)
+!213 = !DIEnumerator(name: "FATAL_ERROR_ID_80", value: 80)
+!214 = !DIEnumerator(name: "FATAL_ERROR_ID_81", value: 81)
+!215 = !DIEnumerator(name: "FATAL_ERROR_ID_82", value: 82)
+!216 = !DIEnumerator(name: "FATAL_ERROR_ID_83", value: 83)
+!217 = !DIEnumerator(name: "FATAL_ERROR_ID_84", value: 84)
+!218 = !DIEnumerator(name: "FATAL_ERROR_ID_85", value: 85)
+!219 = !DIEnumerator(name: "FATAL_ERROR_ID_86", value: 86)
+!220 = !DIEnumerator(name: "FATAL_ERROR_ID_87", value: 87)
+!221 = !DIEnumerator(name: "FATAL_ERROR_ID_88", value: 88)
+!222 = !DIEnumerator(name: "FATAL_ERROR_ID_89", value: 89)
+!223 = !DIEnumerator(name: "FATAL_ERROR_ID_90", value: 90)
+!224 = !DIEnumerator(name: "FATAL_ERROR_ID_91", value: 91)
+!225 = !DIEnumerator(name: "FATAL_ERROR_ID_92", value: 92)
+!226 = !DIEnumerator(name: "FATAL_ERROR_ID_93", value: 93)
+!227 = !DIEnumerator(name: "FATAL_ERROR_ID_94", value: 94)
+!228 = !DIEnumerator(name: "FATAL_ERROR_ID_95", value: 95)
+!229 = !DIEnumerator(name: "FATAL_ERROR_ID_96", value: 96)
+!230 = !DIEnumerator(name: "FATAL_ERROR_ID_97", value: 97)
+!231 = !DIEnumerator(name: "FATAL_ERROR_ID_98", value: 98)
+!232 = !DIEnumerator(name: "FATAL_ERROR_ID_99", value: 99)
+!233 = !DIEnumerator(name: "FATAL_ERROR_ID_100", value: 100)
+!234 = !DIEnumerator(name: "FATAL_ERROR_ID_101", value: 101)
+!235 = !DIEnumerator(name: "FATAL_ERROR_ID_102", value: 102)
+!236 = !DIEnumerator(name: "FATAL_ERROR_ID_103", value: 103)
+!237 = !DIEnumerator(name: "FATAL_ERROR_ID_104", value: 104)
+!238 = !DIEnumerator(name: "FATAL_ERROR_ID_105", value: 105)
+!239 = !DIEnumerator(name: "FATAL_ERROR_ID_106", value: 106)
+!240 = !DIEnumerator(name: "FATAL_ERROR_ID_107", value: 107)
+!241 = !DIEnumerator(name: "FATAL_ERROR_ID_108", value: 108)
+!242 = !DIEnumerator(name: "FATAL_ERROR_ID_109", value: 109)
+!243 = !DIEnumerator(name: "FATAL_ERROR_ID_110", value: 110)
+!244 = !DIEnumerator(name: "FATAL_ERROR_ID_111", value: 111)
+!245 = !DIEnumerator(name: "FATAL_ERROR_ID_112", value: 112)
+!246 = !DIEnumerator(name: "FATAL_ERROR_ID_113", value: 113)
+!247 = !DIEnumerator(name: "FATAL_ERROR_ID_114", value: 114)
+!248 = !DIEnumerator(name: "FATAL_ERROR_ID_115", value: 115)
+!249 = !DIEnumerator(name: "FATAL_ERROR_ID_116", value: 116)
+!250 = !DIEnumerator(name: "FATAL_ERROR_ID_117", value: 117)
+!251 = !DIEnumerator(name: "FATAL_ERROR_ID_118", value: 118)
+!252 = !DIEnumerator(name: "FATAL_ERROR_ID_119", value: 119)
+!253 = !DIEnumerator(name: "FATAL_ERROR_ID_120", value: 120)
+!254 = !DIEnumerator(name: "FATAL_ERROR_ID_121", value: 121)
+!255 = !DIEnumerator(name: "FATAL_ERROR_ID_122", value: 122)
+!256 = !DIEnumerator(name: "FATAL_ERROR_ID_123", value: 123)
+!257 = !DIEnumerator(name: "FATAL_ERROR_ID_124", value: 124)
+!258 = !DIEnumerator(name: "FATAL_ERROR_ID_125", value: 125)
+!259 = !DIEnumerator(name: "FATAL_ERROR_ID_126", value: 126)
+!260 = !DIEnumerator(name: "FATAL_ERROR_ID_127", value: 127)
+!261 = !DIEnumerator(name: "FATAL_ERROR_ID_128", value: 128)
+!262 = !DIEnumerator(name: "FATAL_ERROR_ID_129", value: 129)
+!263 = !DIEnumerator(name: "FATAL_ERROR_ID_130", value: 130)
+!264 = !DIEnumerator(name: "FATAL_ERROR_ID_131", value: 131)
+!265 = !DIEnumerator(name: "FATAL_ERROR_ID_132", value: 132)
+!266 = !DIEnumerator(name: "FATAL_ERROR_ID_133", value: 133)
+!267 = !DIEnumerator(name: "FATAL_ERROR_ID_134", value: 134)
+!268 = !DIEnumerator(name: "FATAL_ERROR_ID_135", value: 135)
+!269 = !DIEnumerator(name: "FATAL_ERROR_ID_136", value: 136)
+!270 = !DIEnumerator(name: "FATAL_ERROR_ID_137", value: 137)
+!271 = !DIEnumerator(name: "FATAL_ERROR_ID_138", value: 138)
+!272 = !DIEnumerator(name: "FATAL_ERROR_ID_139", value: 139)
+!273 = !DIEnumerator(name: "FATAL_ERROR_ID_140", value: 140)
+!274 = !DIEnumerator(name: "FATAL_ERROR_ID_141", value: 141)
+!275 = !DIEnumerator(name: "FATAL_ERROR_ID_142", value: 142)
+!276 = !DIEnumerator(name: "FATAL_ERROR_ID_143", value: 143)
+!277 = !DIEnumerator(name: "FATAL_ERROR_ID_144", value: 144)
+!278 = !DIEnumerator(name: "FATAL_ERROR_ID_145", value: 145)
+!279 = !DIEnumerator(name: "FATAL_ERROR_ID_146", value: 146)
+!280 = !DIEnumerator(name: "FATAL_ERROR_ID_147", value: 147)
+!281 = !DIEnumerator(name: "FATAL_ERROR_ID_148", value: 148)
+!282 = !DIEnumerator(name: "FATAL_ERROR_ID_149", value: 149)
+!283 = !DIEnumerator(name: "FATAL_ERROR_ID_150", value: 150)
+!284 = !DIEnumerator(name: "FATAL_ERROR_ID_151", value: 151)
+!285 = !DIEnumerator(name: "FATAL_ERROR_ID_152", value: 152)
+!286 = !DIEnumerator(name: "FATAL_ERROR_ID_153", value: 153)
+!287 = !DIEnumerator(name: "FATAL_ERROR_ID_154", value: 154)
+!288 = !DIEnumerator(name: "FATAL_ERROR_ID_155", value: 155)
+!289 = !DIEnumerator(name: "FATAL_ERROR_ID_156", value: 156)
+!290 = !DIEnumerator(name: "FATAL_ERROR_ID_157", value: 157)
+!291 = !DIEnumerator(name: "FATAL_ERROR_ID_158", value: 158)
+!292 = !DIEnumerator(name: "FATAL_ERROR_ID_159", value: 159)
+!293 = !DIEnumerator(name: "FATAL_ERROR_ID_160", value: 160)
+!294 = !DIEnumerator(name: "FATAL_ERROR_ID_161", value: 161)
+!295 = !DIEnumerator(name: "FATAL_ERROR_ID_162", value: 162)
+!296 = !DIEnumerator(name: "FATAL_ERROR_ID_163", value: 163)
+!297 = !DIEnumerator(name: "FATAL_ERROR_ID_164", value: 164)
+!298 = !DIEnumerator(name: "FATAL_ERROR_ID_165", value: 165)
+!299 = !DIEnumerator(name: "FATAL_ERROR_ID_166", value: 166)
+!300 = !DIEnumerator(name: "FATAL_ERROR_ID_167", value: 167)
+!301 = !DIEnumerator(name: "FATAL_ERROR_ID_168", value: 168)
+!302 = !DIEnumerator(name: "FATAL_ERROR_ID_169", value: 169)
+!303 = !DIEnumerator(name: "FATAL_ERROR_ID_170", value: 170)
+!304 = !DIEnumerator(name: "FATAL_ERROR_ID_171", value: 171)
+!305 = !DIEnumerator(name: "FATAL_ERROR_ID_172", value: 172)
+!306 = !DIEnumerator(name: "FATAL_ERROR_ID_173", value: 173)
+!307 = !DIEnumerator(name: "FATAL_ERROR_ID_174", value: 174)
+!308 = !DIEnumerator(name: "FATAL_ERROR_ID_175", value: 175)
+!309 = !DIEnumerator(name: "FATAL_ERROR_ID_176", value: 176)
+!310 = !DIEnumerator(name: "FATAL_ERROR_ID_177", value: 177)
+!311 = !DIEnumerator(name: "FATAL_ERROR_ID_178", value: 178)
+!312 = !DIEnumerator(name: "FATAL_ERROR_ID_179", value: 179)
+!313 = !DIEnumerator(name: "FATAL_ERROR_ID_180", value: 180)
+!314 = !DIEnumerator(name: "FATAL_ERROR_ID_181", value: 181)
+!315 = !DIEnumerator(name: "FATAL_ERROR_ID_182", value: 182)
+!316 = !DIEnumerator(name: "FATAL_ERROR_ID_183", value: 183)
+!317 = !DIEnumerator(name: "FATAL_ERROR_ID_184", value: 184)
+!318 = !DIEnumerator(name: "FATAL_ERROR_ID_185", value: 185)
+!319 = !DIEnumerator(name: "FATAL_ERROR_ID_186", value: 186)
+!320 = !DIEnumerator(name: "FATAL_ERROR_ID_187", value: 187)
+!321 = !DIEnumerator(name: "FATAL_ERROR_ID_188", value: 188)
+!322 = !DIEnumerator(name: "FATAL_ERROR_ID_189", value: 189)
+!323 = !DIEnumerator(name: "FATAL_ERROR_ID_190", value: 190)
+!324 = !DIEnumerator(name: "FATAL_ERROR_ID_191", value: 191)
+!325 = !DIEnumerator(name: "FATAL_ERROR_ID_192", value: 192)
+!326 = !DIEnumerator(name: "FATAL_ERROR_ID_193", value: 193)
+!327 = !DIEnumerator(name: "FATAL_ERROR_ID_194", value: 194)
+!328 = !DIEnumerator(name: "FATAL_ERROR_ID_195", value: 195)
+!329 = !DIEnumerator(name: "FATAL_ERROR_ID_196", value: 196)
+!330 = !DIEnumerator(name: "FATAL_ERROR_ID_197", value: 197)
+!331 = !DIEnumerator(name: "FATAL_ERROR_ID_198", value: 198)
+!332 = !DIEnumerator(name: "FATAL_ERROR_ID_199", value: 199)
+!333 = !DIEnumerator(name: "FATAL_ERROR_ID_200", value: 200)
+!334 = !DIEnumerator(name: "FATAL_ERROR_ID_201", value: 201)
+!335 = !DIEnumerator(name: "FATAL_ERROR_ID_202", value: 202)
+!336 = !DIEnumerator(name: "FATAL_ERROR_ID_203", value: 203)
+!337 = !DIEnumerator(name: "FATAL_ERROR_ID_204", value: 204)
+!338 = !DIEnumerator(name: "FATAL_ERROR_ID_205", value: 205)
+!339 = !DIEnumerator(name: "FATAL_ERROR_ID_206", value: 206)
+!340 = !DIEnumerator(name: "FATAL_ERROR_ID_207", value: 207)
+!341 = !DIEnumerator(name: "FATAL_ERROR_ID_208", value: 208)
+!342 = !DIEnumerator(name: "FATAL_ERROR_ID_209", value: 209)
+!343 = !DIEnumerator(name: "FATAL_ERROR_ID_210", value: 210)
+!344 = !DIEnumerator(name: "FATAL_ERROR_ID_211", value: 211)
+!345 = !DIEnumerator(name: "FATAL_ERROR_ID_212", value: 212)
+!346 = !DIEnumerator(name: "FATAL_ERROR_ID_213", value: 213)
+!347 = !DIEnumerator(name: "FATAL_ERROR_ID_214", value: 214)
+!348 = !DIEnumerator(name: "FATAL_ERROR_ID_215", value: 215)
+!349 = !DIEnumerator(name: "FATAL_ERROR_ID_216", value: 216)
+!350 = !DIEnumerator(name: "FATAL_ERROR_ID_217", value: 217)
+!351 = !DIEnumerator(name: "FATAL_ERROR_ID_218", value: 218)
+!352 = !DIEnumerator(name: "FATAL_ERROR_ID_219", value: 219)
+!353 = !DIEnumerator(name: "FATAL_ERROR_ID_220", value: 220)
+!354 = !DIEnumerator(name: "FATAL_ERROR_ID_221", value: 221)
+!355 = !DIEnumerator(name: "FATAL_ERROR_ID_222", value: 222)
+!356 = !DIEnumerator(name: "FATAL_ERROR_ID_223", value: 223)
+!357 = !DIEnumerator(name: "FATAL_ERROR_ID_224", value: 224)
+!358 = !DIEnumerator(name: "FATAL_ERROR_ID_225", value: 225)
+!359 = !DIEnumerator(name: "FATAL_ERROR_ID_226", value: 226)
+!360 = !DIEnumerator(name: "FATAL_ERROR_ID_227", value: 227)
+!361 = !DIEnumerator(name: "FATAL_ERROR_ID_228", value: 228)
+!362 = !DIEnumerator(name: "FATAL_ERROR_ID_229", value: 229)
+!363 = !DIEnumerator(name: "FATAL_ERROR_ID_230", value: 230)
+!364 = !DIEnumerator(name: "FATAL_ERROR_ID_231", value: 231)
+!365 = !DIEnumerator(name: "FATAL_ERROR_ID_232", value: 232)
+!366 = !DIEnumerator(name: "FATAL_ERROR_ID_233", value: 233)
+!367 = !DIEnumerator(name: "FATAL_ERROR_ID_234", value: 234)
+!368 = !DIEnumerator(name: "FATAL_ERROR_ID_235", value: 235)
+!369 = !DIEnumerator(name: "FATAL_ERROR_ID_236", value: 236)
+!370 = !DIEnumerator(name: "FATAL_ERROR_ID_237", value: 237)
+!371 = !DIEnumerator(name: "FATAL_ERROR_ID_238", value: 238)
+!372 = !DIEnumerator(name: "FATAL_ERROR_ID_239", value: 239)
+!373 = !DIEnumerator(name: "FATAL_ERROR_ID_240", value: 240)
+!374 = !DIEnumerator(name: "FATAL_ERROR_ID_241", value: 241)
+!375 = !DIEnumerator(name: "FATAL_ERROR_ID_242", value: 242)
+!376 = !DIEnumerator(name: "FATAL_ERROR_ID_243", value: 243)
+!377 = !DIEnumerator(name: "FATAL_ERROR_ID_244", value: 244)
+!378 = !DIEnumerator(name: "FATAL_ERROR_ID_245", value: 245)
+!379 = !DIEnumerator(name: "FATAL_ERROR_ID_246", value: 246)
+!380 = !DIEnumerator(name: "FATAL_ERROR_ID_247", value: 247)
+!381 = !DIEnumerator(name: "FATAL_ERROR_ID_248", value: 248)
+!382 = !DIEnumerator(name: "FATAL_ERROR_ID_249", value: 249)
+!383 = !DIEnumerator(name: "FATAL_ERROR_ID_250", value: 250)
+!384 = !DIEnumerator(name: "FATAL_ERROR_ID_251", value: 251)
+!385 = !DIEnumerator(name: "FATAL_ERROR_ID_252", value: 252)
+!386 = !DIEnumerator(name: "FATAL_ERROR_ID_253", value: 253)
+!387 = !DIEnumerator(name: "FATAL_ERROR_ID_254", value: 254)
+!388 = !DIEnumerator(name: "FATAL_ERROR_ID_255", value: 255)
+!389 = !DIEnumerator(name: "FATAL_ERROR_ID_256", value: 256)
+!390 = !DIEnumerator(name: "FATAL_ERROR_ID_257", value: 257)
+!391 = !DIEnumerator(name: "FATAL_ERROR_ID_258", value: 258)
+!392 = !DIEnumerator(name: "FATAL_ERROR_ID_259", value: 259)
+!393 = !DIEnumerator(name: "FATAL_ERROR_ID_260", value: 260)
+!394 = !DIEnumerator(name: "FATAL_ERROR_ID_261", value: 261)
+!395 = !DIEnumerator(name: "FATAL_ERROR_ID_262", value: 262)
+!396 = !DIEnumerator(name: "FATAL_ERROR_ID_263", value: 263)
+!397 = !DIEnumerator(name: "FATAL_ERROR_ID_264", value: 264)
+!398 = !DIEnumerator(name: "FATAL_ERROR_ID_265", value: 265)
+!399 = !DIEnumerator(name: "FATAL_ERROR_ID_266", value: 266)
+!400 = !DIEnumerator(name: "FATAL_ERROR_ID_267", value: 267)
+!401 = !DIEnumerator(name: "FATAL_ERROR_ID_268", value: 268)
+!402 = !DIEnumerator(name: "FATAL_ERROR_ID_269", value: 269)
+!403 = !DIEnumerator(name: "FATAL_ERROR_ID_270", value: 270)
+!404 = !DIEnumerator(name: "FATAL_ERROR_ID_271", value: 271)
+!405 = !DIEnumerator(name: "FATAL_ERROR_ID_272", value: 272)
+!406 = !DIEnumerator(name: "FATAL_ERROR_ID_273", value: 273)
+!407 = !DIEnumerator(name: "FATAL_ERROR_ID_274", value: 274)
+!408 = !DIEnumerator(name: "FATAL_ERROR_ID_275", value: 275)
+!409 = !DIEnumerator(name: "FATAL_ERROR_ID_276", value: 276)
+!410 = !DIEnumerator(name: "FATAL_ERROR_ID_277", value: 277)
+!411 = !DIEnumerator(name: "FATAL_ERROR_ID_278", value: 278)
+!412 = !DIEnumerator(name: "FATAL_ERROR_ID_279", value: 279)
+!413 = !DIEnumerator(name: "FATAL_ERROR_ID_280", value: 280)
+!414 = !DIEnumerator(name: "FATAL_ERROR_ID_281", value: 281)
+!415 = !DIEnumerator(name: "FATAL_ERROR_ID_282", value: 282)
+!416 = !DIEnumerator(name: "FATAL_ERROR_ID_283", value: 283)
+!417 = !DIEnumerator(name: "FATAL_ERROR_ID_284", value: 284)
+!418 = !DIEnumerator(name: "FATAL_ERROR_ID_285", value: 285)
+!419 = !DIEnumerator(name: "FATAL_ERROR_ID_286", value: 286)
+!420 = !DIEnumerator(name: "FATAL_ERROR_ID_287", value: 287)
+!421 = !DIEnumerator(name: "FATAL_ERROR_ID_288", value: 288)
+!422 = !DIEnumerator(name: "FATAL_ERROR_ID_289", value: 289)
+!423 = !DIEnumerator(name: "FATAL_ERROR_ID_290", value: 290)
+!424 = !DIEnumerator(name: "FATAL_ERROR_ID_291", value: 291)
+!425 = !DIEnumerator(name: "FATAL_ERROR_ID_292", value: 292)
+!426 = !DIEnumerator(name: "FATAL_ERROR_ID_293", value: 293)
+!427 = !DIEnumerator(name: "FATAL_ERROR_ID_294", value: 294)
+!428 = !DIEnumerator(name: "FATAL_ERROR_ID_295", value: 295)
+!429 = !DIEnumerator(name: "FATAL_ERROR_ID_296", value: 296)
+!430 = !DIEnumerator(name: "FATAL_ERROR_ID_297", value: 297)
+!431 = !DIEnumerator(name: "FATAL_ERROR_ID_298", value: 298)
+!432 = !DIEnumerator(name: "FATAL_ERROR_ID_299", value: 299)
+!433 = !DIEnumerator(name: "FATAL_ERROR_ID_300", value: 300)
+!434 = !DIEnumerator(name: "FATAL_ERROR_ID_301", value: 301)
+!435 = !DIEnumerator(name: "FATAL_ERROR_ID_302", value: 302)
+!436 = !DIEnumerator(name: "FATAL_ERROR_ID_303", value: 303)
+!437 = !DIEnumerator(name: "FATAL_ERROR_ID_304", value: 304)
+!438 = !DIEnumerator(name: "FATAL_ERROR_ID_305", value: 305)
+!439 = !DIEnumerator(name: "FATAL_ERROR_ID_306", value: 306)
+!440 = !DIEnumerator(name: "FATAL_ERROR_ID_307", value: 307)
+!441 = !DIEnumerator(name: "FATAL_ERROR_ID_308", value: 308)
+!442 = !DIEnumerator(name: "FATAL_ERROR_ID_309", value: 309)
+!443 = !DIEnumerator(name: "FATAL_ERROR_ID_310", value: 310)
+!444 = !DIEnumerator(name: "FATAL_ERROR_ID_311", value: 311)
+!445 = !DIEnumerator(name: "FATAL_ERROR_ID_312", value: 312)
+!446 = !DIEnumerator(name: "FATAL_ERROR_ID_313", value: 313)
+!447 = !DIEnumerator(name: "FATAL_ERROR_ID_314", value: 314)
+!448 = !DIEnumerator(name: "FATAL_ERROR_ID_315", value: 315)
+!449 = !DIEnumerator(name: "FATAL_ERROR_ID_316", value: 316)
+!450 = !DIEnumerator(name: "FATAL_ERROR_ID_317", value: 317)
+!451 = !DIEnumerator(name: "FATAL_ERROR_ID_318", value: 318)
+!452 = !DIEnumerator(name: "FATAL_ERROR_ID_319", value: 319)
+!453 = !DIEnumerator(name: "FATAL_ERROR_ID_320", value: 320)
+!454 = !DIEnumerator(name: "FATAL_ERROR_ID_321", value: 321)
+!455 = !DIEnumerator(name: "FATAL_ERROR_ID_322", value: 322)
+!456 = !DIEnumerator(name: "FATAL_ERROR_ID_323", value: 323)
+!457 = !DIEnumerator(name: "FATAL_ERROR_ID_324", value: 324)
+!458 = !DIEnumerator(name: "FATAL_ERROR_ID_325", value: 325)
+!459 = !DIEnumerator(name: "FATAL_ERROR_ID_326", value: 326)
+!460 = !DIEnumerator(name: "FATAL_ERROR_ID_327", value: 327)
+!461 = !DIEnumerator(name: "FATAL_ERROR_ID_328", value: 328)
+!462 = !DIEnumerator(name: "FATAL_ERROR_ID_329", value: 329)
+!463 = !DIEnumerator(name: "FATAL_ERROR_ID_330", value: 330)
+!464 = !DIEnumerator(name: "FATAL_ERROR_ID_331", value: 331)
+!465 = !DIEnumerator(name: "FATAL_ERROR_ID_332", value: 332)
+!466 = !DIEnumerator(name: "FATAL_ERROR_ID_333", value: 333)
+!467 = !DIEnumerator(name: "FATAL_ERROR_ID_334", value: 334)
+!468 = !DIEnumerator(name: "FATAL_ERROR_ID_335", value: 335)
+!469 = !DIEnumerator(name: "FATAL_ERROR_ID_336", value: 336)
+!470 = !DIEnumerator(name: "FATAL_ERROR_ID_337", value: 337)
+!471 = !DIEnumerator(name: "FATAL_ERROR_ID_338", value: 338)
+!472 = !DIEnumerator(name: "FATAL_ERROR_ID_339", value: 339)
+!473 = !DIEnumerator(name: "FATAL_ERROR_ID_340", value: 340)
+!474 = !DIEnumerator(name: "FATAL_ERROR_ID_341", value: 341)
+!475 = !DIEnumerator(name: "FATAL_ERROR_ID_342", value: 342)
+!476 = !DIEnumerator(name: "FATAL_ERROR_ID_343", value: 343)
+!477 = !DIEnumerator(name: "FATAL_ERROR_ID_344", value: 344)
+!478 = !DIEnumerator(name: "FATAL_ERROR_ID_345", value: 345)
+!479 = !DIEnumerator(name: "FATAL_ERROR_ID_346", value: 346)
+!480 = !DIEnumerator(name: "FATAL_ERROR_ID_347", value: 347)
+!481 = !DIEnumerator(name: "FATAL_ERROR_ID_348", value: 348)
+!482 = !DIEnumerator(name: "FATAL_ERROR_ID_349", value: 349)
+!483 = !DIEnumerator(name: "FATAL_ERROR_ID_350", value: 350)
+!484 = !DIEnumerator(name: "FATAL_ERROR_ID_351", value: 351)
+!485 = !DIEnumerator(name: "FATAL_ERROR_ID_352", value: 352)
+!486 = !DIEnumerator(name: "FATAL_ERROR_ID_353", value: 353)
+!487 = !DIEnumerator(name: "FATAL_ERROR_ID_354", value: 354)
+!488 = !DIEnumerator(name: "FATAL_ERROR_ID_355", value: 355)
+!489 = !DIEnumerator(name: "FATAL_ERROR_ID_356", value: 356)
+!490 = !DIEnumerator(name: "FATAL_ERROR_ID_357", value: 357)
+!491 = !DIEnumerator(name: "FATAL_ERROR_ID_358", value: 358)
+!492 = !DIEnumerator(name: "FATAL_ERROR_ID_359", value: 359)
+!493 = !DIEnumerator(name: "FATAL_ERROR_ID_360", value: 360)
+!494 = !DIEnumerator(name: "FATAL_ERROR_ID_361", value: 361)
+!495 = !DIEnumerator(name: "FATAL_ERROR_ID_362", value: 362)
+!496 = !DIEnumerator(name: "FATAL_ERROR_ID_363", value: 363)
+!497 = !DIEnumerator(name: "FATAL_ERROR_ID_364", value: 364)
+!498 = !DIEnumerator(name: "FATAL_ERROR_ID_365", value: 365)
+!499 = !DIEnumerator(name: "FATAL_ERROR_ID_366", value: 366)
+!500 = !DIEnumerator(name: "FATAL_ERROR_ID_367", value: 367)
+!501 = !DIEnumerator(name: "FATAL_ERROR_ID_368", value: 368)
+!502 = !DIEnumerator(name: "FATAL_ERROR_ID_369", value: 369)
+!503 = !DIEnumerator(name: "FATAL_ERROR_ID_370", value: 370)
+!504 = !DICompositeType(tag: DW_TAG_enumeration_type, file: !131, line: 50, baseType: !505, size: 8, elements: !506)
+!505 = !DIBasicType(name: "unsigned char", size: 8, encoding: DW_ATE_unsigned_char)
+!506 = !{!507, !508, !509, !510, !511, !512, !513}
+!507 = !DIEnumerator(name: "FATAL_INFO_FORMAT_BASIC_INFO", value: 0)
+!508 = !DIEnumerator(name: "FATAL_INFO_FORMAT_TD_HANDLE_INFO", value: 1)
+!509 = !DIEnumerator(name: "FATAL_INFO_FORMAT_SEPT_TD_HANDLE_INFO", value: 2)
+!510 = !DIEnumerator(name: "FATAL_INFO_FORMAT_SEPT_EPTP_INFO", value: 3)
+!511 = !DIEnumerator(name: "FATAL_INFO_FORMAT_PAGE_HPA_INFO", value: 4)
+!512 = !DIEnumerator(name: "FATAL_INFO_FORMAT_UNEXPECTED_EXCEPTION_INFO", value: 6)
+!513 = !DIEnumerator(name: "FATAL_INFO_FORMAT_UNEXPECTED_VM_EXIT_INFO", value: 7)
+!514 = !DICompositeType(tag: DW_TAG_enumeration_type, name: "mb_type_e", file: !515, line: 69, baseType: !5, size: 32, elements: !516)
+!515 = !DIFile(filename: "src/common/helpers/migration.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "7d2593cf0d738d12ca64c6def9dee396")
+!516 = !{!517, !518, !519, !520, !521, !522, !523}
+!517 = !DIEnumerator(name: "MB_TYPE_IMMUTABLE_TD_STATE", value: 0)
+!518 = !DIEnumerator(name: "MB_TYPE_MUTABLE_TD_STATE", value: 1)
+!519 = !DIEnumerator(name: "MB_TYPE_MUTABLE_VCPU_STATE", value: 2)
+!520 = !DIEnumerator(name: "MB_TYPE_MEM", value: 16)
+!521 = !DIEnumerator(name: "MB_TYPE_EPOCH_TOKEN", value: 32)
+!522 = !DIEnumerator(name: "MB_TYPE_ABORT_TOKEN", value: 33)
+!523 = !DIEnumerator(name: "MB_TYPE_MAX_MB_TYPE", value: 33)
+!524 = !{!525, !528, !530, !612, !807, !765, !555, !808}
+!525 = !DIDerivedType(tag: DW_TAG_typedef, name: "bool_t", file: !526, line: 61, baseType: !527)
+!526 = !DIFile(filename: "include/tdx_basic_types.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "022dc0e20b17bba09d563e8f5b6face5")
+!527 = !DIDerivedType(tag: DW_TAG_typedef, name: "uint8_t", file: !526, line: 36, baseType: !505)
+!528 = !DIDerivedType(tag: DW_TAG_typedef, name: "uint64_t", file: !526, line: 39, baseType: !529)
+!529 = !DIBasicType(name: "unsigned long long", size: 64, encoding: DW_ATE_unsigned)
+!530 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !531, size: 64)
+!531 = !DIDerivedType(tag: DW_TAG_typedef, name: "mbmd_t", file: !515, line: 204, baseType: !532)
+!532 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "mbmd_s", file: !515, line: 193, size: 384, elements: !533)
+!533 = !{!534}
+!534 = !DIDerivedType(tag: DW_TAG_member, scope: !532, file: !515, line: 195, baseType: !535, size: 384)
+!535 = distinct !DICompositeType(tag: DW_TAG_union_type, scope: !532, file: !515, line: 195, size: 384, elements: !536)
+!536 = !{!537, !562, !573, !583, !590, !598, !605}
+!537 = !DIDerivedType(tag: DW_TAG_member, name: "header", scope: !535, file: !515, line: 196, baseType: !538, size: 192)
+!538 = !DIDerivedType(tag: DW_TAG_typedef, name: "mbmd_header_t", file: !515, line: 95, baseType: !539)
+!539 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "mbmd_header_s", file: !515, line: 80, size: 192, elements: !540)
+!540 = !{!541}
+!541 = !DIDerivedType(tag: DW_TAG_member, scope: !539, file: !515, line: 82, baseType: !542, size: 192)
+!542 = distinct !DICompositeType(tag: DW_TAG_union_type, scope: !539, file: !515, line: 82, size: 192, elements: !543)
+!543 = !{!544, !558}
+!544 = !DIDerivedType(tag: DW_TAG_member, scope: !542, file: !515, line: 83, baseType: !545, size: 192)
+!545 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !542, file: !515, line: 83, size: 192, elements: !546)
+!546 = !{!547, !550, !551, !552, !553, !554, !556, !557}
+!547 = !DIDerivedType(tag: DW_TAG_member, name: "size", scope: !545, file: !515, line: 84, baseType: !548, size: 16)
+!548 = !DIDerivedType(tag: DW_TAG_typedef, name: "uint16_t", file: !526, line: 37, baseType: !549)
+!549 = !DIBasicType(name: "unsigned short", size: 16, encoding: DW_ATE_unsigned)
+!550 = !DIDerivedType(tag: DW_TAG_member, name: "mig_version", scope: !545, file: !515, line: 85, baseType: !548, size: 16, offset: 16)
+!551 = !DIDerivedType(tag: DW_TAG_member, name: "migs_index", scope: !545, file: !515, line: 86, baseType: !548, size: 16, offset: 32)
+!552 = !DIDerivedType(tag: DW_TAG_member, name: "mb_type", scope: !545, file: !515, line: 87, baseType: !527, size: 8, offset: 48)
+!553 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !545, file: !515, line: 88, baseType: !527, size: 8, offset: 56)
+!554 = !DIDerivedType(tag: DW_TAG_member, name: "mb_counter", scope: !545, file: !515, line: 89, baseType: !555, size: 32, offset: 64)
+!555 = !DIDerivedType(tag: DW_TAG_typedef, name: "uint32_t", file: !526, line: 38, baseType: !5)
+!556 = !DIDerivedType(tag: DW_TAG_member, name: "mig_epoch", scope: !545, file: !515, line: 90, baseType: !555, size: 32, offset: 96)
+!557 = !DIDerivedType(tag: DW_TAG_member, name: "iv_counter", scope: !545, file: !515, line: 91, baseType: !528, size: 64, offset: 128)
+!558 = !DIDerivedType(tag: DW_TAG_member, name: "fields_included_in_mac", scope: !542, file: !515, line: 93, baseType: !559, size: 192)
+!559 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 192, elements: !560)
+!560 = !{!561}
+!561 = !DISubrange(count: 24)
+!562 = !DIDerivedType(tag: DW_TAG_member, name: "mem", scope: !535, file: !515, line: 197, baseType: !563, size: 384)
+!563 = !DIDerivedType(tag: DW_TAG_typedef, name: "mbmd_mem_t", file: !515, line: 146, baseType: !564)
+!564 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "mbmd_mem_s", file: !515, line: 140, size: 384, elements: !565)
+!565 = !{!566, !567, !568, !569}
+!566 = !DIDerivedType(tag: DW_TAG_member, name: "header", scope: !564, file: !515, line: 142, baseType: !538, size: 192)
+!567 = !DIDerivedType(tag: DW_TAG_member, name: "num_gpas", scope: !564, file: !515, line: 143, baseType: !528, size: 16, offset: 192, flags: DIFlagBitField, extraData: i64 192)
+!568 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !564, file: !515, line: 144, baseType: !528, size: 48, offset: 208, flags: DIFlagBitField, extraData: i64 192)
+!569 = !DIDerivedType(tag: DW_TAG_member, name: "mac", scope: !564, file: !515, line: 145, baseType: !570, size: 128, offset: 256)
+!570 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 128, elements: !571)
+!571 = !{!572}
+!572 = !DISubrange(count: 16)
+!573 = !DIDerivedType(tag: DW_TAG_member, name: "immutable_td_state", scope: !535, file: !515, line: 198, baseType: !574, size: 384)
+!574 = !DIDerivedType(tag: DW_TAG_typedef, name: "mbmd_immutable_td_state_t", file: !515, line: 157, baseType: !575)
+!575 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "mbmd_immutable_td_state_s", file: !515, line: 149, size: 384, elements: !576)
+!576 = !{!577, !578, !579, !580, !581, !582}
+!577 = !DIDerivedType(tag: DW_TAG_member, name: "header", scope: !575, file: !515, line: 151, baseType: !538, size: 192)
+!578 = !DIDerivedType(tag: DW_TAG_member, name: "num_f_migs", scope: !575, file: !515, line: 152, baseType: !548, size: 16, offset: 192)
+!579 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !575, file: !515, line: 153, baseType: !548, size: 16, offset: 208)
+!580 = !DIDerivedType(tag: DW_TAG_member, name: "num_sys_md_pages", scope: !575, file: !515, line: 154, baseType: !555, size: 8, offset: 224, flags: DIFlagBitField, extraData: i64 224)
+!581 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !575, file: !515, line: 155, baseType: !555, size: 24, offset: 232, flags: DIFlagBitField, extraData: i64 224)
+!582 = !DIDerivedType(tag: DW_TAG_member, name: "mac", scope: !575, file: !515, line: 156, baseType: !570, size: 128, offset: 256)
+!583 = !DIDerivedType(tag: DW_TAG_member, name: "td_state", scope: !535, file: !515, line: 199, baseType: !584, size: 384)
+!584 = !DIDerivedType(tag: DW_TAG_typedef, name: "mbmd_td_state_t", file: !515, line: 165, baseType: !585)
+!585 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "mbmd_td_state_s", file: !515, line: 160, size: 384, elements: !586)
+!586 = !{!587, !588, !589}
+!587 = !DIDerivedType(tag: DW_TAG_member, name: "header", scope: !585, file: !515, line: 162, baseType: !538, size: 192)
+!588 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !585, file: !515, line: 163, baseType: !528, size: 64, offset: 192)
+!589 = !DIDerivedType(tag: DW_TAG_member, name: "mac", scope: !585, file: !515, line: 164, baseType: !570, size: 128, offset: 256)
+!590 = !DIDerivedType(tag: DW_TAG_member, name: "vp_state", scope: !535, file: !515, line: 200, baseType: !591, size: 384)
+!591 = !DIDerivedType(tag: DW_TAG_typedef, name: "mbmd_vp_state_t", file: !515, line: 174, baseType: !592)
+!592 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "mbmd_vp_state_s", file: !515, line: 168, size: 384, elements: !593)
+!593 = !{!594, !595, !596, !597}
+!594 = !DIDerivedType(tag: DW_TAG_member, name: "header", scope: !592, file: !515, line: 170, baseType: !538, size: 192)
+!595 = !DIDerivedType(tag: DW_TAG_member, name: "vp_index", scope: !592, file: !515, line: 171, baseType: !528, size: 16, offset: 192, flags: DIFlagBitField, extraData: i64 192)
+!596 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !592, file: !515, line: 172, baseType: !528, size: 48, offset: 208, flags: DIFlagBitField, extraData: i64 192)
+!597 = !DIDerivedType(tag: DW_TAG_member, name: "mac", scope: !592, file: !515, line: 173, baseType: !570, size: 128, offset: 256)
+!598 = !DIDerivedType(tag: DW_TAG_member, name: "epoch_token", scope: !535, file: !515, line: 201, baseType: !599, size: 384)
+!599 = !DIDerivedType(tag: DW_TAG_typedef, name: "mbmd_epoch_token_t", file: !515, line: 182, baseType: !600)
+!600 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "mbmd_epoch_token_s", file: !515, line: 177, size: 384, elements: !601)
+!601 = !{!602, !603, !604}
+!602 = !DIDerivedType(tag: DW_TAG_member, name: "header", scope: !600, file: !515, line: 179, baseType: !538, size: 192)
+!603 = !DIDerivedType(tag: DW_TAG_member, name: "total_mb", scope: !600, file: !515, line: 180, baseType: !528, size: 64, offset: 192)
+!604 = !DIDerivedType(tag: DW_TAG_member, name: "mac", scope: !600, file: !515, line: 181, baseType: !570, size: 128, offset: 256)
+!605 = !DIDerivedType(tag: DW_TAG_member, name: "abort_token", scope: !535, file: !515, line: 202, baseType: !606, size: 384)
+!606 = !DIDerivedType(tag: DW_TAG_typedef, name: "mbmd_abort_token_t", file: !515, line: 190, baseType: !607)
+!607 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "mbmd_abort_token_s", file: !515, line: 185, size: 384, elements: !608)
+!608 = !{!609, !610, !611}
+!609 = !DIDerivedType(tag: DW_TAG_member, name: "header", scope: !607, file: !515, line: 187, baseType: !538, size: 192)
+!610 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !607, file: !515, line: 188, baseType: !528, size: 64, offset: 192)
+!611 = !DIDerivedType(tag: DW_TAG_member, name: "mac", scope: !607, file: !515, line: 189, baseType: !570, size: 128, offset: 256)
+!612 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !613, size: 64)
+!613 = !DIDerivedType(tag: DW_TAG_typedef, name: "migsc_t", file: !515, line: 271, baseType: !614)
+!614 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "migsc_s", file: !515, line: 233, size: 32768, elements: !615)
+!615 = !{!616, !617, !621, !622, !623, !624, !791, !792, !796}
+!616 = !DIDerivedType(tag: DW_TAG_member, name: "migsc_i", scope: !614, file: !515, line: 234, baseType: !548, size: 16)
+!617 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !614, file: !515, line: 235, baseType: !618, size: 48, offset: 16)
+!618 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 48, elements: !619)
+!619 = !{!620}
+!620 = !DISubrange(count: 6)
+!621 = !DIDerivedType(tag: DW_TAG_member, name: "iv_counter", scope: !614, file: !515, line: 236, baseType: !528, size: 64, offset: 64)
+!622 = !DIDerivedType(tag: DW_TAG_member, name: "next_mb_counter", scope: !614, file: !515, line: 237, baseType: !555, size: 32, offset: 128)
+!623 = !DIDerivedType(tag: DW_TAG_member, name: "expected_mb_counter", scope: !614, file: !515, line: 238, baseType: !555, size: 32, offset: 160)
+!624 = !DIDerivedType(tag: DW_TAG_member, name: "interrupted_state", scope: !614, file: !515, line: 266, baseType: !625, size: 1024, offset: 192)
+!625 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !614, file: !515, line: 240, size: 1024, elements: !626)
+!626 = !{!627, !639, !640, !641, !642, !643, !658, !697, !766, !779, !780, !784, !785, !787, !789, !790}
+!627 = !DIDerivedType(tag: DW_TAG_member, name: "func", scope: !625, file: !515, line: 241, baseType: !628, size: 64)
+!628 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdx_leaf_and_version_t", file: !54, line: 165, baseType: !629)
+!629 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "tdx_leaf_and_version_u", file: !54, line: 155, size: 64, elements: !630)
+!630 = !{!631, !638}
+!631 = !DIDerivedType(tag: DW_TAG_member, scope: !629, file: !54, line: 157, baseType: !632, size: 64)
+!632 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !629, file: !54, line: 157, size: 64, elements: !633)
+!633 = !{!634, !635, !636, !637}
+!634 = !DIDerivedType(tag: DW_TAG_member, name: "leaf", scope: !632, file: !54, line: 159, baseType: !528, size: 16, flags: DIFlagBitField, extraData: i64 0)
+!635 = !DIDerivedType(tag: DW_TAG_member, name: "version", scope: !632, file: !54, line: 160, baseType: !528, size: 8, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!636 = !DIDerivedType(tag: DW_TAG_member, name: "reserved0", scope: !632, file: !54, line: 161, baseType: !528, size: 8, offset: 24, flags: DIFlagBitField, extraData: i64 0)
+!637 = !DIDerivedType(tag: DW_TAG_member, name: "reserved1", scope: !632, file: !54, line: 162, baseType: !528, size: 32, offset: 32, flags: DIFlagBitField, extraData: i64 0)
+!638 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !629, file: !54, line: 164, baseType: !528, size: 64)
+!639 = !DIDerivedType(tag: DW_TAG_member, name: "valid", scope: !625, file: !515, line: 242, baseType: !525, size: 8, offset: 64)
+!640 = !DIDerivedType(tag: DW_TAG_member, name: "sys_migrated", scope: !625, file: !515, line: 243, baseType: !525, size: 8, offset: 72)
+!641 = !DIDerivedType(tag: DW_TAG_member, name: "aes_gcm_context_version", scope: !625, file: !515, line: 244, baseType: !548, size: 16, offset: 80)
+!642 = !DIDerivedType(tag: DW_TAG_member, name: "num_processed", scope: !625, file: !515, line: 245, baseType: !555, size: 32, offset: 96)
+!643 = !DIDerivedType(tag: DW_TAG_member, name: "page_list_info", scope: !625, file: !515, line: 246, baseType: !644, size: 64, offset: 128)
+!644 = !DIDerivedType(tag: DW_TAG_typedef, name: "page_list_info_t", file: !515, line: 230, baseType: !645)
+!645 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "page_list_info_s", file: !515, line: 217, size: 64, elements: !646)
+!646 = !{!647}
+!647 = !DIDerivedType(tag: DW_TAG_member, scope: !645, file: !515, line: 219, baseType: !648, size: 64)
+!648 = distinct !DICompositeType(tag: DW_TAG_union_type, scope: !645, file: !515, line: 219, size: 64, elements: !649)
+!649 = !{!650, !657}
+!650 = !DIDerivedType(tag: DW_TAG_member, scope: !648, file: !515, line: 221, baseType: !651, size: 64)
+!651 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !648, file: !515, line: 221, size: 64, elements: !652)
+!652 = !{!653, !654, !655, !656}
+!653 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !651, file: !515, line: 223, baseType: !528, size: 12, flags: DIFlagBitField, extraData: i64 0)
+!654 = !DIDerivedType(tag: DW_TAG_member, name: "hpa", scope: !651, file: !515, line: 224, baseType: !528, size: 40, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!655 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_2", scope: !651, file: !515, line: 225, baseType: !528, size: 3, offset: 52, flags: DIFlagBitField, extraData: i64 0)
+!656 = !DIDerivedType(tag: DW_TAG_member, name: "last_entry", scope: !651, file: !515, line: 226, baseType: !528, size: 9, offset: 55, flags: DIFlagBitField, extraData: i64 0)
+!657 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !648, file: !515, line: 228, baseType: !528, size: 64)
+!658 = !DIDerivedType(tag: DW_TAG_member, name: "field_id", scope: !625, file: !515, line: 247, baseType: !659, size: 64, offset: 192)
+!659 = !DIDerivedType(tag: DW_TAG_typedef, name: "md_field_id_t", file: !54, line: 337, baseType: !660)
+!660 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "md_field_id_u", file: !54, line: 298, size: 64, elements: !661)
+!661 = !{!662, !696}
+!662 = !DIDerivedType(tag: DW_TAG_member, scope: !660, file: !54, line: 300, baseType: !663, size: 64)
+!663 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !660, file: !54, line: 300, size: 64, elements: !664)
+!664 = !{!665, !682}
+!665 = !DIDerivedType(tag: DW_TAG_member, scope: !663, file: !54, line: 302, baseType: !666, size: 32)
+!666 = distinct !DICompositeType(tag: DW_TAG_union_type, scope: !663, file: !54, line: 302, size: 32, elements: !667)
+!667 = !{!668, !673}
+!668 = !DIDerivedType(tag: DW_TAG_member, scope: !666, file: !54, line: 304, baseType: !669, size: 32)
+!669 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !666, file: !54, line: 304, size: 32, elements: !670)
+!670 = !{!671, !672}
+!671 = !DIDerivedType(tag: DW_TAG_member, name: "field_code", scope: !669, file: !54, line: 306, baseType: !555, size: 24, flags: DIFlagBitField, extraData: i64 0)
+!672 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !669, file: !54, line: 307, baseType: !555, size: 8, offset: 24, flags: DIFlagBitField, extraData: i64 0)
+!673 = !DIDerivedType(tag: DW_TAG_member, name: "cpuid_field_code", scope: !666, file: !54, line: 318, baseType: !674, size: 32)
+!674 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !666, file: !54, line: 310, size: 32, elements: !675)
+!675 = !{!676, !677, !678, !679, !680, !681}
+!676 = !DIDerivedType(tag: DW_TAG_member, name: "element", scope: !674, file: !54, line: 312, baseType: !555, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!677 = !DIDerivedType(tag: DW_TAG_member, name: "subleaf", scope: !674, file: !54, line: 313, baseType: !555, size: 7, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!678 = !DIDerivedType(tag: DW_TAG_member, name: "subleaf_na", scope: !674, file: !54, line: 314, baseType: !555, size: 1, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!679 = !DIDerivedType(tag: DW_TAG_member, name: "leaf", scope: !674, file: !54, line: 315, baseType: !555, size: 7, offset: 9, flags: DIFlagBitField, extraData: i64 0)
+!680 = !DIDerivedType(tag: DW_TAG_member, name: "leaf_bit31", scope: !674, file: !54, line: 316, baseType: !555, size: 1, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!681 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !674, file: !54, line: 317, baseType: !555, size: 15, offset: 17, flags: DIFlagBitField, extraData: i64 0)
+!682 = !DIDerivedType(tag: DW_TAG_member, scope: !663, file: !54, line: 321, baseType: !683, size: 32, offset: 32)
+!683 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !663, file: !54, line: 321, size: 32, elements: !684)
+!684 = !{!685, !686, !687, !688, !689, !690, !691, !692, !693, !694, !695}
+!685 = !DIDerivedType(tag: DW_TAG_member, name: "element_size_code", scope: !683, file: !54, line: 323, baseType: !555, size: 2, flags: DIFlagBitField, extraData: i64 0)
+!686 = !DIDerivedType(tag: DW_TAG_member, name: "last_element_in_field", scope: !683, file: !54, line: 324, baseType: !555, size: 4, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!687 = !DIDerivedType(tag: DW_TAG_member, name: "last_field_in_sequence", scope: !683, file: !54, line: 325, baseType: !555, size: 9, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!688 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !683, file: !54, line: 326, baseType: !555, size: 3, offset: 15, flags: DIFlagBitField, extraData: i64 0)
+!689 = !DIDerivedType(tag: DW_TAG_member, name: "inc_size", scope: !683, file: !54, line: 327, baseType: !555, size: 1, offset: 18, flags: DIFlagBitField, extraData: i64 0)
+!690 = !DIDerivedType(tag: DW_TAG_member, name: "write_mask_valid", scope: !683, file: !54, line: 328, baseType: !555, size: 1, offset: 19, flags: DIFlagBitField, extraData: i64 0)
+!691 = !DIDerivedType(tag: DW_TAG_member, name: "context_code", scope: !683, file: !54, line: 329, baseType: !555, size: 3, offset: 20, flags: DIFlagBitField, extraData: i64 0)
+!692 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_2", scope: !683, file: !54, line: 330, baseType: !555, size: 1, offset: 23, flags: DIFlagBitField, extraData: i64 0)
+!693 = !DIDerivedType(tag: DW_TAG_member, name: "class_code", scope: !683, file: !54, line: 331, baseType: !555, size: 6, offset: 24, flags: DIFlagBitField, extraData: i64 0)
+!694 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_3", scope: !683, file: !54, line: 332, baseType: !555, size: 1, offset: 30, flags: DIFlagBitField, extraData: i64 0)
+!695 = !DIDerivedType(tag: DW_TAG_member, name: "ignored", scope: !683, file: !54, line: 333, baseType: !555, size: 1, offset: 31, flags: DIFlagBitField, extraData: i64 0)
+!696 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !660, file: !54, line: 336, baseType: !528, size: 64)
+!697 = !DIDerivedType(tag: DW_TAG_member, name: "tdvpr_pa", scope: !625, file: !515, line: 249, baseType: !698, size: 64, offset: 256)
+!698 = !DIDerivedType(tag: DW_TAG_typedef, name: "pa_t", file: !699, line: 724, baseType: !700)
+!699 = !DIFile(filename: "src/common/x86_defs/x86_defs.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "34c5b587adc5f61883cf2de840191113")
+!700 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "pa_u", file: !699, line: 632, size: 64, elements: !701)
+!701 = !{!702, !763, !764}
+!702 = !DIDerivedType(tag: DW_TAG_member, scope: !700, file: !699, line: 633, baseType: !703, size: 64)
+!703 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !700, file: !699, line: 633, size: 64, elements: !704)
+!704 = !{!705}
+!705 = !DIDerivedType(tag: DW_TAG_member, scope: !703, file: !699, line: 634, baseType: !706, size: 64)
+!706 = distinct !DICompositeType(tag: DW_TAG_union_type, scope: !703, file: !699, line: 634, size: 64, elements: !707)
+!707 = !{!708, !709, !718, !726, !731, !736, !741, !746, !751, !756}
+!708 = !DIDerivedType(tag: DW_TAG_member, name: "full_pa", scope: !706, file: !699, line: 637, baseType: !528, size: 52, flags: DIFlagBitField, extraData: i64 0)
+!709 = !DIDerivedType(tag: DW_TAG_member, name: "fields_4k", scope: !706, file: !699, line: 665, baseType: !710, size: 64)
+!710 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !706, file: !699, line: 657, size: 64, elements: !711)
+!711 = !{!712, !713, !714, !715, !716, !717}
+!712 = !DIDerivedType(tag: DW_TAG_member, name: "page_offset", scope: !710, file: !699, line: 659, baseType: !528, size: 12, flags: DIFlagBitField, extraData: i64 0)
+!713 = !DIDerivedType(tag: DW_TAG_member, name: "pt_index", scope: !710, file: !699, line: 660, baseType: !528, size: 9, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!714 = !DIDerivedType(tag: DW_TAG_member, name: "pd_index", scope: !710, file: !699, line: 661, baseType: !528, size: 9, offset: 21, flags: DIFlagBitField, extraData: i64 0)
+!715 = !DIDerivedType(tag: DW_TAG_member, name: "pdpt_index", scope: !710, file: !699, line: 662, baseType: !528, size: 9, offset: 30, flags: DIFlagBitField, extraData: i64 0)
+!716 = !DIDerivedType(tag: DW_TAG_member, name: "pml4_index", scope: !710, file: !699, line: 663, baseType: !528, size: 9, offset: 39, flags: DIFlagBitField, extraData: i64 0)
+!717 = !DIDerivedType(tag: DW_TAG_member, name: "pml5_index", scope: !710, file: !699, line: 664, baseType: !528, size: 9, offset: 48, flags: DIFlagBitField, extraData: i64 0)
+!718 = !DIDerivedType(tag: DW_TAG_member, name: "fields_2m", scope: !706, file: !699, line: 673, baseType: !719, size: 64)
+!719 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !706, file: !699, line: 666, size: 64, elements: !720)
+!720 = !{!721, !722, !723, !724, !725}
+!721 = !DIDerivedType(tag: DW_TAG_member, name: "page_offset", scope: !719, file: !699, line: 668, baseType: !528, size: 21, flags: DIFlagBitField, extraData: i64 0)
+!722 = !DIDerivedType(tag: DW_TAG_member, name: "pd_index", scope: !719, file: !699, line: 669, baseType: !528, size: 9, offset: 21, flags: DIFlagBitField, extraData: i64 0)
+!723 = !DIDerivedType(tag: DW_TAG_member, name: "pdpt_index", scope: !719, file: !699, line: 670, baseType: !528, size: 9, offset: 30, flags: DIFlagBitField, extraData: i64 0)
+!724 = !DIDerivedType(tag: DW_TAG_member, name: "pml4_index", scope: !719, file: !699, line: 671, baseType: !528, size: 9, offset: 39, flags: DIFlagBitField, extraData: i64 0)
+!725 = !DIDerivedType(tag: DW_TAG_member, name: "pml5_index", scope: !719, file: !699, line: 672, baseType: !528, size: 9, offset: 48, flags: DIFlagBitField, extraData: i64 0)
+!726 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_4k", scope: !706, file: !699, line: 680, baseType: !727, size: 64)
+!727 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !706, file: !699, line: 676, size: 64, elements: !728)
+!728 = !{!729, !730}
+!729 = !DIDerivedType(tag: DW_TAG_member, name: "page_offset", scope: !727, file: !699, line: 678, baseType: !528, size: 12, flags: DIFlagBitField, extraData: i64 0)
+!730 = !DIDerivedType(tag: DW_TAG_member, name: "idx", scope: !727, file: !699, line: 679, baseType: !528, size: 18, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!731 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_4k_in_2mb", scope: !706, file: !699, line: 686, baseType: !732, size: 64)
+!732 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !706, file: !699, line: 682, size: 64, elements: !733)
+!733 = !{!734, !735}
+!734 = !DIDerivedType(tag: DW_TAG_member, name: "page_offset", scope: !732, file: !699, line: 684, baseType: !528, size: 12, flags: DIFlagBitField, extraData: i64 0)
+!735 = !DIDerivedType(tag: DW_TAG_member, name: "idx", scope: !732, file: !699, line: 685, baseType: !528, size: 9, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!736 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_2m", scope: !706, file: !699, line: 692, baseType: !737, size: 64)
+!737 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !706, file: !699, line: 688, size: 64, elements: !738)
+!738 = !{!739, !740}
+!739 = !DIDerivedType(tag: DW_TAG_member, name: "page_offset", scope: !737, file: !699, line: 690, baseType: !528, size: 21, flags: DIFlagBitField, extraData: i64 0)
+!740 = !DIDerivedType(tag: DW_TAG_member, name: "idx", scope: !737, file: !699, line: 691, baseType: !528, size: 9, offset: 21, flags: DIFlagBitField, extraData: i64 0)
+!741 = !DIDerivedType(tag: DW_TAG_member, scope: !706, file: !699, line: 695, baseType: !742, size: 64)
+!742 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !706, file: !699, line: 695, size: 64, elements: !743)
+!743 = !{!744, !745}
+!744 = !DIDerivedType(tag: DW_TAG_member, name: "low_12_bits", scope: !742, file: !699, line: 697, baseType: !528, size: 12, flags: DIFlagBitField, extraData: i64 0)
+!745 = !DIDerivedType(tag: DW_TAG_member, name: "page_4k_num", scope: !742, file: !699, line: 698, baseType: !528, size: 40, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!746 = !DIDerivedType(tag: DW_TAG_member, scope: !706, file: !699, line: 700, baseType: !747, size: 64)
+!747 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !706, file: !699, line: 700, size: 64, elements: !748)
+!748 = !{!749, !750}
+!749 = !DIDerivedType(tag: DW_TAG_member, name: "low_21_bits", scope: !747, file: !699, line: 702, baseType: !528, size: 21, flags: DIFlagBitField, extraData: i64 0)
+!750 = !DIDerivedType(tag: DW_TAG_member, name: "page_2m_num", scope: !747, file: !699, line: 703, baseType: !528, size: 31, offset: 21, flags: DIFlagBitField, extraData: i64 0)
+!751 = !DIDerivedType(tag: DW_TAG_member, scope: !706, file: !699, line: 705, baseType: !752, size: 64)
+!752 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !706, file: !699, line: 705, size: 64, elements: !753)
+!753 = !{!754, !755}
+!754 = !DIDerivedType(tag: DW_TAG_member, name: "low_30_bits", scope: !752, file: !699, line: 707, baseType: !528, size: 30, flags: DIFlagBitField, extraData: i64 0)
+!755 = !DIDerivedType(tag: DW_TAG_member, name: "page_1g_num", scope: !752, file: !699, line: 708, baseType: !528, size: 22, offset: 30, flags: DIFlagBitField, extraData: i64 0)
+!756 = !DIDerivedType(tag: DW_TAG_member, scope: !706, file: !699, line: 710, baseType: !757, size: 64)
+!757 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !706, file: !699, line: 710, size: 64, elements: !758)
+!758 = !{!759, !760, !761, !762}
+!759 = !DIDerivedType(tag: DW_TAG_member, name: "event_filtering", scope: !757, file: !699, line: 712, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!760 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_11_1", scope: !757, file: !699, line: 713, baseType: !528, size: 11, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!761 = !DIDerivedType(tag: DW_TAG_member, name: "tdr_hpa_51_12", scope: !757, file: !699, line: 714, baseType: !528, size: 40, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!762 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_63_52", scope: !757, file: !699, line: 715, baseType: !528, size: 12, offset: 52, flags: DIFlagBitField, extraData: i64 0)
+!763 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !700, file: !699, line: 722, baseType: !528, size: 64)
+!764 = !DIDerivedType(tag: DW_TAG_member, name: "raw_void", scope: !700, file: !699, line: 723, baseType: !765, size: 64)
+!765 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: null, size: 64)
+!766 = !DIDerivedType(tag: DW_TAG_member, name: "gpa_list_info", scope: !625, file: !515, line: 251, baseType: !767, size: 64, offset: 320)
+!767 = !DIDerivedType(tag: DW_TAG_typedef, name: "gpa_list_info_t", file: !54, line: 1065, baseType: !768)
+!768 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "gpa_list_info_u", file: !54, line: 1054, size: 64, elements: !769)
+!769 = !{!770, !778}
+!770 = !DIDerivedType(tag: DW_TAG_member, scope: !768, file: !54, line: 1056, baseType: !771, size: 64)
+!771 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !768, file: !54, line: 1056, size: 64, elements: !772)
+!772 = !{!773, !774, !775, !776, !777}
+!773 = !DIDerivedType(tag: DW_TAG_member, name: "format", scope: !771, file: !54, line: 1058, baseType: !528, size: 3, flags: DIFlagBitField, extraData: i64 0)
+!774 = !DIDerivedType(tag: DW_TAG_member, name: "first_entry", scope: !771, file: !54, line: 1059, baseType: !528, size: 9, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!775 = !DIDerivedType(tag: DW_TAG_member, name: "hpa", scope: !771, file: !54, line: 1060, baseType: !528, size: 40, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!776 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !771, file: !54, line: 1061, baseType: !528, size: 3, offset: 52, flags: DIFlagBitField, extraData: i64 0)
+!777 = !DIDerivedType(tag: DW_TAG_member, name: "last_entry", scope: !771, file: !54, line: 1062, baseType: !528, size: 9, offset: 55, flags: DIFlagBitField, extraData: i64 0)
+!778 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !768, file: !54, line: 1064, baseType: !528, size: 64)
+!779 = !DIDerivedType(tag: DW_TAG_member, name: "mig_buff_list_pa", scope: !625, file: !515, line: 253, baseType: !698, size: 64, offset: 384)
+!780 = !DIDerivedType(tag: DW_TAG_member, name: "mac_list_pa", scope: !625, file: !515, line: 254, baseType: !781, size: 128, offset: 448)
+!781 = !DICompositeType(tag: DW_TAG_array_type, baseType: !698, size: 128, elements: !782)
+!782 = !{!783}
+!783 = !DISubrange(count: 2)
+!784 = !DIDerivedType(tag: DW_TAG_member, name: "new_page_list_pa", scope: !625, file: !515, line: 255, baseType: !698, size: 64, offset: 576)
+!785 = !DIDerivedType(tag: DW_TAG_member, name: "status", scope: !625, file: !515, line: 261, baseType: !786, size: 64, offset: 640)
+!786 = !DIDerivedType(tag: DW_TAG_typedef, name: "api_error_type", file: !54, line: 906, baseType: !528)
+!787 = !DIDerivedType(tag: DW_TAG_member, name: "extended_err_info", scope: !625, file: !515, line: 262, baseType: !788, size: 128, offset: 704)
+!788 = !DICompositeType(tag: DW_TAG_array_type, baseType: !528, size: 128, elements: !782)
+!789 = !DIDerivedType(tag: DW_TAG_member, name: "l2_attr_list_pa", scope: !625, file: !515, line: 264, baseType: !698, size: 64, offset: 832)
+!790 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_2", scope: !625, file: !515, line: 265, baseType: !570, size: 128, offset: 896)
+!791 = !DIDerivedType(tag: DW_TAG_member, name: "mbmd", scope: !614, file: !515, line: 268, baseType: !531, size: 384, offset: 1216)
+!792 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_3", scope: !614, file: !515, line: 269, baseType: !793, size: 448, offset: 1600)
+!793 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 448, elements: !794)
+!794 = !{!795}
+!795 = !DISubrange(count: 56)
+!796 = !DIDerivedType(tag: DW_TAG_member, name: "aes_gcm_context", scope: !614, file: !515, line: 270, baseType: !797, size: 28704, align: 2048, offset: 2048)
+!797 = !DIDerivedType(tag: DW_TAG_typedef, name: "aes_gcm_ctx_t", file: !798, line: 52, baseType: !799)
+!798 = !DIFile(filename: "src/common/crypto/aes_gcm.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "eee0b70fffe30972d21056da99bc93e0")
+!799 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "aes_gcm_ctx_s", file: !798, line: 48, size: 28704, elements: !800)
+!800 = !{!801, !803}
+!801 = !DIDerivedType(tag: DW_TAG_member, name: "size", scope: !799, file: !798, line: 50, baseType: !802, size: 32)
+!802 = !DIBasicType(name: "int", size: 32, encoding: DW_ATE_signed)
+!803 = !DIDerivedType(tag: DW_TAG_member, name: "state", scope: !799, file: !798, line: 51, baseType: !804, size: 28672, offset: 32)
+!804 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 28672, elements: !805)
+!805 = !{!806}
+!806 = !DISubrange(count: 3584)
+!807 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !527, size: 64)
+!808 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !809, size: 64)
+!809 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdx_module_global_t", file: !810, line: 428, baseType: !811)
+!810 = !DIFile(filename: "src/common/data_structures/tdx_global_data.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "466423a8680acb3c9e2f75ab14459634")
+!811 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdx_module_global_s", file: !810, line: 291, size: 655360, elements: !812)
+!812 = !{!813, !859, !869, !870, !871, !872, !873, !874, !875, !876, !877, !878, !879, !880, !881, !882, !883, !884, !896, !897, !898, !899, !900, !905, !919, !929, !951, !952, !1316, !1317, !1318, !1319, !1320, !1321, !1322, !1323, !1324, !1325, !1326, !1327, !1328, !1329, !1330, !1331, !1332, !1333, !1334, !1335, !1336, !1337, !1346, !1380, !1381, !1382, !1392, !1393, !1416, !1417, !1418, !1419, !1420, !1421, !1422, !1438, !1439, !1458, !1473, !1474, !1475, !1476, !1484, !1500, !1510, !1511, !1512, !1513, !1514, !1515, !1516}
+!813 = !DIDerivedType(tag: DW_TAG_member, name: "xbuf", scope: !811, file: !810, line: 293, baseType: !814, size: 32768, align: 32768)
+!814 = !DIDerivedType(tag: DW_TAG_typedef, name: "xsave_area_no_extended_t", file: !810, line: 72, baseType: !815)
+!815 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "xsave_area_no_extended_s", file: !810, line: 68, size: 32768, align: 32768, elements: !816)
+!816 = !{!817, !849}
+!817 = !DIDerivedType(tag: DW_TAG_member, name: "legacy_region", scope: !815, file: !810, line: 70, baseType: !818, size: 4096)
+!818 = !DIDerivedType(tag: DW_TAG_typedef, name: "xsave_legacy_region_t", file: !699, line: 744, baseType: !819)
+!819 = distinct !DICompositeType(tag: DW_TAG_structure_type, file: !699, line: 730, size: 4096, elements: !820)
+!820 = !{!821, !822, !823, !824, !825, !826, !827, !828, !829, !830, !843, !845}
+!821 = !DIDerivedType(tag: DW_TAG_member, name: "fcw", scope: !819, file: !699, line: 732, baseType: !548, size: 16)
+!822 = !DIDerivedType(tag: DW_TAG_member, name: "fsw", scope: !819, file: !699, line: 733, baseType: !548, size: 16, offset: 16)
+!823 = !DIDerivedType(tag: DW_TAG_member, name: "ftw", scope: !819, file: !699, line: 734, baseType: !527, size: 8, offset: 32)
+!824 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !819, file: !699, line: 735, baseType: !527, size: 8, offset: 40)
+!825 = !DIDerivedType(tag: DW_TAG_member, name: "fop", scope: !819, file: !699, line: 736, baseType: !548, size: 16, offset: 48)
+!826 = !DIDerivedType(tag: DW_TAG_member, name: "fip", scope: !819, file: !699, line: 737, baseType: !528, size: 64, offset: 64)
+!827 = !DIDerivedType(tag: DW_TAG_member, name: "fdp", scope: !819, file: !699, line: 738, baseType: !528, size: 64, offset: 128)
+!828 = !DIDerivedType(tag: DW_TAG_member, name: "mxcsr", scope: !819, file: !699, line: 739, baseType: !555, size: 32, offset: 192)
+!829 = !DIDerivedType(tag: DW_TAG_member, name: "mxcsr_mask", scope: !819, file: !699, line: 740, baseType: !555, size: 32, offset: 224)
+!830 = !DIDerivedType(tag: DW_TAG_member, name: "st_mm", scope: !819, file: !699, line: 741, baseType: !831, size: 1024, align: 128, offset: 256)
+!831 = !DICompositeType(tag: DW_TAG_array_type, baseType: !832, size: 1024, align: 128, elements: !841)
+!832 = !DIDerivedType(tag: DW_TAG_typedef, name: "uint128_t", file: !526, line: 97, baseType: !833)
+!833 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !526, line: 92, size: 128, align: 128, elements: !834)
+!834 = !{!835, !836, !840}
+!835 = !DIDerivedType(tag: DW_TAG_member, name: "qwords", scope: !833, file: !526, line: 94, baseType: !788, size: 128)
+!836 = !DIDerivedType(tag: DW_TAG_member, name: "dwords", scope: !833, file: !526, line: 95, baseType: !837, size: 128)
+!837 = !DICompositeType(tag: DW_TAG_array_type, baseType: !555, size: 128, elements: !838)
+!838 = !{!839}
+!839 = !DISubrange(count: 4)
+!840 = !DIDerivedType(tag: DW_TAG_member, name: "bytes", scope: !833, file: !526, line: 96, baseType: !570, size: 128)
+!841 = !{!842}
+!842 = !DISubrange(count: 8)
+!843 = !DIDerivedType(tag: DW_TAG_member, name: "xmm", scope: !819, file: !699, line: 742, baseType: !844, size: 2048, align: 128, offset: 1280)
+!844 = !DICompositeType(tag: DW_TAG_array_type, baseType: !832, size: 2048, align: 128, elements: !571)
+!845 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !819, file: !699, line: 743, baseType: !846, size: 768, offset: 3328)
+!846 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 768, elements: !847)
+!847 = !{!848}
+!848 = !DISubrange(count: 96)
+!849 = !DIDerivedType(tag: DW_TAG_member, name: "xsave_header", scope: !815, file: !810, line: 71, baseType: !850, size: 512, offset: 4096)
+!850 = !DIDerivedType(tag: DW_TAG_typedef, name: "xsave_header_t", file: !699, line: 752, baseType: !851)
+!851 = distinct !DICompositeType(tag: DW_TAG_structure_type, file: !699, line: 747, size: 512, elements: !852)
+!852 = !{!853, !854, !855}
+!853 = !DIDerivedType(tag: DW_TAG_member, name: "xstate_bv", scope: !851, file: !699, line: 749, baseType: !528, size: 64)
+!854 = !DIDerivedType(tag: DW_TAG_member, name: "xcomp_bv", scope: !851, file: !699, line: 750, baseType: !528, size: 64, offset: 64)
+!855 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !851, file: !699, line: 751, baseType: !856, size: 384, offset: 128)
+!856 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 384, elements: !857)
+!857 = !{!858}
+!858 = !DISubrange(count: 48)
+!859 = !DIDerivedType(tag: DW_TAG_member, name: "global_lock", scope: !811, file: !810, line: 298, baseType: !860, size: 16, align: 16, offset: 32768)
+!860 = !DIDerivedType(tag: DW_TAG_typedef, name: "sharex_lock_t", file: !28, line: 129, baseType: !861)
+!861 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !28, line: 121, size: 16, align: 16, elements: !862)
+!862 = !{!863, !868}
+!863 = !DIDerivedType(tag: DW_TAG_member, scope: !861, file: !28, line: 123, baseType: !864, size: 16)
+!864 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !861, file: !28, line: 123, size: 16, elements: !865)
+!865 = !{!866, !867}
+!866 = !DIDerivedType(tag: DW_TAG_member, name: "exclusive", scope: !864, file: !28, line: 125, baseType: !548, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!867 = !DIDerivedType(tag: DW_TAG_member, name: "counter", scope: !864, file: !28, line: 126, baseType: !548, size: 15, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!868 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !861, file: !28, line: 128, baseType: !548, size: 16)
+!869 = !DIDerivedType(tag: DW_TAG_member, name: "hkid_mask", scope: !811, file: !810, line: 299, baseType: !528, size: 64, offset: 32832)
+!870 = !DIDerivedType(tag: DW_TAG_member, name: "hkid_start_bit", scope: !811, file: !810, line: 300, baseType: !555, size: 32, offset: 32896)
+!871 = !DIDerivedType(tag: DW_TAG_member, name: "max_pa", scope: !811, file: !810, line: 301, baseType: !528, size: 64, offset: 32960)
+!872 = !DIDerivedType(tag: DW_TAG_member, name: "num_of_lps", scope: !811, file: !810, line: 302, baseType: !555, size: 32, offset: 33024)
+!873 = !DIDerivedType(tag: DW_TAG_member, name: "num_of_pkgs", scope: !811, file: !810, line: 303, baseType: !555, size: 32, offset: 33056)
+!874 = !DIDerivedType(tag: DW_TAG_member, name: "num_of_init_lps", scope: !811, file: !810, line: 304, baseType: !555, size: 32, offset: 33088)
+!875 = !DIDerivedType(tag: DW_TAG_member, name: "num_of_init_pkgs", scope: !811, file: !810, line: 305, baseType: !555, size: 32, offset: 33120)
+!876 = !DIDerivedType(tag: DW_TAG_member, name: "module_hv", scope: !811, file: !810, line: 306, baseType: !548, size: 16, offset: 33152)
+!877 = !DIDerivedType(tag: DW_TAG_member, name: "min_update_hv", scope: !811, file: !810, line: 307, baseType: !548, size: 16, offset: 33168)
+!878 = !DIDerivedType(tag: DW_TAG_member, name: "no_downgrade", scope: !811, file: !810, line: 308, baseType: !548, size: 16, offset: 33184)
+!879 = !DIDerivedType(tag: DW_TAG_member, name: "num_handoff_pages", scope: !811, file: !810, line: 309, baseType: !548, size: 16, offset: 33200)
+!880 = !DIDerivedType(tag: DW_TAG_member, name: "update_compatibility", scope: !811, file: !810, line: 310, baseType: !525, size: 8, offset: 33216)
+!881 = !DIDerivedType(tag: DW_TAG_member, name: "td_build_count", scope: !811, file: !810, line: 311, baseType: !548, size: 16, offset: 33232)
+!882 = !DIDerivedType(tag: DW_TAG_member, name: "mig_interrupted_count", scope: !811, file: !810, line: 312, baseType: !548, size: 16, offset: 33248)
+!883 = !DIDerivedType(tag: DW_TAG_member, name: "seamdb_index", scope: !811, file: !810, line: 316, baseType: !528, size: 64, offset: 33280)
+!884 = !DIDerivedType(tag: DW_TAG_member, name: "seamdb_nonce", scope: !811, file: !810, line: 317, baseType: !885, size: 256, offset: 33344)
+!885 = !DIDerivedType(tag: DW_TAG_typedef, name: "uint256_t", file: !526, line: 105, baseType: !886)
+!886 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !526, line: 100, size: 256, elements: !887)
+!887 = !{!888, !890, !892}
+!888 = !DIDerivedType(tag: DW_TAG_member, name: "qwords", scope: !886, file: !526, line: 102, baseType: !889, size: 256)
+!889 = !DICompositeType(tag: DW_TAG_array_type, baseType: !528, size: 256, elements: !838)
+!890 = !DIDerivedType(tag: DW_TAG_member, name: "dwords", scope: !886, file: !526, line: 103, baseType: !891, size: 256)
+!891 = !DICompositeType(tag: DW_TAG_array_type, baseType: !555, size: 256, elements: !841)
+!892 = !DIDerivedType(tag: DW_TAG_member, name: "bytes", scope: !886, file: !526, line: 104, baseType: !893, size: 256)
+!893 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 256, elements: !894)
+!894 = !{!895}
+!895 = !DISubrange(count: 32)
+!896 = !DIDerivedType(tag: DW_TAG_member, name: "pkg_config_bitmap", scope: !811, file: !810, line: 322, baseType: !555, size: 32, offset: 33600)
+!897 = !DIDerivedType(tag: DW_TAG_member, name: "private_hkid_min", scope: !811, file: !810, line: 323, baseType: !555, size: 32, offset: 33632)
+!898 = !DIDerivedType(tag: DW_TAG_member, name: "private_hkid_max", scope: !811, file: !810, line: 324, baseType: !555, size: 32, offset: 33664)
+!899 = !DIDerivedType(tag: DW_TAG_member, name: "hkid", scope: !811, file: !810, line: 325, baseType: !548, size: 16, offset: 33696)
+!900 = !DIDerivedType(tag: DW_TAG_member, name: "global_state", scope: !811, file: !810, line: 326, baseType: !901, size: 8, offset: 33712)
+!901 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdx_global_state_t", file: !810, line: 86, baseType: !902)
+!902 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdx_global_state_s", file: !810, line: 79, size: 8, elements: !903)
+!903 = !{!904}
+!904 = !DIDerivedType(tag: DW_TAG_member, name: "sys_state", scope: !902, file: !810, line: 85, baseType: !527, size: 8)
+!905 = !DIDerivedType(tag: DW_TAG_member, name: "kot", scope: !811, file: !810, line: 327, baseType: !906, size: 131104, offset: 33728)
+!906 = !DIDerivedType(tag: DW_TAG_typedef, name: "kot_t", file: !810, line: 132, baseType: !907)
+!907 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "kot_s", file: !810, line: 125, size: 131104, elements: !908)
+!908 = !{!909, !910}
+!909 = !DIDerivedType(tag: DW_TAG_member, name: "lock", scope: !907, file: !810, line: 127, baseType: !860, size: 16, align: 16)
+!910 = !DIDerivedType(tag: DW_TAG_member, name: "entries", scope: !907, file: !810, line: 131, baseType: !911, size: 131072, align: 32, offset: 32)
+!911 = !DICompositeType(tag: DW_TAG_array_type, baseType: !912, size: 131072, align: 32, elements: !917)
+!912 = !DIDerivedType(tag: DW_TAG_typedef, name: "kot_entry_t", file: !810, line: 115, baseType: !913)
+!913 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "kot_entry_s", file: !810, line: 102, size: 64, align: 32, elements: !914)
+!914 = !{!915, !916}
+!915 = !DIDerivedType(tag: DW_TAG_member, name: "wbinvd_bitmap", scope: !913, file: !810, line: 109, baseType: !555, size: 32)
+!916 = !DIDerivedType(tag: DW_TAG_member, name: "state", scope: !913, file: !810, line: 114, baseType: !527, size: 8, offset: 32)
+!917 = !{!918}
+!918 = !DISubrange(count: 2048)
+!919 = !DIDerivedType(tag: DW_TAG_member, name: "wbt_entries", scope: !811, file: !810, line: 328, baseType: !920, size: 132096, align: 64, offset: 164864)
+!920 = !DICompositeType(tag: DW_TAG_array_type, baseType: !921, size: 132096, align: 64, elements: !841)
+!921 = !DIDerivedType(tag: DW_TAG_typedef, name: "wbt_entry_t", file: !810, line: 155, baseType: !922)
+!922 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "wbt_entry_s", file: !810, line: 141, size: 16512, align: 64, elements: !923)
+!923 = !{!924, !925, !927}
+!924 = !DIDerivedType(tag: DW_TAG_member, name: "intr_point", scope: !922, file: !810, line: 143, baseType: !528, size: 64)
+!925 = !DIDerivedType(tag: DW_TAG_member, name: "hkid_flushed", scope: !922, file: !810, line: 153, baseType: !926, size: 16384, offset: 64)
+!926 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 16384, elements: !917)
+!927 = !DIDerivedType(tag: DW_TAG_member, name: "entry_lock", scope: !922, file: !810, line: 154, baseType: !928, size: 8, offset: 16448)
+!928 = !DIDerivedType(tag: DW_TAG_typedef, name: "mutex_lock_t", file: !28, line: 53, baseType: !527)
+!929 = !DIDerivedType(tag: DW_TAG_member, name: "tdmr_table", scope: !811, file: !810, line: 329, baseType: !930, size: 163840, align: 64, offset: 296960)
+!930 = !DICompositeType(tag: DW_TAG_array_type, baseType: !931, size: 163840, align: 64, elements: !949)
+!931 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdmr_entry_t", file: !810, line: 186, baseType: !932)
+!932 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdmr_entry_s", file: !810, line: 165, size: 2560, align: 64, elements: !933)
+!933 = !{!934, !935, !936, !937, !938, !939, !940, !941, !942, !948}
+!934 = !DIDerivedType(tag: DW_TAG_member, name: "base", scope: !932, file: !810, line: 167, baseType: !528, size: 64)
+!935 = !DIDerivedType(tag: DW_TAG_member, name: "size", scope: !932, file: !810, line: 168, baseType: !528, size: 64, offset: 64)
+!936 = !DIDerivedType(tag: DW_TAG_member, name: "last_initialized", scope: !932, file: !810, line: 169, baseType: !528, size: 64, offset: 128)
+!937 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_1g_base", scope: !932, file: !810, line: 171, baseType: !528, size: 64, offset: 192)
+!938 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_2m_base", scope: !932, file: !810, line: 172, baseType: !528, size: 64, offset: 256)
+!939 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_4k_base", scope: !932, file: !810, line: 173, baseType: !528, size: 64, offset: 320)
+!940 = !DIDerivedType(tag: DW_TAG_member, name: "num_of_pamt_blocks", scope: !932, file: !810, line: 175, baseType: !555, size: 32, offset: 384)
+!941 = !DIDerivedType(tag: DW_TAG_member, name: "num_of_rsvd_areas", scope: !932, file: !810, line: 176, baseType: !555, size: 32, offset: 416)
+!942 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd_areas", scope: !932, file: !810, line: 183, baseType: !943, size: 2048, offset: 448)
+!943 = !DICompositeType(tag: DW_TAG_array_type, baseType: !944, size: 2048, elements: !571)
+!944 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !932, file: !810, line: 178, size: 128, elements: !945)
+!945 = !{!946, !947}
+!946 = !DIDerivedType(tag: DW_TAG_member, name: "offset", scope: !944, file: !810, line: 181, baseType: !528, size: 64)
+!947 = !DIDerivedType(tag: DW_TAG_member, name: "size", scope: !944, file: !810, line: 182, baseType: !528, size: 64, offset: 64)
+!948 = !DIDerivedType(tag: DW_TAG_member, name: "lock", scope: !932, file: !810, line: 185, baseType: !928, size: 8, offset: 2496)
+!949 = !{!950}
+!950 = !DISubrange(count: 64)
+!951 = !DIDerivedType(tag: DW_TAG_member, name: "num_of_tdmr_entries", scope: !811, file: !810, line: 330, baseType: !555, size: 32, offset: 460800)
+!952 = !DIDerivedType(tag: DW_TAG_member, name: "plt_common_config", scope: !811, file: !810, line: 331, baseType: !953, size: 1792, offset: 460864)
+!953 = !DIDerivedType(tag: DW_TAG_typedef, name: "platform_common_config_t", file: !810, line: 224, baseType: !954)
+!954 = distinct !DICompositeType(tag: DW_TAG_structure_type, file: !810, line: 188, size: 1792, elements: !955)
+!955 = !{!956, !957, !987, !1006, !1029, !1039, !1040, !1041, !1059, !1060, !1061, !1062, !1085, !1086, !1123, !1124, !1143, !1177, !1187, !1205, !1223, !1242, !1266, !1276, !1286}
+!956 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_tsc_adjust", scope: !954, file: !810, line: 191, baseType: !528, size: 64)
+!957 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_misc_enable", scope: !954, file: !810, line: 193, baseType: !958, size: 64, offset: 64)
+!958 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_misc_enable_t", file: !959, line: 542, baseType: !960)
+!959 = !DIFile(filename: "src/common/x86_defs/msr_defs.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "43bad8c9950ac11b71133d6c117fcf36")
+!960 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "ia32_misc_enable_u", file: !959, line: 515, size: 64, elements: !961)
+!961 = !{!962, !986}
+!962 = !DIDerivedType(tag: DW_TAG_member, scope: !960, file: !959, line: 517, baseType: !963, size: 64)
+!963 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !960, file: !959, line: 517, size: 64, elements: !964)
+!964 = !{!965, !966, !967, !968, !969, !970, !971, !972, !973, !974, !975, !976, !977, !978, !979, !980, !981, !982, !983, !984, !985}
+!965 = !DIDerivedType(tag: DW_TAG_member, name: "fast_strings", scope: !963, file: !959, line: 519, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!966 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd1", scope: !963, file: !959, line: 520, baseType: !528, size: 2, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!967 = !DIDerivedType(tag: DW_TAG_member, name: "thermal_monitor_enable", scope: !963, file: !959, line: 521, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!968 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd2", scope: !963, file: !959, line: 522, baseType: !528, size: 3, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!969 = !DIDerivedType(tag: DW_TAG_member, name: "perfmon_available", scope: !963, file: !959, line: 523, baseType: !528, size: 1, offset: 7, flags: DIFlagBitField, extraData: i64 0)
+!970 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd3", scope: !963, file: !959, line: 524, baseType: !528, size: 3, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!971 = !DIDerivedType(tag: DW_TAG_member, name: "bts_unavailable", scope: !963, file: !959, line: 525, baseType: !528, size: 1, offset: 11, flags: DIFlagBitField, extraData: i64 0)
+!972 = !DIDerivedType(tag: DW_TAG_member, name: "pebs_unavailable", scope: !963, file: !959, line: 526, baseType: !528, size: 1, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!973 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd4", scope: !963, file: !959, line: 527, baseType: !528, size: 3, offset: 13, flags: DIFlagBitField, extraData: i64 0)
+!974 = !DIDerivedType(tag: DW_TAG_member, name: "est", scope: !963, file: !959, line: 528, baseType: !528, size: 1, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!975 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd5", scope: !963, file: !959, line: 529, baseType: !528, size: 1, offset: 17, flags: DIFlagBitField, extraData: i64 0)
+!976 = !DIDerivedType(tag: DW_TAG_member, name: "enable_monitor_fsm", scope: !963, file: !959, line: 530, baseType: !528, size: 1, offset: 18, flags: DIFlagBitField, extraData: i64 0)
+!977 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd6", scope: !963, file: !959, line: 531, baseType: !528, size: 3, offset: 19, flags: DIFlagBitField, extraData: i64 0)
+!978 = !DIDerivedType(tag: DW_TAG_member, name: "limit_cpuid_maxval", scope: !963, file: !959, line: 532, baseType: !528, size: 1, offset: 22, flags: DIFlagBitField, extraData: i64 0)
+!979 = !DIDerivedType(tag: DW_TAG_member, name: "tpr_message_disable", scope: !963, file: !959, line: 533, baseType: !528, size: 1, offset: 23, flags: DIFlagBitField, extraData: i64 0)
+!980 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd7", scope: !963, file: !959, line: 534, baseType: !528, size: 3, offset: 24, flags: DIFlagBitField, extraData: i64 0)
+!981 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd8", scope: !963, file: !959, line: 535, baseType: !528, size: 1, offset: 27, flags: DIFlagBitField, extraData: i64 0)
+!982 = !DIDerivedType(tag: DW_TAG_member, name: "hlep_disable", scope: !963, file: !959, line: 536, baseType: !528, size: 1, offset: 28, flags: DIFlagBitField, extraData: i64 0)
+!983 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd9", scope: !963, file: !959, line: 537, baseType: !528, size: 9, offset: 29, flags: DIFlagBitField, extraData: i64 0)
+!984 = !DIDerivedType(tag: DW_TAG_member, name: "turbo_mode_disable", scope: !963, file: !959, line: 538, baseType: !528, size: 1, offset: 38, flags: DIFlagBitField, extraData: i64 0)
+!985 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd10", scope: !963, file: !959, line: 539, baseType: !528, size: 25, offset: 39, flags: DIFlagBitField, extraData: i64 0)
+!986 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !960, file: !959, line: 541, baseType: !528, size: 64)
+!987 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_basic", scope: !954, file: !810, line: 195, baseType: !988, size: 64, offset: 128)
+!988 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_vmx_basic_t", file: !959, line: 335, baseType: !989)
+!989 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !959, line: 318, size: 64, elements: !990)
+!990 = !{!991, !1005}
+!991 = !DIDerivedType(tag: DW_TAG_member, scope: !989, file: !959, line: 320, baseType: !992, size: 64)
+!992 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !989, file: !959, line: 320, size: 64, elements: !993)
+!993 = !{!994, !995, !996, !997, !998, !999, !1000, !1001, !1002, !1003, !1004}
+!994 = !DIDerivedType(tag: DW_TAG_member, name: "vmcs_revision_id", scope: !992, file: !959, line: 322, baseType: !528, size: 31, flags: DIFlagBitField, extraData: i64 0)
+!995 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd0", scope: !992, file: !959, line: 323, baseType: !528, size: 1, offset: 31, flags: DIFlagBitField, extraData: i64 0)
+!996 = !DIDerivedType(tag: DW_TAG_member, name: "vmcs_region_size", scope: !992, file: !959, line: 324, baseType: !528, size: 13, offset: 32, flags: DIFlagBitField, extraData: i64 0)
+!997 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd1", scope: !992, file: !959, line: 325, baseType: !528, size: 3, offset: 45, flags: DIFlagBitField, extraData: i64 0)
+!998 = !DIDerivedType(tag: DW_TAG_member, name: "vmxon_pa_width", scope: !992, file: !959, line: 326, baseType: !528, size: 1, offset: 48, flags: DIFlagBitField, extraData: i64 0)
+!999 = !DIDerivedType(tag: DW_TAG_member, name: "dual_monitor", scope: !992, file: !959, line: 327, baseType: !528, size: 1, offset: 49, flags: DIFlagBitField, extraData: i64 0)
+!1000 = !DIDerivedType(tag: DW_TAG_member, name: "vmcs_mt", scope: !992, file: !959, line: 328, baseType: !528, size: 4, offset: 50, flags: DIFlagBitField, extraData: i64 0)
+!1001 = !DIDerivedType(tag: DW_TAG_member, name: "vmexit_info_on_ios", scope: !992, file: !959, line: 329, baseType: !528, size: 1, offset: 54, flags: DIFlagBitField, extraData: i64 0)
+!1002 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_true_available", scope: !992, file: !959, line: 330, baseType: !528, size: 1, offset: 55, flags: DIFlagBitField, extraData: i64 0)
+!1003 = !DIDerivedType(tag: DW_TAG_member, name: "voe_without_err_code", scope: !992, file: !959, line: 331, baseType: !528, size: 1, offset: 56, flags: DIFlagBitField, extraData: i64 0)
+!1004 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd2", scope: !992, file: !959, line: 332, baseType: !528, size: 7, offset: 57, flags: DIFlagBitField, extraData: i64 0)
+!1005 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !989, file: !959, line: 334, baseType: !528, size: 64)
+!1006 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_misc", scope: !954, file: !810, line: 196, baseType: !1007, size: 64, offset: 192)
+!1007 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_vmx_misc_t", file: !959, line: 359, baseType: !1008)
+!1008 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "ia32_vmx_misc_u", file: !959, line: 338, size: 64, elements: !1009)
+!1009 = !{!1010, !1028}
+!1010 = !DIDerivedType(tag: DW_TAG_member, scope: !1008, file: !959, line: 340, baseType: !1011, size: 64)
+!1011 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1008, file: !959, line: 340, size: 64, elements: !1012)
+!1012 = !{!1013, !1014, !1015, !1016, !1017, !1018, !1019, !1020, !1021, !1022, !1023, !1024, !1025, !1026, !1027}
+!1013 = !DIDerivedType(tag: DW_TAG_member, name: "vmx_preempt_timer_tsc_factor", scope: !1011, file: !959, line: 342, baseType: !528, size: 5, flags: DIFlagBitField, extraData: i64 0)
+!1014 = !DIDerivedType(tag: DW_TAG_member, name: "unrestricted_guest", scope: !1011, file: !959, line: 343, baseType: !528, size: 1, offset: 5, flags: DIFlagBitField, extraData: i64 0)
+!1015 = !DIDerivedType(tag: DW_TAG_member, name: "activity_hlt", scope: !1011, file: !959, line: 344, baseType: !528, size: 1, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!1016 = !DIDerivedType(tag: DW_TAG_member, name: "activity_shutdown", scope: !1011, file: !959, line: 345, baseType: !528, size: 1, offset: 7, flags: DIFlagBitField, extraData: i64 0)
+!1017 = !DIDerivedType(tag: DW_TAG_member, name: "activity_wait_for_sipi", scope: !1011, file: !959, line: 346, baseType: !528, size: 1, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!1018 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1011, file: !959, line: 347, baseType: !528, size: 5, offset: 9, flags: DIFlagBitField, extraData: i64 0)
+!1019 = !DIDerivedType(tag: DW_TAG_member, name: "pt_in_vmx", scope: !1011, file: !959, line: 348, baseType: !528, size: 1, offset: 14, flags: DIFlagBitField, extraData: i64 0)
+!1020 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_smbase", scope: !1011, file: !959, line: 349, baseType: !528, size: 1, offset: 15, flags: DIFlagBitField, extraData: i64 0)
+!1021 = !DIDerivedType(tag: DW_TAG_member, name: "max_cr3_targets", scope: !1011, file: !959, line: 350, baseType: !528, size: 9, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!1022 = !DIDerivedType(tag: DW_TAG_member, name: "max_msr_list_size", scope: !1011, file: !959, line: 351, baseType: !528, size: 3, offset: 25, flags: DIFlagBitField, extraData: i64 0)
+!1023 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_smm_monitor_ctl", scope: !1011, file: !959, line: 352, baseType: !528, size: 1, offset: 28, flags: DIFlagBitField, extraData: i64 0)
+!1024 = !DIDerivedType(tag: DW_TAG_member, name: "vmwrite_any_vmcs_field", scope: !1011, file: !959, line: 353, baseType: !528, size: 1, offset: 29, flags: DIFlagBitField, extraData: i64 0)
+!1025 = !DIDerivedType(tag: DW_TAG_member, name: "voe_with_0_instr_length", scope: !1011, file: !959, line: 354, baseType: !528, size: 1, offset: 30, flags: DIFlagBitField, extraData: i64 0)
+!1026 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1011, file: !959, line: 355, baseType: !528, size: 1, offset: 31, flags: DIFlagBitField, extraData: i64 0)
+!1027 = !DIDerivedType(tag: DW_TAG_member, name: "mseg_rev_id", scope: !1011, file: !959, line: 356, baseType: !528, size: 32, offset: 32, flags: DIFlagBitField, extraData: i64 0)
+!1028 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1008, file: !959, line: 358, baseType: !528, size: 64)
+!1029 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_true_pinbased_ctls", scope: !954, file: !810, line: 197, baseType: !1030, size: 64, offset: 256)
+!1030 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_vmx_allowed_bits_t", file: !959, line: 408, baseType: !1031)
+!1031 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !959, line: 400, size: 64, elements: !1032)
+!1032 = !{!1033, !1038}
+!1033 = !DIDerivedType(tag: DW_TAG_member, scope: !1031, file: !959, line: 402, baseType: !1034, size: 64)
+!1034 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1031, file: !959, line: 402, size: 64, elements: !1035)
+!1035 = !{!1036, !1037}
+!1036 = !DIDerivedType(tag: DW_TAG_member, name: "not_allowed0", scope: !1034, file: !959, line: 404, baseType: !555, size: 32)
+!1037 = !DIDerivedType(tag: DW_TAG_member, name: "allowed1", scope: !1034, file: !959, line: 405, baseType: !555, size: 32, offset: 32)
+!1038 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1031, file: !959, line: 407, baseType: !528, size: 64)
+!1039 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_true_procbased_ctls", scope: !954, file: !810, line: 198, baseType: !1030, size: 64, offset: 320)
+!1040 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_procbased_ctls2", scope: !954, file: !810, line: 199, baseType: !1030, size: 64, offset: 384)
+!1041 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_procbased_ctls3", scope: !954, file: !810, line: 200, baseType: !1042, size: 64, offset: 448)
+!1042 = !DIDerivedType(tag: DW_TAG_typedef, name: "vmx_procbased_ctls3_t", file: !1043, line: 578, baseType: !1044)
+!1043 = !DIFile(filename: "src/common/x86_defs/vmcs_defs.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "7b57810abfb2d37396870f10ec301a0f")
+!1044 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !1043, line: 563, size: 64, elements: !1045)
+!1045 = !{!1046, !1058}
+!1046 = !DIDerivedType(tag: DW_TAG_member, scope: !1044, file: !1043, line: 565, baseType: !1047, size: 64)
+!1047 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1044, file: !1043, line: 565, size: 64, elements: !1048)
+!1048 = !{!1049, !1050, !1051, !1052, !1053, !1054, !1055, !1056, !1057}
+!1049 = !DIDerivedType(tag: DW_TAG_member, name: "loadiwkey_exiting", scope: !1047, file: !1043, line: 567, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1050 = !DIDerivedType(tag: DW_TAG_member, name: "enable_hlat", scope: !1047, file: !1043, line: 568, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1051 = !DIDerivedType(tag: DW_TAG_member, name: "ept_paging_write_control", scope: !1047, file: !1043, line: 569, baseType: !528, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!1052 = !DIDerivedType(tag: DW_TAG_member, name: "guest_paging_verification", scope: !1047, file: !1043, line: 570, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!1053 = !DIDerivedType(tag: DW_TAG_member, name: "ipi_virtualization", scope: !1047, file: !1043, line: 571, baseType: !528, size: 1, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1054 = !DIDerivedType(tag: DW_TAG_member, name: "gpaw", scope: !1047, file: !1043, line: 572, baseType: !528, size: 1, offset: 5, flags: DIFlagBitField, extraData: i64 0)
+!1055 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !1047, file: !1043, line: 573, baseType: !528, size: 1, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!1056 = !DIDerivedType(tag: DW_TAG_member, name: "virt_ia32_spec_ctrl", scope: !1047, file: !1043, line: 574, baseType: !528, size: 1, offset: 7, flags: DIFlagBitField, extraData: i64 0)
+!1057 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1047, file: !1043, line: 575, baseType: !528, size: 56, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!1058 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1044, file: !1043, line: 577, baseType: !528, size: 64)
+!1059 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_true_exit_ctls", scope: !954, file: !810, line: 201, baseType: !1030, size: 64, offset: 512)
+!1060 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_true_entry_ctls", scope: !954, file: !810, line: 202, baseType: !1030, size: 64, offset: 576)
+!1061 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_ept_vpid_cap", scope: !954, file: !810, line: 203, baseType: !528, size: 64, offset: 640)
+!1062 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_cr0_fixed0", scope: !954, file: !810, line: 205, baseType: !1063, size: 64, offset: 704)
+!1063 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_cr0_t", file: !699, line: 142, baseType: !1064)
+!1064 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !699, line: 121, size: 64, elements: !1065)
+!1065 = !{!1066, !1084}
+!1066 = !DIDerivedType(tag: DW_TAG_member, scope: !1064, file: !699, line: 122, baseType: !1067, size: 64)
+!1067 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1064, file: !699, line: 122, size: 64, elements: !1068)
+!1068 = !{!1069, !1070, !1071, !1072, !1073, !1074, !1075, !1076, !1077, !1078, !1079, !1080, !1081, !1082, !1083}
+!1069 = !DIDerivedType(tag: DW_TAG_member, name: "pe", scope: !1067, file: !699, line: 125, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1070 = !DIDerivedType(tag: DW_TAG_member, name: "mp", scope: !1067, file: !699, line: 126, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1071 = !DIDerivedType(tag: DW_TAG_member, name: "em", scope: !1067, file: !699, line: 127, baseType: !528, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!1072 = !DIDerivedType(tag: DW_TAG_member, name: "ts", scope: !1067, file: !699, line: 128, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!1073 = !DIDerivedType(tag: DW_TAG_member, name: "et", scope: !1067, file: !699, line: 129, baseType: !528, size: 1, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1074 = !DIDerivedType(tag: DW_TAG_member, name: "ne", scope: !1067, file: !699, line: 130, baseType: !528, size: 1, offset: 5, flags: DIFlagBitField, extraData: i64 0)
+!1075 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !1067, file: !699, line: 131, baseType: !528, size: 10, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!1076 = !DIDerivedType(tag: DW_TAG_member, name: "wp", scope: !1067, file: !699, line: 132, baseType: !528, size: 1, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!1077 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1067, file: !699, line: 133, baseType: !528, size: 1, offset: 17, flags: DIFlagBitField, extraData: i64 0)
+!1078 = !DIDerivedType(tag: DW_TAG_member, name: "am", scope: !1067, file: !699, line: 134, baseType: !528, size: 1, offset: 18, flags: DIFlagBitField, extraData: i64 0)
+!1079 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_2", scope: !1067, file: !699, line: 135, baseType: !528, size: 10, offset: 19, flags: DIFlagBitField, extraData: i64 0)
+!1080 = !DIDerivedType(tag: DW_TAG_member, name: "nw", scope: !1067, file: !699, line: 136, baseType: !528, size: 1, offset: 29, flags: DIFlagBitField, extraData: i64 0)
+!1081 = !DIDerivedType(tag: DW_TAG_member, name: "cd", scope: !1067, file: !699, line: 137, baseType: !528, size: 1, offset: 30, flags: DIFlagBitField, extraData: i64 0)
+!1082 = !DIDerivedType(tag: DW_TAG_member, name: "pg", scope: !1067, file: !699, line: 138, baseType: !528, size: 1, offset: 31, flags: DIFlagBitField, extraData: i64 0)
+!1083 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_3", scope: !1067, file: !699, line: 139, baseType: !528, size: 32, offset: 32, flags: DIFlagBitField, extraData: i64 0)
+!1084 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1064, file: !699, line: 141, baseType: !528, size: 64)
+!1085 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_cr0_fixed1", scope: !954, file: !810, line: 206, baseType: !1063, size: 64, offset: 768)
+!1086 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_cr4_fixed0", scope: !954, file: !810, line: 207, baseType: !1087, size: 64, offset: 832)
+!1087 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_cr4_t", file: !699, line: 197, baseType: !1088)
+!1088 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !699, line: 162, size: 64, elements: !1089)
+!1089 = !{!1090, !1122}
+!1090 = !DIDerivedType(tag: DW_TAG_member, scope: !1088, file: !699, line: 163, baseType: !1091, size: 64)
+!1091 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1088, file: !699, line: 163, size: 64, elements: !1092)
+!1092 = !{!1093, !1094, !1095, !1096, !1097, !1098, !1099, !1100, !1101, !1102, !1103, !1104, !1105, !1106, !1107, !1108, !1109, !1110, !1111, !1112, !1113, !1114, !1115, !1116, !1117, !1118, !1119, !1120, !1121}
+!1093 = !DIDerivedType(tag: DW_TAG_member, name: "vme", scope: !1091, file: !699, line: 166, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1094 = !DIDerivedType(tag: DW_TAG_member, name: "pvi", scope: !1091, file: !699, line: 167, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1095 = !DIDerivedType(tag: DW_TAG_member, name: "tsd", scope: !1091, file: !699, line: 168, baseType: !528, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!1096 = !DIDerivedType(tag: DW_TAG_member, name: "de", scope: !1091, file: !699, line: 169, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!1097 = !DIDerivedType(tag: DW_TAG_member, name: "pse", scope: !1091, file: !699, line: 170, baseType: !528, size: 1, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1098 = !DIDerivedType(tag: DW_TAG_member, name: "pae", scope: !1091, file: !699, line: 171, baseType: !528, size: 1, offset: 5, flags: DIFlagBitField, extraData: i64 0)
+!1099 = !DIDerivedType(tag: DW_TAG_member, name: "mce", scope: !1091, file: !699, line: 172, baseType: !528, size: 1, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!1100 = !DIDerivedType(tag: DW_TAG_member, name: "pge", scope: !1091, file: !699, line: 173, baseType: !528, size: 1, offset: 7, flags: DIFlagBitField, extraData: i64 0)
+!1101 = !DIDerivedType(tag: DW_TAG_member, name: "pce", scope: !1091, file: !699, line: 174, baseType: !528, size: 1, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!1102 = !DIDerivedType(tag: DW_TAG_member, name: "osfxsr", scope: !1091, file: !699, line: 175, baseType: !528, size: 1, offset: 9, flags: DIFlagBitField, extraData: i64 0)
+!1103 = !DIDerivedType(tag: DW_TAG_member, name: "osxmmexcpt", scope: !1091, file: !699, line: 176, baseType: !528, size: 1, offset: 10, flags: DIFlagBitField, extraData: i64 0)
+!1104 = !DIDerivedType(tag: DW_TAG_member, name: "umip", scope: !1091, file: !699, line: 177, baseType: !528, size: 1, offset: 11, flags: DIFlagBitField, extraData: i64 0)
+!1105 = !DIDerivedType(tag: DW_TAG_member, name: "la57", scope: !1091, file: !699, line: 178, baseType: !528, size: 1, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!1106 = !DIDerivedType(tag: DW_TAG_member, name: "vmxe", scope: !1091, file: !699, line: 179, baseType: !528, size: 1, offset: 13, flags: DIFlagBitField, extraData: i64 0)
+!1107 = !DIDerivedType(tag: DW_TAG_member, name: "smxe", scope: !1091, file: !699, line: 180, baseType: !528, size: 1, offset: 14, flags: DIFlagBitField, extraData: i64 0)
+!1108 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !1091, file: !699, line: 181, baseType: !528, size: 1, offset: 15, flags: DIFlagBitField, extraData: i64 0)
+!1109 = !DIDerivedType(tag: DW_TAG_member, name: "fsgsbase", scope: !1091, file: !699, line: 182, baseType: !528, size: 1, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!1110 = !DIDerivedType(tag: DW_TAG_member, name: "pcide", scope: !1091, file: !699, line: 183, baseType: !528, size: 1, offset: 17, flags: DIFlagBitField, extraData: i64 0)
+!1111 = !DIDerivedType(tag: DW_TAG_member, name: "osxsave", scope: !1091, file: !699, line: 184, baseType: !528, size: 1, offset: 18, flags: DIFlagBitField, extraData: i64 0)
+!1112 = !DIDerivedType(tag: DW_TAG_member, name: "keylocker", scope: !1091, file: !699, line: 185, baseType: !528, size: 1, offset: 19, flags: DIFlagBitField, extraData: i64 0)
+!1113 = !DIDerivedType(tag: DW_TAG_member, name: "smep", scope: !1091, file: !699, line: 186, baseType: !528, size: 1, offset: 20, flags: DIFlagBitField, extraData: i64 0)
+!1114 = !DIDerivedType(tag: DW_TAG_member, name: "smap", scope: !1091, file: !699, line: 187, baseType: !528, size: 1, offset: 21, flags: DIFlagBitField, extraData: i64 0)
+!1115 = !DIDerivedType(tag: DW_TAG_member, name: "pke", scope: !1091, file: !699, line: 188, baseType: !528, size: 1, offset: 22, flags: DIFlagBitField, extraData: i64 0)
+!1116 = !DIDerivedType(tag: DW_TAG_member, name: "cet", scope: !1091, file: !699, line: 189, baseType: !528, size: 1, offset: 23, flags: DIFlagBitField, extraData: i64 0)
+!1117 = !DIDerivedType(tag: DW_TAG_member, name: "pks", scope: !1091, file: !699, line: 190, baseType: !528, size: 1, offset: 24, flags: DIFlagBitField, extraData: i64 0)
+!1118 = !DIDerivedType(tag: DW_TAG_member, name: "uintr", scope: !1091, file: !699, line: 191, baseType: !528, size: 1, offset: 25, flags: DIFlagBitField, extraData: i64 0)
+!1119 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1091, file: !699, line: 192, baseType: !528, size: 1, offset: 26, flags: DIFlagBitField, extraData: i64 0)
+!1120 = !DIDerivedType(tag: DW_TAG_member, name: "lass", scope: !1091, file: !699, line: 193, baseType: !528, size: 1, offset: 27, flags: DIFlagBitField, extraData: i64 0)
+!1121 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_2", scope: !1091, file: !699, line: 194, baseType: !528, size: 36, offset: 28, flags: DIFlagBitField, extraData: i64 0)
+!1122 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1088, file: !699, line: 196, baseType: !528, size: 64)
+!1123 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_vmx_cr4_fixed1", scope: !954, file: !810, line: 208, baseType: !1087, size: 64, offset: 896)
+!1124 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_mtrrcap", scope: !954, file: !810, line: 210, baseType: !1125, size: 64, offset: 960)
+!1125 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_mtrrcap_t", file: !1126, line: 53, baseType: !1127)
+!1126 = !DIFile(filename: "src/common/helpers/smrrs.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "553f81584f6b71b566c06c394232de8a")
+!1127 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "ia32_mtrrcap_u", file: !1126, line: 37, size: 64, elements: !1128)
+!1128 = !{!1129, !1142}
+!1129 = !DIDerivedType(tag: DW_TAG_member, scope: !1127, file: !1126, line: 39, baseType: !1130, size: 64)
+!1130 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1127, file: !1126, line: 39, size: 64, elements: !1131)
+!1131 = !{!1132, !1133, !1134, !1135, !1136, !1137, !1138, !1139, !1140, !1141}
+!1132 = !DIDerivedType(tag: DW_TAG_member, name: "vcnt", scope: !1130, file: !1126, line: 41, baseType: !528, size: 8, flags: DIFlagBitField, extraData: i64 0)
+!1133 = !DIDerivedType(tag: DW_TAG_member, name: "fix", scope: !1130, file: !1126, line: 42, baseType: !528, size: 1, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!1134 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd1", scope: !1130, file: !1126, line: 43, baseType: !528, size: 1, offset: 9, flags: DIFlagBitField, extraData: i64 0)
+!1135 = !DIDerivedType(tag: DW_TAG_member, name: "wc", scope: !1130, file: !1126, line: 44, baseType: !528, size: 1, offset: 10, flags: DIFlagBitField, extraData: i64 0)
+!1136 = !DIDerivedType(tag: DW_TAG_member, name: "smrr", scope: !1130, file: !1126, line: 45, baseType: !528, size: 1, offset: 11, flags: DIFlagBitField, extraData: i64 0)
+!1137 = !DIDerivedType(tag: DW_TAG_member, name: "prmrr", scope: !1130, file: !1126, line: 46, baseType: !528, size: 1, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!1138 = !DIDerivedType(tag: DW_TAG_member, name: "smrr2", scope: !1130, file: !1126, line: 47, baseType: !528, size: 1, offset: 13, flags: DIFlagBitField, extraData: i64 0)
+!1139 = !DIDerivedType(tag: DW_TAG_member, name: "smrr_lock", scope: !1130, file: !1126, line: 48, baseType: !528, size: 1, offset: 14, flags: DIFlagBitField, extraData: i64 0)
+!1140 = !DIDerivedType(tag: DW_TAG_member, name: "seamrr", scope: !1130, file: !1126, line: 49, baseType: !528, size: 1, offset: 15, flags: DIFlagBitField, extraData: i64 0)
+!1141 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd2", scope: !1130, file: !1126, line: 50, baseType: !528, size: 48, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!1142 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1127, file: !1126, line: 52, baseType: !528, size: 64)
+!1143 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_arch_capabilities", scope: !954, file: !810, line: 212, baseType: !1144, size: 64, offset: 1024)
+!1144 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_arch_capabilities_t", file: !959, line: 499, baseType: !1145)
+!1145 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "ia32_arch_capabilities_u", file: !959, line: 467, size: 64, elements: !1146)
+!1146 = !{!1147, !1176}
+!1147 = !DIDerivedType(tag: DW_TAG_member, scope: !1145, file: !959, line: 469, baseType: !1148, size: 64)
+!1148 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1145, file: !959, line: 469, size: 64, elements: !1149)
+!1149 = !{!1150, !1151, !1152, !1153, !1154, !1155, !1156, !1157, !1158, !1159, !1160, !1161, !1162, !1163, !1164, !1165, !1166, !1167, !1168, !1169, !1170, !1171, !1172, !1173, !1174, !1175}
+!1150 = !DIDerivedType(tag: DW_TAG_member, name: "rdcl_no", scope: !1148, file: !959, line: 471, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1151 = !DIDerivedType(tag: DW_TAG_member, name: "irbs_all", scope: !1148, file: !959, line: 472, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1152 = !DIDerivedType(tag: DW_TAG_member, name: "rsba", scope: !1148, file: !959, line: 473, baseType: !528, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!1153 = !DIDerivedType(tag: DW_TAG_member, name: "skip_l1dfl_vmentry", scope: !1148, file: !959, line: 474, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!1154 = !DIDerivedType(tag: DW_TAG_member, name: "ssb_no", scope: !1148, file: !959, line: 475, baseType: !528, size: 1, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1155 = !DIDerivedType(tag: DW_TAG_member, name: "mds_no", scope: !1148, file: !959, line: 476, baseType: !528, size: 1, offset: 5, flags: DIFlagBitField, extraData: i64 0)
+!1156 = !DIDerivedType(tag: DW_TAG_member, name: "if_pschange_mc_no", scope: !1148, file: !959, line: 477, baseType: !528, size: 1, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!1157 = !DIDerivedType(tag: DW_TAG_member, name: "tsx_ctrl", scope: !1148, file: !959, line: 478, baseType: !528, size: 1, offset: 7, flags: DIFlagBitField, extraData: i64 0)
+!1158 = !DIDerivedType(tag: DW_TAG_member, name: "taa_no", scope: !1148, file: !959, line: 479, baseType: !528, size: 1, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!1159 = !DIDerivedType(tag: DW_TAG_member, name: "mcu_ctls", scope: !1148, file: !959, line: 480, baseType: !528, size: 1, offset: 9, flags: DIFlagBitField, extraData: i64 0)
+!1160 = !DIDerivedType(tag: DW_TAG_member, name: "misc_package_ctls", scope: !1148, file: !959, line: 481, baseType: !528, size: 1, offset: 10, flags: DIFlagBitField, extraData: i64 0)
+!1161 = !DIDerivedType(tag: DW_TAG_member, name: "energy_filtering_ctl", scope: !1148, file: !959, line: 482, baseType: !528, size: 1, offset: 11, flags: DIFlagBitField, extraData: i64 0)
+!1162 = !DIDerivedType(tag: DW_TAG_member, name: "doitm", scope: !1148, file: !959, line: 483, baseType: !528, size: 1, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!1163 = !DIDerivedType(tag: DW_TAG_member, name: "sbdr_ssdp_no", scope: !1148, file: !959, line: 484, baseType: !528, size: 1, offset: 13, flags: DIFlagBitField, extraData: i64 0)
+!1164 = !DIDerivedType(tag: DW_TAG_member, name: "fbsdp_no", scope: !1148, file: !959, line: 485, baseType: !528, size: 1, offset: 14, flags: DIFlagBitField, extraData: i64 0)
+!1165 = !DIDerivedType(tag: DW_TAG_member, name: "psdp_no", scope: !1148, file: !959, line: 486, baseType: !528, size: 1, offset: 15, flags: DIFlagBitField, extraData: i64 0)
+!1166 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1148, file: !959, line: 487, baseType: !528, size: 1, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!1167 = !DIDerivedType(tag: DW_TAG_member, name: "fb_clear", scope: !1148, file: !959, line: 488, baseType: !528, size: 1, offset: 17, flags: DIFlagBitField, extraData: i64 0)
+!1168 = !DIDerivedType(tag: DW_TAG_member, name: "fb_clear_ctrl", scope: !1148, file: !959, line: 489, baseType: !528, size: 1, offset: 18, flags: DIFlagBitField, extraData: i64 0)
+!1169 = !DIDerivedType(tag: DW_TAG_member, name: "rrsba", scope: !1148, file: !959, line: 490, baseType: !528, size: 1, offset: 19, flags: DIFlagBitField, extraData: i64 0)
+!1170 = !DIDerivedType(tag: DW_TAG_member, name: "bhi_no", scope: !1148, file: !959, line: 491, baseType: !528, size: 1, offset: 20, flags: DIFlagBitField, extraData: i64 0)
+!1171 = !DIDerivedType(tag: DW_TAG_member, name: "xapic_disable_status", scope: !1148, file: !959, line: 492, baseType: !528, size: 1, offset: 21, flags: DIFlagBitField, extraData: i64 0)
+!1172 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_2", scope: !1148, file: !959, line: 493, baseType: !528, size: 1, offset: 22, flags: DIFlagBitField, extraData: i64 0)
+!1173 = !DIDerivedType(tag: DW_TAG_member, name: "overclocking_status", scope: !1148, file: !959, line: 494, baseType: !528, size: 1, offset: 23, flags: DIFlagBitField, extraData: i64 0)
+!1174 = !DIDerivedType(tag: DW_TAG_member, name: "pbrsb_no", scope: !1148, file: !959, line: 495, baseType: !528, size: 1, offset: 24, flags: DIFlagBitField, extraData: i64 0)
+!1175 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_3", scope: !1148, file: !959, line: 496, baseType: !528, size: 39, offset: 25, flags: DIFlagBitField, extraData: i64 0)
+!1176 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1145, file: !959, line: 498, baseType: !528, size: 64)
+!1177 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_xapic_disable_status", scope: !954, file: !810, line: 213, baseType: !1178, size: 64, offset: 1088)
+!1178 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_xapic_disable_status_t", file: !959, line: 574, baseType: !1179)
+!1179 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "ia32_xapic_disable_status_u", file: !959, line: 566, size: 64, elements: !1180)
+!1180 = !{!1181, !1186}
+!1181 = !DIDerivedType(tag: DW_TAG_member, scope: !1179, file: !959, line: 568, baseType: !1182, size: 64)
+!1182 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1179, file: !959, line: 568, size: 64, elements: !1183)
+!1183 = !{!1184, !1185}
+!1184 = !DIDerivedType(tag: DW_TAG_member, name: "legacy_xapic_disabled", scope: !1182, file: !959, line: 570, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1185 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1182, file: !959, line: 571, baseType: !528, size: 63, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1186 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1179, file: !959, line: 573, baseType: !528, size: 64)
+!1187 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_core_capabilities", scope: !954, file: !810, line: 214, baseType: !1188, size: 64, offset: 1152)
+!1188 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_core_capabilities_t", file: !959, line: 436, baseType: !1189)
+!1189 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "ia32_core_capabilities_u", file: !959, line: 420, size: 64, elements: !1190)
+!1190 = !{!1191, !1204}
+!1191 = !DIDerivedType(tag: DW_TAG_member, scope: !1189, file: !959, line: 422, baseType: !1192, size: 64)
+!1192 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1189, file: !959, line: 422, size: 64, elements: !1193)
+!1193 = !{!1194, !1195, !1196, !1197, !1198, !1199, !1200, !1201, !1202, !1203}
+!1194 = !DIDerivedType(tag: DW_TAG_member, name: "stlb_qos_supported", scope: !1192, file: !959, line: 424, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1195 = !DIDerivedType(tag: DW_TAG_member, name: "rar_supported", scope: !1192, file: !959, line: 425, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1196 = !DIDerivedType(tag: DW_TAG_member, name: "fusa_supported", scope: !1192, file: !959, line: 426, baseType: !528, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!1197 = !DIDerivedType(tag: DW_TAG_member, name: "rsm_in_cpl0_only", scope: !1192, file: !959, line: 427, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!1198 = !DIDerivedType(tag: DW_TAG_member, name: "uc_lock_disable_supported", scope: !1192, file: !959, line: 428, baseType: !528, size: 1, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1199 = !DIDerivedType(tag: DW_TAG_member, name: "split_lock_disable_supported", scope: !1192, file: !959, line: 429, baseType: !528, size: 1, offset: 5, flags: DIFlagBitField, extraData: i64 0)
+!1200 = !DIDerivedType(tag: DW_TAG_member, name: "snoop_filter_qos_supported", scope: !1192, file: !959, line: 430, baseType: !528, size: 1, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!1201 = !DIDerivedType(tag: DW_TAG_member, name: "uc_store_throttlin_supported", scope: !1192, file: !959, line: 431, baseType: !528, size: 1, offset: 7, flags: DIFlagBitField, extraData: i64 0)
+!1202 = !DIDerivedType(tag: DW_TAG_member, name: "lam_supported", scope: !1192, file: !959, line: 432, baseType: !528, size: 1, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!1203 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_2", scope: !1192, file: !959, line: 433, baseType: !528, size: 55, offset: 9, flags: DIFlagBitField, extraData: i64 0)
+!1204 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1189, file: !959, line: 435, baseType: !528, size: 64)
+!1205 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_perf_capabilities", scope: !954, file: !810, line: 215, baseType: !1206, size: 64, offset: 1216)
+!1206 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_perf_capabilities_t", file: !959, line: 316, baseType: !1207)
+!1207 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !959, line: 300, size: 64, elements: !1208)
+!1208 = !{!1209, !1222}
+!1209 = !DIDerivedType(tag: DW_TAG_member, scope: !1207, file: !959, line: 302, baseType: !1210, size: 64)
+!1210 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1207, file: !959, line: 302, size: 64, elements: !1211)
+!1211 = !{!1212, !1213, !1214, !1215, !1216, !1217, !1218, !1219, !1220, !1221}
+!1212 = !DIDerivedType(tag: DW_TAG_member, name: "lbr_format", scope: !1210, file: !959, line: 304, baseType: !528, size: 6, flags: DIFlagBitField, extraData: i64 0)
+!1213 = !DIDerivedType(tag: DW_TAG_member, name: "pebs_trap_indicator", scope: !1210, file: !959, line: 305, baseType: !528, size: 1, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!1214 = !DIDerivedType(tag: DW_TAG_member, name: "pebs_save_arch_regs", scope: !1210, file: !959, line: 306, baseType: !528, size: 1, offset: 7, flags: DIFlagBitField, extraData: i64 0)
+!1215 = !DIDerivedType(tag: DW_TAG_member, name: "pebs_records_encoding", scope: !1210, file: !959, line: 307, baseType: !528, size: 4, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!1216 = !DIDerivedType(tag: DW_TAG_member, name: "freeze_while_smm_supported", scope: !1210, file: !959, line: 308, baseType: !528, size: 1, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!1217 = !DIDerivedType(tag: DW_TAG_member, name: "full_write", scope: !1210, file: !959, line: 309, baseType: !528, size: 1, offset: 13, flags: DIFlagBitField, extraData: i64 0)
+!1218 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd1", scope: !1210, file: !959, line: 310, baseType: !528, size: 1, offset: 14, flags: DIFlagBitField, extraData: i64 0)
+!1219 = !DIDerivedType(tag: DW_TAG_member, name: "perf_metrics_available", scope: !1210, file: !959, line: 311, baseType: !528, size: 1, offset: 15, flags: DIFlagBitField, extraData: i64 0)
+!1220 = !DIDerivedType(tag: DW_TAG_member, name: "pebs_output_pt_avail", scope: !1210, file: !959, line: 312, baseType: !528, size: 1, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!1221 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd2", scope: !1210, file: !959, line: 313, baseType: !528, size: 47, offset: 17, flags: DIFlagBitField, extraData: i64 0)
+!1222 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1207, file: !959, line: 315, baseType: !528, size: 64)
+!1223 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_tme_capability", scope: !954, file: !810, line: 217, baseType: !1224, size: 64, offset: 1280)
+!1224 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_tme_capability_t", file: !959, line: 257, baseType: !1225)
+!1225 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !959, line: 240, size: 64, elements: !1226)
+!1226 = !{!1227, !1241}
+!1227 = !DIDerivedType(tag: DW_TAG_member, scope: !1225, file: !959, line: 242, baseType: !1228, size: 64)
+!1228 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1225, file: !959, line: 242, size: 64, elements: !1229)
+!1229 = !{!1230, !1231, !1232, !1233, !1234, !1235, !1236, !1237, !1238, !1239, !1240}
+!1230 = !DIDerivedType(tag: DW_TAG_member, name: "aes_xts_128", scope: !1228, file: !959, line: 244, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1231 = !DIDerivedType(tag: DW_TAG_member, name: "aes_xts_128_with_integrity", scope: !1228, file: !959, line: 245, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1232 = !DIDerivedType(tag: DW_TAG_member, name: "aes_xts_256", scope: !1228, file: !959, line: 246, baseType: !528, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!1233 = !DIDerivedType(tag: DW_TAG_member, name: "aes_xts_256_with_integrity", scope: !1228, file: !959, line: 247, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!1234 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd", scope: !1228, file: !959, line: 248, baseType: !528, size: 27, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1235 = !DIDerivedType(tag: DW_TAG_member, name: "tme_enc_bypass_supported", scope: !1228, file: !959, line: 249, baseType: !528, size: 1, offset: 31, flags: DIFlagBitField, extraData: i64 0)
+!1236 = !DIDerivedType(tag: DW_TAG_member, name: "mk_tme_max_keyid_bits", scope: !1228, file: !959, line: 250, baseType: !528, size: 4, offset: 32, flags: DIFlagBitField, extraData: i64 0)
+!1237 = !DIDerivedType(tag: DW_TAG_member, name: "mk_tme_max_keys", scope: !1228, file: !959, line: 251, baseType: !528, size: 15, offset: 36, flags: DIFlagBitField, extraData: i64 0)
+!1238 = !DIDerivedType(tag: DW_TAG_member, name: "nm_encryption_disable", scope: !1228, file: !959, line: 252, baseType: !528, size: 1, offset: 51, flags: DIFlagBitField, extraData: i64 0)
+!1239 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1228, file: !959, line: 253, baseType: !528, size: 11, offset: 52, flags: DIFlagBitField, extraData: i64 0)
+!1240 = !DIDerivedType(tag: DW_TAG_member, name: "implicit_bit_mask", scope: !1228, file: !959, line: 254, baseType: !528, size: 1, offset: 63, flags: DIFlagBitField, extraData: i64 0)
+!1241 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1225, file: !959, line: 256, baseType: !528, size: 64)
+!1242 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_tme_activate", scope: !954, file: !810, line: 218, baseType: !1243, size: 64, offset: 1344)
+!1243 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_tme_activate_t", file: !959, line: 237, baseType: !1244)
+!1244 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !959, line: 215, size: 64, elements: !1245)
+!1245 = !{!1246, !1265}
+!1246 = !DIDerivedType(tag: DW_TAG_member, scope: !1244, file: !959, line: 217, baseType: !1247, size: 64)
+!1247 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1244, file: !959, line: 217, size: 64, elements: !1248)
+!1248 = !{!1249, !1250, !1251, !1252, !1253, !1254, !1255, !1256, !1257, !1258, !1259, !1260, !1261, !1262, !1263, !1264}
+!1249 = !DIDerivedType(tag: DW_TAG_member, name: "lock", scope: !1247, file: !959, line: 219, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1250 = !DIDerivedType(tag: DW_TAG_member, name: "tme_enable", scope: !1247, file: !959, line: 220, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1251 = !DIDerivedType(tag: DW_TAG_member, name: "key_select", scope: !1247, file: !959, line: 221, baseType: !528, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!1252 = !DIDerivedType(tag: DW_TAG_member, name: "save_key_for_standby", scope: !1247, file: !959, line: 222, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!1253 = !DIDerivedType(tag: DW_TAG_member, name: "tme_policy", scope: !1247, file: !959, line: 223, baseType: !528, size: 4, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1254 = !DIDerivedType(tag: DW_TAG_member, name: "sgx_tem_enable", scope: !1247, file: !959, line: 224, baseType: !528, size: 1, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!1255 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd", scope: !1247, file: !959, line: 225, baseType: !528, size: 22, offset: 9, flags: DIFlagBitField, extraData: i64 0)
+!1256 = !DIDerivedType(tag: DW_TAG_member, name: "tme_enc_bypass_enable", scope: !1247, file: !959, line: 226, baseType: !528, size: 1, offset: 31, flags: DIFlagBitField, extraData: i64 0)
+!1257 = !DIDerivedType(tag: DW_TAG_member, name: "mk_tme_keyid_bits", scope: !1247, file: !959, line: 227, baseType: !528, size: 4, offset: 32, flags: DIFlagBitField, extraData: i64 0)
+!1258 = !DIDerivedType(tag: DW_TAG_member, name: "tdx_reserved_keyid_bits", scope: !1247, file: !959, line: 228, baseType: !528, size: 4, offset: 36, flags: DIFlagBitField, extraData: i64 0)
+!1259 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd1", scope: !1247, file: !959, line: 229, baseType: !528, size: 8, offset: 40, flags: DIFlagBitField, extraData: i64 0)
+!1260 = !DIDerivedType(tag: DW_TAG_member, name: "algs_aes_xts_128", scope: !1247, file: !959, line: 230, baseType: !528, size: 1, offset: 48, flags: DIFlagBitField, extraData: i64 0)
+!1261 = !DIDerivedType(tag: DW_TAG_member, name: "algs_aes_xts_128_with_integrity", scope: !1247, file: !959, line: 231, baseType: !528, size: 1, offset: 49, flags: DIFlagBitField, extraData: i64 0)
+!1262 = !DIDerivedType(tag: DW_TAG_member, name: "algs_aes_xts_256", scope: !1247, file: !959, line: 232, baseType: !528, size: 1, offset: 50, flags: DIFlagBitField, extraData: i64 0)
+!1263 = !DIDerivedType(tag: DW_TAG_member, name: "algs_aes_xts_256_with_integrity", scope: !1247, file: !959, line: 233, baseType: !528, size: 1, offset: 51, flags: DIFlagBitField, extraData: i64 0)
+!1264 = !DIDerivedType(tag: DW_TAG_member, name: "algs_rsvd", scope: !1247, file: !959, line: 234, baseType: !528, size: 12, offset: 52, flags: DIFlagBitField, extraData: i64 0)
+!1265 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1244, file: !959, line: 236, baseType: !528, size: 64)
+!1266 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_tme_keyid_partitioning", scope: !954, file: !810, line: 219, baseType: !1267, size: 64, offset: 1408)
+!1267 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_tme_keyid_partitioning_t", file: !959, line: 268, baseType: !1268)
+!1268 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !959, line: 260, size: 64, elements: !1269)
+!1269 = !{!1270, !1275}
+!1270 = !DIDerivedType(tag: DW_TAG_member, scope: !1268, file: !959, line: 262, baseType: !1271, size: 64)
+!1271 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1268, file: !959, line: 262, size: 64, elements: !1272)
+!1272 = !{!1273, !1274}
+!1273 = !DIDerivedType(tag: DW_TAG_member, name: "num_mktme_kids", scope: !1271, file: !959, line: 264, baseType: !555, size: 32)
+!1274 = !DIDerivedType(tag: DW_TAG_member, name: "num_tdx_priv_kids", scope: !1271, file: !959, line: 265, baseType: !555, size: 32, offset: 32)
+!1275 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1268, file: !959, line: 267, baseType: !528, size: 64)
+!1276 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_misc_package_ctls", scope: !954, file: !810, line: 221, baseType: !1277, size: 64, offset: 1472)
+!1277 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_misc_package_ctls_t", file: !959, line: 552, baseType: !1278)
+!1278 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "ia32_misc_package_ctls_u", file: !959, line: 544, size: 64, elements: !1279)
+!1279 = !{!1280, !1285}
+!1280 = !DIDerivedType(tag: DW_TAG_member, scope: !1278, file: !959, line: 546, baseType: !1281, size: 64)
+!1281 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1278, file: !959, line: 546, size: 64, elements: !1282)
+!1282 = !{!1283, !1284}
+!1283 = !DIDerivedType(tag: DW_TAG_member, name: "energy_filtering_enable", scope: !1281, file: !959, line: 548, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1284 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1281, file: !959, line: 549, baseType: !528, size: 63, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1285 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1278, file: !959, line: 551, baseType: !528, size: 64)
+!1286 = !DIDerivedType(tag: DW_TAG_member, name: "smrr", scope: !954, file: !810, line: 223, baseType: !1287, size: 256, offset: 1536)
+!1287 = !DICompositeType(tag: DW_TAG_array_type, baseType: !1288, size: 256, elements: !782)
+!1288 = !DIDerivedType(tag: DW_TAG_typedef, name: "smrr_range_t", file: !1126, line: 87, baseType: !1289)
+!1289 = distinct !DICompositeType(tag: DW_TAG_structure_type, file: !1126, line: 83, size: 128, elements: !1290)
+!1290 = !{!1291, !1303}
+!1291 = !DIDerivedType(tag: DW_TAG_member, name: "smrr_base", scope: !1289, file: !1126, line: 85, baseType: !1292, size: 64)
+!1292 = !DIDerivedType(tag: DW_TAG_typedef, name: "smrr_base_t", file: !1126, line: 81, baseType: !1293)
+!1293 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !1126, line: 74, size: 64, elements: !1294)
+!1294 = !{!1295, !1302}
+!1295 = !DIDerivedType(tag: DW_TAG_member, scope: !1293, file: !1126, line: 76, baseType: !1296, size: 64)
+!1296 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1293, file: !1126, line: 76, size: 64, elements: !1297)
+!1297 = !{!1298, !1299, !1300, !1301}
+!1298 = !DIDerivedType(tag: DW_TAG_member, name: "memtype", scope: !1296, file: !1126, line: 78, baseType: !528, size: 8, flags: DIFlagBitField, extraData: i64 0)
+!1299 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd0", scope: !1296, file: !1126, line: 78, baseType: !528, size: 4, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!1300 = !DIDerivedType(tag: DW_TAG_member, name: "base", scope: !1296, file: !1126, line: 78, baseType: !528, size: 20, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!1301 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd1", scope: !1296, file: !1126, line: 78, baseType: !528, size: 32, offset: 32, flags: DIFlagBitField, extraData: i64 0)
+!1302 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1293, file: !1126, line: 80, baseType: !528, size: 64)
+!1303 = !DIDerivedType(tag: DW_TAG_member, name: "smrr_mask", scope: !1289, file: !1126, line: 86, baseType: !1304, size: 64, offset: 64)
+!1304 = !DIDerivedType(tag: DW_TAG_typedef, name: "smrr_mask_t", file: !1126, line: 72, baseType: !1305)
+!1305 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !1126, line: 61, size: 64, elements: !1306)
+!1306 = !{!1307, !1315}
+!1307 = !DIDerivedType(tag: DW_TAG_member, scope: !1305, file: !1126, line: 63, baseType: !1308, size: 64)
+!1308 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1305, file: !1126, line: 63, size: 64, elements: !1309)
+!1309 = !{!1310, !1311, !1312, !1313, !1314}
+!1310 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd0", scope: !1308, file: !1126, line: 65, baseType: !528, size: 10, flags: DIFlagBitField, extraData: i64 0)
+!1311 = !DIDerivedType(tag: DW_TAG_member, name: "lock", scope: !1308, file: !1126, line: 66, baseType: !528, size: 1, offset: 10, flags: DIFlagBitField, extraData: i64 0)
+!1312 = !DIDerivedType(tag: DW_TAG_member, name: "vld", scope: !1308, file: !1126, line: 67, baseType: !528, size: 1, offset: 11, flags: DIFlagBitField, extraData: i64 0)
+!1313 = !DIDerivedType(tag: DW_TAG_member, name: "mask", scope: !1308, file: !1126, line: 68, baseType: !528, size: 20, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!1314 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd1", scope: !1308, file: !1126, line: 69, baseType: !528, size: 32, offset: 32, flags: DIFlagBitField, extraData: i64 0)
+!1315 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1305, file: !1126, line: 71, baseType: !528, size: 64)
+!1316 = !DIDerivedType(tag: DW_TAG_member, name: "seamrr_base", scope: !811, file: !810, line: 332, baseType: !528, size: 64, offset: 462656)
+!1317 = !DIDerivedType(tag: DW_TAG_member, name: "seamrr_size", scope: !811, file: !810, line: 333, baseType: !528, size: 64, offset: 462720)
+!1318 = !DIDerivedType(tag: DW_TAG_member, name: "num_of_cached_sub_blocks", scope: !811, file: !810, line: 337, baseType: !528, size: 64, offset: 462784)
+!1319 = !DIDerivedType(tag: DW_TAG_member, name: "x2apic_core_id_shift_count", scope: !811, file: !810, line: 339, baseType: !555, size: 32, offset: 462848)
+!1320 = !DIDerivedType(tag: DW_TAG_member, name: "x2apic_core_id_mask", scope: !811, file: !810, line: 340, baseType: !555, size: 32, offset: 462880)
+!1321 = !DIDerivedType(tag: DW_TAG_member, name: "x2apic_pkg_id_shift_count", scope: !811, file: !810, line: 341, baseType: !555, size: 32, offset: 462912)
+!1322 = !DIDerivedType(tag: DW_TAG_member, name: "waitpkg_supported", scope: !811, file: !810, line: 343, baseType: !525, size: 8, offset: 462944)
+!1323 = !DIDerivedType(tag: DW_TAG_member, name: "kl_loadiwk_no_backup", scope: !811, file: !810, line: 344, baseType: !525, size: 8, offset: 462952)
+!1324 = !DIDerivedType(tag: DW_TAG_member, name: "xfd_supported", scope: !811, file: !810, line: 345, baseType: !525, size: 8, offset: 462960)
+!1325 = !DIDerivedType(tag: DW_TAG_member, name: "hle_supported", scope: !811, file: !810, line: 346, baseType: !525, size: 8, offset: 462968)
+!1326 = !DIDerivedType(tag: DW_TAG_member, name: "rtm_supported", scope: !811, file: !810, line: 347, baseType: !525, size: 8, offset: 462976)
+!1327 = !DIDerivedType(tag: DW_TAG_member, name: "ddpd_supported", scope: !811, file: !810, line: 348, baseType: !525, size: 8, offset: 462984)
+!1328 = !DIDerivedType(tag: DW_TAG_member, name: "la57_supported", scope: !811, file: !810, line: 349, baseType: !525, size: 8, offset: 462992)
+!1329 = !DIDerivedType(tag: DW_TAG_member, name: "lam_supported", scope: !811, file: !810, line: 350, baseType: !525, size: 8, offset: 463000)
+!1330 = !DIDerivedType(tag: DW_TAG_member, name: "perfmon_ext_leaf_supported", scope: !811, file: !810, line: 351, baseType: !525, size: 8, offset: 463008)
+!1331 = !DIDerivedType(tag: DW_TAG_member, name: "lass_supported", scope: !811, file: !810, line: 352, baseType: !525, size: 8, offset: 463016)
+!1332 = !DIDerivedType(tag: DW_TAG_member, name: "crystal_clock_frequency", scope: !811, file: !810, line: 354, baseType: !528, size: 64, offset: 463040)
+!1333 = !DIDerivedType(tag: DW_TAG_member, name: "native_tsc_frequency", scope: !811, file: !810, line: 355, baseType: !528, size: 64, offset: 463104)
+!1334 = !DIDerivedType(tag: DW_TAG_member, name: "xcr0_supported_mask", scope: !811, file: !810, line: 357, baseType: !555, size: 32, offset: 463168)
+!1335 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_xss_supported_mask", scope: !811, file: !810, line: 358, baseType: !555, size: 32, offset: 463200)
+!1336 = !DIDerivedType(tag: DW_TAG_member, name: "xfd_faulting_mask", scope: !811, file: !810, line: 359, baseType: !555, size: 32, offset: 463232)
+!1337 = !DIDerivedType(tag: DW_TAG_member, name: "xsave_comp", scope: !811, file: !810, line: 361, baseType: !1338, size: 1216, offset: 463264)
+!1338 = !DICompositeType(tag: DW_TAG_array_type, baseType: !1339, size: 1216, elements: !1344)
+!1339 = !DIDerivedType(tag: DW_TAG_typedef, name: "xsave_component_info_t", file: !810, line: 269, baseType: !1340)
+!1340 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "xsave_component_info_s", file: !810, line: 265, size: 64, elements: !1341)
+!1341 = !{!1342, !1343}
+!1342 = !DIDerivedType(tag: DW_TAG_member, name: "size", scope: !1340, file: !810, line: 267, baseType: !555, size: 32)
+!1343 = !DIDerivedType(tag: DW_TAG_member, name: "align", scope: !1340, file: !810, line: 268, baseType: !525, size: 8, offset: 32)
+!1344 = !{!1345}
+!1345 = !DISubrange(count: 19)
+!1346 = !DIDerivedType(tag: DW_TAG_member, name: "cpuid_values", scope: !811, file: !810, line: 364, baseType: !1347, size: 15168, offset: 464480)
+!1347 = !DICompositeType(tag: DW_TAG_array_type, baseType: !1348, size: 15168, elements: !1378)
+!1348 = !DIDerivedType(tag: DW_TAG_typedef, name: "cpuid_config_t", file: !54, line: 376, baseType: !1349)
+!1349 = distinct !DICompositeType(tag: DW_TAG_structure_type, file: !54, line: 372, size: 192, elements: !1350)
+!1350 = !{!1351, !1361}
+!1351 = !DIDerivedType(tag: DW_TAG_member, name: "leaf_subleaf", scope: !1349, file: !54, line: 374, baseType: !1352, size: 64)
+!1352 = !DIDerivedType(tag: DW_TAG_typedef, name: "cpuid_config_leaf_subleaf_t", file: !54, line: 352, baseType: !1353)
+!1353 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !54, line: 344, size: 64, elements: !1354)
+!1354 = !{!1355, !1360}
+!1355 = !DIDerivedType(tag: DW_TAG_member, scope: !1353, file: !54, line: 346, baseType: !1356, size: 64)
+!1356 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1353, file: !54, line: 346, size: 64, elements: !1357)
+!1357 = !{!1358, !1359}
+!1358 = !DIDerivedType(tag: DW_TAG_member, name: "leaf", scope: !1356, file: !54, line: 348, baseType: !555, size: 32)
+!1359 = !DIDerivedType(tag: DW_TAG_member, name: "subleaf", scope: !1356, file: !54, line: 349, baseType: !555, size: 32, offset: 32)
+!1360 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1353, file: !54, line: 351, baseType: !528, size: 64)
+!1361 = !DIDerivedType(tag: DW_TAG_member, name: "values", scope: !1349, file: !54, line: 375, baseType: !1362, size: 128, offset: 64)
+!1362 = !DIDerivedType(tag: DW_TAG_typedef, name: "cpuid_config_return_values_t", file: !54, line: 369, baseType: !1363)
+!1363 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !54, line: 354, size: 128, elements: !1364)
+!1364 = !{!1365, !1372, !1377}
+!1365 = !DIDerivedType(tag: DW_TAG_member, scope: !1363, file: !54, line: 356, baseType: !1366, size: 128)
+!1366 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1363, file: !54, line: 356, size: 128, elements: !1367)
+!1367 = !{!1368, !1369, !1370, !1371}
+!1368 = !DIDerivedType(tag: DW_TAG_member, name: "eax", scope: !1366, file: !54, line: 358, baseType: !555, size: 32)
+!1369 = !DIDerivedType(tag: DW_TAG_member, name: "ebx", scope: !1366, file: !54, line: 359, baseType: !555, size: 32, offset: 32)
+!1370 = !DIDerivedType(tag: DW_TAG_member, name: "ecx", scope: !1366, file: !54, line: 360, baseType: !555, size: 32, offset: 64)
+!1371 = !DIDerivedType(tag: DW_TAG_member, name: "edx", scope: !1366, file: !54, line: 361, baseType: !555, size: 32, offset: 96)
+!1372 = !DIDerivedType(tag: DW_TAG_member, scope: !1363, file: !54, line: 363, baseType: !1373, size: 128)
+!1373 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1363, file: !54, line: 363, size: 128, elements: !1374)
+!1374 = !{!1375, !1376}
+!1375 = !DIDerivedType(tag: DW_TAG_member, name: "low", scope: !1373, file: !54, line: 365, baseType: !528, size: 64)
+!1376 = !DIDerivedType(tag: DW_TAG_member, name: "high", scope: !1373, file: !54, line: 366, baseType: !528, size: 64, offset: 64)
+!1377 = !DIDerivedType(tag: DW_TAG_member, name: "values", scope: !1363, file: !54, line: 368, baseType: !837, size: 128)
+!1378 = !{!1379}
+!1379 = !DISubrange(count: 79)
+!1380 = !DIDerivedType(tag: DW_TAG_member, name: "cpuid_last_base_leaf", scope: !811, file: !810, line: 365, baseType: !555, size: 32, offset: 479648)
+!1381 = !DIDerivedType(tag: DW_TAG_member, name: "cpuid_last_extended_leaf", scope: !811, file: !810, line: 366, baseType: !555, size: 32, offset: 479680)
+!1382 = !DIDerivedType(tag: DW_TAG_member, name: "td_vmcs_values", scope: !811, file: !810, line: 369, baseType: !1383, size: 256, offset: 479744)
+!1383 = !DIDerivedType(tag: DW_TAG_typedef, name: "td_vmcs_values_t", file: !810, line: 236, baseType: !1384)
+!1384 = distinct !DICompositeType(tag: DW_TAG_structure_type, file: !810, line: 228, size: 256, elements: !1385)
+!1385 = !{!1386, !1387, !1388, !1389, !1390, !1391}
+!1386 = !DIDerivedType(tag: DW_TAG_member, name: "pinbased_ctls", scope: !1384, file: !810, line: 230, baseType: !555, size: 32)
+!1387 = !DIDerivedType(tag: DW_TAG_member, name: "procbased_ctls", scope: !1384, file: !810, line: 231, baseType: !555, size: 32, offset: 32)
+!1388 = !DIDerivedType(tag: DW_TAG_member, name: "procbased_ctls2", scope: !1384, file: !810, line: 232, baseType: !555, size: 32, offset: 64)
+!1389 = !DIDerivedType(tag: DW_TAG_member, name: "procbased_ctls3", scope: !1384, file: !810, line: 233, baseType: !528, size: 64, offset: 128)
+!1390 = !DIDerivedType(tag: DW_TAG_member, name: "exit_ctls", scope: !1384, file: !810, line: 234, baseType: !555, size: 32, offset: 192)
+!1391 = !DIDerivedType(tag: DW_TAG_member, name: "entry_ctls", scope: !1384, file: !810, line: 235, baseType: !555, size: 32, offset: 224)
+!1392 = !DIDerivedType(tag: DW_TAG_member, name: "l2_vmcs_values", scope: !811, file: !810, line: 372, baseType: !1383, size: 256, offset: 480000)
+!1393 = !DIDerivedType(tag: DW_TAG_member, name: "seam_vmcs_host_values", scope: !811, file: !810, line: 376, baseType: !1394, size: 1792, offset: 480256)
+!1394 = !DIDerivedType(tag: DW_TAG_typedef, name: "vmcs_host_values_t", file: !810, line: 263, baseType: !1395)
+!1395 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "vmcs_host_values_s", file: !810, line: 247, size: 1792, elements: !1396)
+!1396 = !{!1397, !1403, !1404, !1405, !1406, !1407, !1408, !1409, !1410, !1411, !1412, !1413, !1414, !1415}
+!1397 = !DIDerivedType(tag: DW_TAG_member, name: "CR0", scope: !1395, file: !810, line: 249, baseType: !1398, size: 128)
+!1398 = !DIDerivedType(tag: DW_TAG_typedef, name: "vmcs_fields_info_t", file: !810, line: 242, baseType: !1399)
+!1399 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "vmcs_fields_info_s", file: !810, line: 238, size: 128, elements: !1400)
+!1400 = !{!1401, !1402}
+!1401 = !DIDerivedType(tag: DW_TAG_member, name: "encoding", scope: !1399, file: !810, line: 240, baseType: !528, size: 64)
+!1402 = !DIDerivedType(tag: DW_TAG_member, name: "value", scope: !1399, file: !810, line: 241, baseType: !528, size: 64, offset: 64)
+!1403 = !DIDerivedType(tag: DW_TAG_member, name: "CR3", scope: !1395, file: !810, line: 250, baseType: !1398, size: 128, offset: 128)
+!1404 = !DIDerivedType(tag: DW_TAG_member, name: "CR4", scope: !1395, file: !810, line: 251, baseType: !1398, size: 128, offset: 256)
+!1405 = !DIDerivedType(tag: DW_TAG_member, name: "CS", scope: !1395, file: !810, line: 252, baseType: !1398, size: 128, offset: 384)
+!1406 = !DIDerivedType(tag: DW_TAG_member, name: "SS", scope: !1395, file: !810, line: 253, baseType: !1398, size: 128, offset: 512)
+!1407 = !DIDerivedType(tag: DW_TAG_member, name: "FS", scope: !1395, file: !810, line: 254, baseType: !1398, size: 128, offset: 640)
+!1408 = !DIDerivedType(tag: DW_TAG_member, name: "GS", scope: !1395, file: !810, line: 255, baseType: !1398, size: 128, offset: 768)
+!1409 = !DIDerivedType(tag: DW_TAG_member, name: "TR", scope: !1395, file: !810, line: 256, baseType: !1398, size: 128, offset: 896)
+!1410 = !DIDerivedType(tag: DW_TAG_member, name: "IA32_S_CET", scope: !1395, file: !810, line: 257, baseType: !1398, size: 128, offset: 1024)
+!1411 = !DIDerivedType(tag: DW_TAG_member, name: "IA32_PAT", scope: !1395, file: !810, line: 258, baseType: !1398, size: 128, offset: 1152)
+!1412 = !DIDerivedType(tag: DW_TAG_member, name: "IA32_EFER", scope: !1395, file: !810, line: 259, baseType: !1398, size: 128, offset: 1280)
+!1413 = !DIDerivedType(tag: DW_TAG_member, name: "FS_BASE", scope: !1395, file: !810, line: 260, baseType: !1398, size: 128, offset: 1408)
+!1414 = !DIDerivedType(tag: DW_TAG_member, name: "IDTR_BASE", scope: !1395, file: !810, line: 261, baseType: !1398, size: 128, offset: 1536)
+!1415 = !DIDerivedType(tag: DW_TAG_member, name: "GDTR_BASE", scope: !1395, file: !810, line: 262, baseType: !1398, size: 128, offset: 1664)
+!1416 = !DIDerivedType(tag: DW_TAG_member, name: "max_lbr_depth", scope: !811, file: !810, line: 379, baseType: !555, size: 32, offset: 482048)
+!1417 = !DIDerivedType(tag: DW_TAG_member, name: "num_fixed_ctrs", scope: !811, file: !810, line: 380, baseType: !527, size: 8, offset: 482080)
+!1418 = !DIDerivedType(tag: DW_TAG_member, name: "fc_bitmap", scope: !811, file: !810, line: 381, baseType: !555, size: 32, offset: 482112)
+!1419 = !DIDerivedType(tag: DW_TAG_member, name: "is_arch_pebs_supported", scope: !811, file: !810, line: 384, baseType: !525, size: 8, offset: 482144)
+!1420 = !DIDerivedType(tag: DW_TAG_member, name: "attributes_fixed0", scope: !811, file: !810, line: 387, baseType: !528, size: 64, offset: 482176)
+!1421 = !DIDerivedType(tag: DW_TAG_member, name: "attributes_fixed1", scope: !811, file: !810, line: 388, baseType: !528, size: 64, offset: 482240)
+!1422 = !DIDerivedType(tag: DW_TAG_member, name: "config_flags_fixed0", scope: !811, file: !810, line: 391, baseType: !1423, size: 64, offset: 482304)
+!1423 = !DIDerivedType(tag: DW_TAG_typedef, name: "config_flags_t", file: !54, line: 454, baseType: !1424)
+!1424 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "config_flags_s", file: !54, line: 440, size: 64, elements: !1425)
+!1425 = !{!1426, !1437}
+!1426 = !DIDerivedType(tag: DW_TAG_member, scope: !1424, file: !54, line: 441, baseType: !1427, size: 64)
+!1427 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1424, file: !54, line: 441, size: 64, elements: !1428)
+!1428 = !{!1429, !1430, !1431, !1432, !1433, !1434, !1435, !1436}
+!1429 = !DIDerivedType(tag: DW_TAG_member, name: "gpaw", scope: !1427, file: !54, line: 444, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1430 = !DIDerivedType(tag: DW_TAG_member, name: "flexible_pending_ve", scope: !1427, file: !54, line: 445, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1431 = !DIDerivedType(tag: DW_TAG_member, name: "no_rbp_mod", scope: !1427, file: !54, line: 446, baseType: !528, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!1432 = !DIDerivedType(tag: DW_TAG_member, name: "maxpa_virt", scope: !1427, file: !54, line: 447, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!1433 = !DIDerivedType(tag: DW_TAG_member, name: "maxgpa_virt", scope: !1427, file: !54, line: 448, baseType: !528, size: 1, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1434 = !DIDerivedType(tag: DW_TAG_member, name: "tdx_connect", scope: !1427, file: !54, line: 449, baseType: !528, size: 1, offset: 5, flags: DIFlagBitField, extraData: i64 0)
+!1435 = !DIDerivedType(tag: DW_TAG_member, name: "page_release", scope: !1427, file: !54, line: 450, baseType: !528, size: 1, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!1436 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1427, file: !54, line: 451, baseType: !528, size: 57, offset: 7, flags: DIFlagBitField, extraData: i64 0)
+!1437 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1424, file: !54, line: 453, baseType: !528, size: 64)
+!1438 = !DIDerivedType(tag: DW_TAG_member, name: "config_flags_fixed1", scope: !811, file: !810, line: 392, baseType: !1423, size: 64, offset: 482368)
+!1439 = !DIDerivedType(tag: DW_TAG_member, name: "tdmr_info_copy", scope: !811, file: !810, line: 395, baseType: !1440, size: 163840, align: 64, offset: 482432)
+!1440 = !DICompositeType(tag: DW_TAG_array_type, baseType: !1441, size: 163840, align: 64, elements: !949)
+!1441 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdmr_info_entry_t", file: !54, line: 995, baseType: !1442)
+!1442 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdmr_info_entry_s", file: !54, line: 977, size: 2560, align: 64, elements: !1443)
+!1443 = !{!1444, !1445, !1446, !1447, !1448, !1449, !1450, !1451, !1452}
+!1444 = !DIDerivedType(tag: DW_TAG_member, name: "tdmr_base", scope: !1442, file: !54, line: 979, baseType: !528, size: 64)
+!1445 = !DIDerivedType(tag: DW_TAG_member, name: "tdmr_size", scope: !1442, file: !54, line: 980, baseType: !528, size: 64, offset: 64)
+!1446 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_1g_base", scope: !1442, file: !54, line: 981, baseType: !528, size: 64, offset: 128)
+!1447 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_1g_size", scope: !1442, file: !54, line: 982, baseType: !528, size: 64, offset: 192)
+!1448 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_2m_base", scope: !1442, file: !54, line: 983, baseType: !528, size: 64, offset: 256)
+!1449 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_2m_size", scope: !1442, file: !54, line: 984, baseType: !528, size: 64, offset: 320)
+!1450 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_4k_base", scope: !1442, file: !54, line: 985, baseType: !528, size: 64, offset: 384)
+!1451 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_4k_size", scope: !1442, file: !54, line: 986, baseType: !528, size: 64, offset: 448)
+!1452 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd_areas", scope: !1442, file: !54, line: 993, baseType: !1453, size: 2048, offset: 512)
+!1453 = !DICompositeType(tag: DW_TAG_array_type, baseType: !1454, size: 2048, elements: !571)
+!1454 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1442, file: !54, line: 988, size: 128, elements: !1455)
+!1455 = !{!1456, !1457}
+!1456 = !DIDerivedType(tag: DW_TAG_member, name: "offset", scope: !1454, file: !54, line: 991, baseType: !528, size: 64)
+!1457 = !DIDerivedType(tag: DW_TAG_member, name: "size", scope: !1454, file: !54, line: 992, baseType: !528, size: 64, offset: 64)
+!1458 = !DIDerivedType(tag: DW_TAG_member, name: "seam_capabilities", scope: !811, file: !810, line: 397, baseType: !1459, size: 64, offset: 646272)
+!1459 = !DIDerivedType(tag: DW_TAG_typedef, name: "seam_ops_capabilities_t", file: !1043, line: 414, baseType: !1460)
+!1460 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "seam_ops_capabilities_s", file: !1043, line: 401, size: 64, elements: !1461)
+!1461 = !{!1462, !1472}
+!1462 = !DIDerivedType(tag: DW_TAG_member, scope: !1460, file: !1043, line: 403, baseType: !1463, size: 64)
+!1463 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1460, file: !1043, line: 403, size: 64, elements: !1464)
+!1464 = !{!1465, !1466, !1467, !1468, !1469, !1470, !1471}
+!1465 = !DIDerivedType(tag: DW_TAG_member, name: "capabilities", scope: !1463, file: !1043, line: 405, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1466 = !DIDerivedType(tag: DW_TAG_member, name: "seamreport", scope: !1463, file: !1043, line: 406, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1467 = !DIDerivedType(tag: DW_TAG_member, name: "seamdb_clear", scope: !1463, file: !1043, line: 407, baseType: !528, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!1468 = !DIDerivedType(tag: DW_TAG_member, name: "seamdb_insert", scope: !1463, file: !1043, line: 408, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!1469 = !DIDerivedType(tag: DW_TAG_member, name: "seamdb_getref", scope: !1463, file: !1043, line: 409, baseType: !528, size: 1, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1470 = !DIDerivedType(tag: DW_TAG_member, name: "seamdb_report", scope: !1463, file: !1043, line: 410, baseType: !528, size: 1, offset: 5, flags: DIFlagBitField, extraData: i64 0)
+!1471 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1463, file: !1043, line: 411, baseType: !528, size: 58, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!1472 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1460, file: !1043, line: 413, baseType: !528, size: 64)
+!1473 = !DIDerivedType(tag: DW_TAG_member, name: "seamverifyreport_available", scope: !811, file: !810, line: 398, baseType: !525, size: 8, offset: 646336)
+!1474 = !DIDerivedType(tag: DW_TAG_member, name: "num_rdseed_retries", scope: !811, file: !810, line: 400, baseType: !527, size: 8, offset: 646344)
+!1475 = !DIDerivedType(tag: DW_TAG_member, name: "num_rdseed_pauses", scope: !811, file: !810, line: 401, baseType: !527, size: 8, offset: 646352)
+!1476 = !DIDerivedType(tag: DW_TAG_member, name: "sha384_method", scope: !811, file: !810, line: 404, baseType: !1477, size: 520, offset: 646360)
+!1477 = !DIDerivedType(tag: DW_TAG_typedef, name: "hash_method_t", file: !1478, line: 51, baseType: !1479)
+!1478 = !DIFile(filename: "src/common/crypto/sha384.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "949af74ccd6039b2f67be8114c2013d1")
+!1479 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "hash_method_s", file: !1478, line: 47, size: 520, elements: !1480)
+!1480 = !{!1481, !1483}
+!1481 = !DIDerivedType(tag: DW_TAG_member, name: "hash_method_buffer", scope: !1479, file: !1478, line: 49, baseType: !1482, size: 512)
+!1482 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 512, elements: !949)
+!1483 = !DIDerivedType(tag: DW_TAG_member, name: "is_initialized", scope: !1479, file: !1478, line: 50, baseType: !525, size: 8, offset: 512)
+!1484 = !DIDerivedType(tag: DW_TAG_member, name: "platform_fms", scope: !811, file: !810, line: 406, baseType: !1485, size: 32, offset: 646880)
+!1485 = !DIDerivedType(tag: DW_TAG_typedef, name: "fms_info_t", file: !699, line: 951, baseType: !1486)
+!1486 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !699, line: 937, size: 32, elements: !1487)
+!1487 = !{!1488, !1499}
+!1488 = !DIDerivedType(tag: DW_TAG_member, scope: !1486, file: !699, line: 939, baseType: !1489, size: 32)
+!1489 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1486, file: !699, line: 939, size: 32, elements: !1490)
+!1490 = !{!1491, !1492, !1493, !1494, !1495, !1496, !1497, !1498}
+!1491 = !DIDerivedType(tag: DW_TAG_member, name: "stepping_id", scope: !1489, file: !699, line: 941, baseType: !555, size: 4, flags: DIFlagBitField, extraData: i64 0)
+!1492 = !DIDerivedType(tag: DW_TAG_member, name: "model", scope: !1489, file: !699, line: 942, baseType: !555, size: 4, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1493 = !DIDerivedType(tag: DW_TAG_member, name: "family", scope: !1489, file: !699, line: 943, baseType: !555, size: 4, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!1494 = !DIDerivedType(tag: DW_TAG_member, name: "processor_type", scope: !1489, file: !699, line: 944, baseType: !555, size: 2, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!1495 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd0", scope: !1489, file: !699, line: 945, baseType: !555, size: 2, offset: 14, flags: DIFlagBitField, extraData: i64 0)
+!1496 = !DIDerivedType(tag: DW_TAG_member, name: "extende_model_id", scope: !1489, file: !699, line: 946, baseType: !555, size: 4, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!1497 = !DIDerivedType(tag: DW_TAG_member, name: "extended_family_id", scope: !1489, file: !699, line: 947, baseType: !555, size: 8, offset: 20, flags: DIFlagBitField, extraData: i64 0)
+!1498 = !DIDerivedType(tag: DW_TAG_member, name: "rsvd1", scope: !1489, file: !699, line: 948, baseType: !555, size: 4, offset: 28, flags: DIFlagBitField, extraData: i64 0)
+!1499 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1486, file: !699, line: 950, baseType: !555, size: 32)
+!1500 = !DIDerivedType(tag: DW_TAG_member, name: "native_model_info", scope: !811, file: !810, line: 407, baseType: !1501, size: 32, offset: 646912)
+!1501 = !DIDerivedType(tag: DW_TAG_typedef, name: "cpuid_1a_eax_t", file: !699, line: 1085, baseType: !1502)
+!1502 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "cpuid_1a_eax_u", file: !699, line: 1076, size: 32, elements: !1503)
+!1503 = !{!1504, !1509}
+!1504 = !DIDerivedType(tag: DW_TAG_member, scope: !1502, file: !699, line: 1078, baseType: !1505, size: 32)
+!1505 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1502, file: !699, line: 1078, size: 32, elements: !1506)
+!1506 = !{!1507, !1508}
+!1507 = !DIDerivedType(tag: DW_TAG_member, name: "native_model_id", scope: !1505, file: !699, line: 1080, baseType: !555, size: 24, flags: DIFlagBitField, extraData: i64 0)
+!1508 = !DIDerivedType(tag: DW_TAG_member, name: "core_type", scope: !1505, file: !699, line: 1081, baseType: !555, size: 8, offset: 24, flags: DIFlagBitField, extraData: i64 0)
+!1509 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1502, file: !699, line: 1083, baseType: !555, size: 32)
+!1510 = !DIDerivedType(tag: DW_TAG_member, name: "fatal_info_config_hpa", scope: !811, file: !810, line: 410, baseType: !528, size: 64, offset: 646976)
+!1511 = !DIDerivedType(tag: DW_TAG_member, name: "fatal_info_icr", scope: !811, file: !810, line: 411, baseType: !528, size: 64, offset: 647040)
+!1512 = !DIDerivedType(tag: DW_TAG_member, name: "twenty_usec_in_tsc", scope: !811, file: !810, line: 414, baseType: !528, size: 64, offset: 647104)
+!1513 = !DIDerivedType(tag: DW_TAG_member, name: "dynamic_pamt_enabled", scope: !811, file: !810, line: 416, baseType: !525, size: 8, offset: 647168)
+!1514 = !DIDerivedType(tag: DW_TAG_member, name: "is_a0_wa_invoked", scope: !811, file: !810, line: 425, baseType: !525, size: 8, offset: 647176)
+!1515 = !DIDerivedType(tag: DW_TAG_member, name: "is_gnr_a0_cpuid", scope: !811, file: !810, line: 426, baseType: !525, size: 8, offset: 647184)
+!1516 = !DIDerivedType(tag: DW_TAG_member, name: "is_gnr_d_cpuid", scope: !811, file: !810, line: 427, baseType: !525, size: 8, offset: 647192)
+!1517 = !{i32 7, !"Dwarf Version", i32 5}
+!1518 = !{i32 2, !"Debug Info Version", i32 3}
+!1519 = !{i32 1, !"wchar_size", i32 4}
+!1520 = !{i32 8, !"cf-protection-return", i32 1}
+!1521 = !{i32 8, !"cf-protection-branch", i32 1}
+!1522 = !{i32 8, !"PIC Level", i32 2}
+!1523 = !{i32 1, !"Code Model", i32 1}
+!1524 = !{i32 7, !"uwtable", i32 2}
+!1525 = !{i32 7, !"frame-pointer", i32 2}
+!1526 = !{i32 1, !"override-stack-alignment", i32 16}
+!1527 = !{!"Ubuntu clang version 18.1.3 (1ubuntu1)"}
+!1528 = distinct !DISubprogram(name: "tdh_import_abort", scope: !1529, file: !1529, line: 38, type: !1530, scopeLine: 39, flags: DIFlagPrototyped, spFlags: DISPFlagDefinition, unit: !0, retainedNodes: !1532)
+!1529 = !DIFile(filename: "src/vmm_dispatcher/migration_api_calls/tdh_import_abort.c", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "8de71d454aaa072df881650606da0500")
+!1530 = !DISubroutineType(types: !1531)
+!1531 = !{!786, !528, !528, !528}
+!1532 = !{}
+!1533 = !DILocalVariable(name: "target_tdr_pa", arg: 1, scope: !1528, file: !1529, line: 38, type: !528)
+!1534 = !DILocation(line: 38, column: 42, scope: !1528)
+!1535 = !DILocalVariable(name: "hpa_and_size_pa", arg: 2, scope: !1528, file: !1529, line: 38, type: !528)
+!1536 = !DILocation(line: 38, column: 66, scope: !1528)
+!1537 = !DILocalVariable(name: "migs_i", arg: 3, scope: !1528, file: !1529, line: 38, type: !528)
+!1538 = !DILocation(line: 38, column: 92, scope: !1528)
+!1539 = !DILocalVariable(name: "tdr_p", scope: !1528, file: !1529, line: 41, type: !1540)
+!1540 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !1541, size: 64)
+!1541 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdr_t", file: !4, line: 185, baseType: !1542)
+!1542 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdr_s", file: !4, line: 176, size: 32768, align: 32768, elements: !1543)
+!1543 = !{!1544, !1562, !1569, !1577, !1578}
+!1544 = !DIDerivedType(tag: DW_TAG_member, name: "management_fields", scope: !1542, file: !4, line: 179, baseType: !1545, size: 2048)
+!1545 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdr_td_management_fields_t", file: !4, line: 122, baseType: !1546)
+!1546 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdr_td_management_fields_s", file: !4, line: 106, size: 2048, elements: !1547)
+!1547 = !{!1548, !1549, !1550, !1551, !1553, !1557, !1558}
+!1548 = !DIDerivedType(tag: DW_TAG_member, name: "fatal", scope: !1546, file: !4, line: 108, baseType: !525, size: 8)
+!1549 = !DIDerivedType(tag: DW_TAG_member, name: "num_tdcx", scope: !1546, file: !4, line: 110, baseType: !555, size: 32, align: 32, offset: 32)
+!1550 = !DIDerivedType(tag: DW_TAG_member, name: "chldcnt", scope: !1546, file: !4, line: 115, baseType: !528, size: 64, align: 64, offset: 64)
+!1551 = !DIDerivedType(tag: DW_TAG_member, name: "lifecycle_state", scope: !1546, file: !4, line: 116, baseType: !1552, size: 32, align: 32, offset: 128)
+!1552 = !DIDerivedType(tag: DW_TAG_typedef, name: "td_lifecycle_state_t", file: !4, line: 63, baseType: !3)
+!1553 = !DIDerivedType(tag: DW_TAG_member, name: "tdcx_pa", scope: !1546, file: !4, line: 117, baseType: !1554, size: 576, align: 64, offset: 192)
+!1554 = !DICompositeType(tag: DW_TAG_array_type, baseType: !528, size: 576, elements: !1555)
+!1555 = !{!1556}
+!1556 = !DISubrange(count: 9)
+!1557 = !DIDerivedType(tag: DW_TAG_member, name: "td_uuid", scope: !1546, file: !4, line: 119, baseType: !885, size: 256, align: 256, offset: 768)
+!1558 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_2", scope: !1546, file: !4, line: 121, baseType: !1559, size: 1024, offset: 1024)
+!1559 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 1024, elements: !1560)
+!1560 = !{!1561}
+!1561 = !DISubrange(count: 128)
+!1562 = !DIDerivedType(tag: DW_TAG_member, name: "key_management_fields", scope: !1542, file: !4, line: 180, baseType: !1563, size: 512, offset: 2048)
+!1563 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdr_key_managment_fields_t", file: !4, line: 141, baseType: !1564)
+!1564 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdr_key_managment_fields_s", file: !4, line: 131, size: 512, elements: !1565)
+!1565 = !{!1566, !1567, !1568}
+!1566 = !DIDerivedType(tag: DW_TAG_member, name: "hkid", scope: !1564, file: !4, line: 133, baseType: !548, size: 16)
+!1567 = !DIDerivedType(tag: DW_TAG_member, name: "pkg_config_bitmap", scope: !1564, file: !4, line: 138, baseType: !528, size: 64, align: 64, offset: 64)
+!1568 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1564, file: !4, line: 140, baseType: !856, size: 384, offset: 128)
+!1569 = !DIDerivedType(tag: DW_TAG_member, name: "td_preserving_fields", scope: !1542, file: !4, line: 181, baseType: !1570, size: 512, offset: 2560)
+!1570 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdr_td_preserving_fields_t", file: !4, line: 156, baseType: !1571)
+!1571 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdr_td_preserving_fields_s", file: !4, line: 149, size: 512, elements: !1572)
+!1572 = !{!1573, !1574, !1575, !1576}
+!1573 = !DIDerivedType(tag: DW_TAG_member, name: "handoff_version", scope: !1571, file: !4, line: 151, baseType: !548, size: 16)
+!1574 = !DIDerivedType(tag: DW_TAG_member, name: "seamdb_index", scope: !1571, file: !4, line: 152, baseType: !528, size: 64, align: 64, offset: 64)
+!1575 = !DIDerivedType(tag: DW_TAG_member, name: "seamdb_nonce", scope: !1571, file: !4, line: 153, baseType: !885, size: 256, offset: 128)
+!1576 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1571, file: !4, line: 155, baseType: !570, size: 128, offset: 384)
+!1577 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_io", scope: !1542, file: !4, line: 182, baseType: !570, size: 128, offset: 3072)
+!1578 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1542, file: !4, line: 183, baseType: !1579, size: 29568, offset: 3200)
+!1579 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 29568, elements: !1580)
+!1580 = !{!1581}
+!1581 = !DISubrange(count: 3696)
+!1582 = !DILocation(line: 41, column: 24, scope: !1528)
+!1583 = !DILocalVariable(name: "tdr_pa", scope: !1528, file: !1529, line: 42, type: !698)
+!1584 = !DILocation(line: 42, column: 24, scope: !1528)
+!1585 = !DILocalVariable(name: "tdr_pamt_walk_result", scope: !1528, file: !1529, line: 43, type: !1586)
+!1586 = !DIDerivedType(tag: DW_TAG_typedef, name: "pamt_walk_result_t", file: !12, line: 216, baseType: !1587)
+!1587 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "pamt_walk_result_s", file: !12, line: 203, size: 384, elements: !1588)
+!1588 = !{!1589, !1590, !1592, !1658, !1660}
+!1589 = !DIDerivedType(tag: DW_TAG_member, name: "valid", scope: !1587, file: !12, line: 205, baseType: !525, size: 8)
+!1590 = !DIDerivedType(tag: DW_TAG_member, name: "level_reached", scope: !1587, file: !12, line: 206, baseType: !1591, size: 32, offset: 32)
+!1591 = !DIDerivedType(tag: DW_TAG_typedef, name: "page_size_t", file: !12, line: 63, baseType: !11)
+!1592 = !DIDerivedType(tag: DW_TAG_member, scope: !1587, file: !12, line: 208, baseType: !1593, size: 192, offset: 64)
+!1593 = distinct !DICompositeType(tag: DW_TAG_union_type, scope: !1587, file: !12, line: 208, size: 192, elements: !1594)
+!1594 = !{!1595, !1635}
+!1595 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_walk_path", scope: !1593, file: !12, line: 210, baseType: !1596, size: 192)
+!1596 = !DICompositeType(tag: DW_TAG_array_type, baseType: !1597, size: 192, elements: !1633)
+!1597 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !1598, size: 64)
+!1598 = !DIDerivedType(tag: DW_TAG_typedef, name: "pamt_entry_t", file: !12, line: 109, baseType: !1599)
+!1599 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "pamt_entry_s", file: !12, line: 95, size: 128, elements: !1600)
+!1600 = !{!1601, !1619}
+!1601 = !DIDerivedType(tag: DW_TAG_member, scope: !1599, file: !12, line: 97, baseType: !1602, size: 64)
+!1602 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1599, file: !12, line: 97, size: 64, elements: !1603)
+!1603 = !{!1604, !1615, !1617, !1618}
+!1604 = !DIDerivedType(tag: DW_TAG_member, name: "entry_lock", scope: !1602, file: !12, line: 99, baseType: !1605, size: 16, align: 16)
+!1605 = !DIDerivedType(tag: DW_TAG_typedef, name: "sharex_hp_lock_t", file: !28, line: 313, baseType: !1606)
+!1606 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !28, line: 304, size: 16, align: 16, elements: !1607)
+!1607 = !{!1608, !1614}
+!1608 = !DIDerivedType(tag: DW_TAG_member, scope: !1606, file: !28, line: 306, baseType: !1609, size: 16)
+!1609 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1606, file: !28, line: 306, size: 16, elements: !1610)
+!1610 = !{!1611, !1612, !1613}
+!1611 = !DIDerivedType(tag: DW_TAG_member, name: "exclusive", scope: !1609, file: !28, line: 308, baseType: !548, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1612 = !DIDerivedType(tag: DW_TAG_member, name: "host_prio", scope: !1609, file: !28, line: 309, baseType: !548, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1613 = !DIDerivedType(tag: DW_TAG_member, name: "counter", scope: !1609, file: !28, line: 310, baseType: !548, size: 14, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!1614 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1606, file: !28, line: 312, baseType: !548, size: 16)
+!1615 = !DIDerivedType(tag: DW_TAG_member, name: "pt", scope: !1602, file: !12, line: 100, baseType: !1616, size: 5, offset: 16, flags: DIFlagBitField, extraData: i64 16)
+!1616 = !DIDerivedType(tag: DW_TAG_typedef, name: "page_type_t", file: !12, line: 54, baseType: !17)
+!1617 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1602, file: !12, line: 101, baseType: !528, size: 3, offset: 21, flags: DIFlagBitField, extraData: i64 16)
+!1618 = !DIDerivedType(tag: DW_TAG_member, name: "owner", scope: !1602, file: !12, line: 102, baseType: !528, size: 40, offset: 24, flags: DIFlagBitField, extraData: i64 16)
+!1619 = !DIDerivedType(tag: DW_TAG_member, scope: !1599, file: !12, line: 105, baseType: !1620, size: 64, offset: 64)
+!1620 = distinct !DICompositeType(tag: DW_TAG_union_type, scope: !1599, file: !12, line: 105, size: 64, elements: !1621)
+!1621 = !{!1622}
+!1622 = !DIDerivedType(tag: DW_TAG_member, name: "bepoch", scope: !1620, file: !12, line: 107, baseType: !1623, size: 64)
+!1623 = !DIDerivedType(tag: DW_TAG_typedef, name: "bepoch_t", file: !12, line: 87, baseType: !1624)
+!1624 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "bepoch_u", file: !12, line: 77, size: 64, elements: !1625)
+!1625 = !{!1626, !1632}
+!1626 = !DIDerivedType(tag: DW_TAG_member, scope: !1624, file: !12, line: 79, baseType: !1627, size: 64)
+!1627 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1624, file: !12, line: 79, size: 64, elements: !1628)
+!1628 = !{!1629, !1630, !1631}
+!1629 = !DIDerivedType(tag: DW_TAG_member, name: "mig_epoch", scope: !1627, file: !12, line: 81, baseType: !528, size: 32, flags: DIFlagBitField, extraData: i64 0)
+!1630 = !DIDerivedType(tag: DW_TAG_member, name: "export_count", scope: !1627, file: !12, line: 82, baseType: !528, size: 31, offset: 32, flags: DIFlagBitField, extraData: i64 0)
+!1631 = !DIDerivedType(tag: DW_TAG_member, name: "mig_flag", scope: !1627, file: !12, line: 83, baseType: !528, size: 1, offset: 63, flags: DIFlagBitField, extraData: i64 0)
+!1632 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1624, file: !12, line: 86, baseType: !528, size: 64)
+!1633 = !{!1634}
+!1634 = !DISubrange(count: 3)
+!1635 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_walk_path_nl", scope: !1593, file: !12, line: 211, baseType: !1636, size: 192)
+!1636 = !DICompositeType(tag: DW_TAG_array_type, baseType: !1637, size: 192, elements: !1633)
+!1637 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !1638, size: 64)
+!1638 = !DIDerivedType(tag: DW_TAG_typedef, name: "pamt_non_leaf_entry_t", file: !12, line: 142, baseType: !1639)
+!1639 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "pamt_non_leaf_entry_s", file: !12, line: 120, size: 128, elements: !1640)
+!1640 = !{!1641, !1648}
+!1641 = !DIDerivedType(tag: DW_TAG_member, scope: !1639, file: !12, line: 122, baseType: !1642, size: 64)
+!1642 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1639, file: !12, line: 122, size: 64, elements: !1643)
+!1643 = !{!1644, !1645, !1646, !1647}
+!1644 = !DIDerivedType(tag: DW_TAG_member, name: "entry_lock", scope: !1642, file: !12, line: 124, baseType: !1605, size: 16, align: 16)
+!1645 = !DIDerivedType(tag: DW_TAG_member, name: "pt", scope: !1642, file: !12, line: 125, baseType: !1616, size: 5, offset: 16, flags: DIFlagBitField, extraData: i64 16)
+!1646 = !DIDerivedType(tag: DW_TAG_member, name: "reserved0", scope: !1642, file: !12, line: 126, baseType: !528, size: 7, offset: 21, flags: DIFlagBitField, extraData: i64 16)
+!1647 = !DIDerivedType(tag: DW_TAG_member, name: "page_hpa0", scope: !1642, file: !12, line: 127, baseType: !528, size: 36, offset: 28, flags: DIFlagBitField, extraData: i64 16)
+!1648 = !DIDerivedType(tag: DW_TAG_member, scope: !1639, file: !12, line: 130, baseType: !1649, size: 64, offset: 64)
+!1649 = distinct !DICompositeType(tag: DW_TAG_union_type, scope: !1639, file: !12, line: 130, size: 64, elements: !1650)
+!1650 = !{!1651, !1657}
+!1651 = !DIDerivedType(tag: DW_TAG_member, scope: !1649, file: !12, line: 132, baseType: !1652, size: 64)
+!1652 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1649, file: !12, line: 132, size: 64, elements: !1653)
+!1653 = !{!1654, !1655, !1656}
+!1654 = !DIDerivedType(tag: DW_TAG_member, name: "page_count", scope: !1652, file: !12, line: 134, baseType: !528, size: 10, flags: DIFlagBitField, extraData: i64 0)
+!1655 = !DIDerivedType(tag: DW_TAG_member, name: "reserved1", scope: !1652, file: !12, line: 135, baseType: !528, size: 18, offset: 10, flags: DIFlagBitField, extraData: i64 0)
+!1656 = !DIDerivedType(tag: DW_TAG_member, name: "page_hpa1", scope: !1652, file: !12, line: 136, baseType: !528, size: 36, offset: 28, flags: DIFlagBitField, extraData: i64 0)
+!1657 = !DIDerivedType(tag: DW_TAG_member, name: "second_quadword", scope: !1649, file: !12, line: 139, baseType: !528, size: 64)
+!1658 = !DIDerivedType(tag: DW_TAG_member, name: "leaf_lock_type", scope: !1587, file: !12, line: 214, baseType: !1659, size: 32, offset: 256)
+!1659 = !DIDerivedType(tag: DW_TAG_typedef, name: "lock_type_t", file: !28, line: 46, baseType: !27)
+!1660 = !DIDerivedType(tag: DW_TAG_member, name: "pamt_entry_p", scope: !1587, file: !12, line: 215, baseType: !1597, size: 64, offset: 320)
+!1661 = !DILocation(line: 43, column: 24, scope: !1528)
+!1662 = !DILocalVariable(name: "tdcs_p", scope: !1528, file: !1529, line: 44, type: !1663)
+!1663 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !1664, size: 64)
+!1664 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdcs_t", file: !4, line: 839, baseType: !1665)
+!1665 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdcs_s", file: !4, line: 768, size: 294912, align: 32768, elements: !1666)
+!1666 = !{!1667, !1683, !1826, !1850, !1887, !1923, !1979, !1981, !2042, !2099, !2103, !2116, !2117, !2121, !2122, !2123, !2149, !2150, !2151}
+!1667 = !DIDerivedType(tag: DW_TAG_member, name: "management_fields", scope: !1665, file: !4, line: 773, baseType: !1668, size: 1024)
+!1668 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdcs_management_fields_t", file: !4, line: 230, baseType: !1669)
+!1669 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdcs_management_fields_s", file: !4, line: 207, size: 1024, elements: !1670)
+!1670 = !{!1671, !1672, !1673, !1675, !1676, !1678, !1679}
+!1671 = !DIDerivedType(tag: DW_TAG_member, name: "num_vcpus", scope: !1669, file: !4, line: 215, baseType: !555, size: 32)
+!1672 = !DIDerivedType(tag: DW_TAG_member, name: "num_assoc_vcpus", scope: !1669, file: !4, line: 220, baseType: !555, size: 32, offset: 32)
+!1673 = !DIDerivedType(tag: DW_TAG_member, name: "op_state", scope: !1669, file: !4, line: 222, baseType: !1674, size: 32, offset: 64)
+!1674 = !DIDerivedType(tag: DW_TAG_typedef, name: "op_state_e", file: !34, line: 56, baseType: !33)
+!1675 = !DIDerivedType(tag: DW_TAG_member, name: "op_state_lock", scope: !1669, file: !4, line: 223, baseType: !1605, size: 16, align: 16, offset: 96)
+!1676 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !1669, file: !4, line: 224, baseType: !1677, size: 16, offset: 112)
+!1677 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 16, elements: !782)
+!1678 = !DIDerivedType(tag: DW_TAG_member, name: "num_l2_vms", scope: !1669, file: !4, line: 227, baseType: !548, size: 16, offset: 128)
+!1679 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1669, file: !4, line: 228, baseType: !1680, size: 880, offset: 144)
+!1680 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 880, elements: !1681)
+!1681 = !{!1682}
+!1682 = !DISubrange(count: 110)
+!1683 = !DIDerivedType(tag: DW_TAG_member, name: "executions_ctl_fields", scope: !1665, file: !4, line: 774, baseType: !1684, size: 3072, offset: 1024)
+!1684 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdcs_execution_control_fields_t", file: !4, line: 551, baseType: !1685)
+!1685 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdcs_execution_control_fields_s", file: !4, line: 505, size: 3072, elements: !1686)
+!1686 = !{!1687, !1711, !1712, !1713, !1714, !1729, !1730, !1731, !1732, !1733, !1767, !1768, !1778, !1779, !1793, !1794, !1795, !1809, !1810, !1812, !1813, !1814, !1815, !1816, !1820, !1822}
+!1687 = !DIDerivedType(tag: DW_TAG_member, name: "attributes", scope: !1685, file: !4, line: 507, baseType: !1688, size: 64)
+!1688 = !DIDerivedType(tag: DW_TAG_typedef, name: "td_param_attributes_t", file: !54, line: 409, baseType: !1689)
+!1689 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "td_param_attributes_s", file: !54, line: 388, size: 64, elements: !1690)
+!1690 = !{!1691, !1710}
+!1691 = !DIDerivedType(tag: DW_TAG_member, scope: !1689, file: !54, line: 389, baseType: !1692, size: 64)
+!1692 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1689, file: !54, line: 389, size: 64, elements: !1693)
+!1693 = !{!1694, !1695, !1696, !1697, !1698, !1699, !1700, !1701, !1702, !1703, !1704, !1705, !1706, !1707, !1708, !1709}
+!1694 = !DIDerivedType(tag: DW_TAG_member, name: "debug", scope: !1692, file: !54, line: 391, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1695 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_tud", scope: !1692, file: !54, line: 392, baseType: !528, size: 3, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1696 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_tup", scope: !1692, file: !54, line: 393, baseType: !528, size: 2, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1697 = !DIDerivedType(tag: DW_TAG_member, name: "pmt_prof", scope: !1692, file: !54, line: 394, baseType: !528, size: 1, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!1698 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_tup2", scope: !1692, file: !54, line: 395, baseType: !528, size: 9, offset: 7, flags: DIFlagBitField, extraData: i64 0)
+!1699 = !DIDerivedType(tag: DW_TAG_member, name: "icssd", scope: !1692, file: !54, line: 396, baseType: !528, size: 1, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!1700 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_p", scope: !1692, file: !54, line: 397, baseType: !528, size: 6, offset: 17, flags: DIFlagBitField, extraData: i64 0)
+!1701 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_n", scope: !1692, file: !54, line: 398, baseType: !528, size: 4, offset: 23, flags: DIFlagBitField, extraData: i64 0)
+!1702 = !DIDerivedType(tag: DW_TAG_member, name: "lass", scope: !1692, file: !54, line: 399, baseType: !528, size: 1, offset: 27, flags: DIFlagBitField, extraData: i64 0)
+!1703 = !DIDerivedType(tag: DW_TAG_member, name: "sept_ve_disable", scope: !1692, file: !54, line: 400, baseType: !528, size: 1, offset: 28, flags: DIFlagBitField, extraData: i64 0)
+!1704 = !DIDerivedType(tag: DW_TAG_member, name: "migratable", scope: !1692, file: !54, line: 401, baseType: !528, size: 1, offset: 29, flags: DIFlagBitField, extraData: i64 0)
+!1705 = !DIDerivedType(tag: DW_TAG_member, name: "pks", scope: !1692, file: !54, line: 402, baseType: !528, size: 1, offset: 30, flags: DIFlagBitField, extraData: i64 0)
+!1706 = !DIDerivedType(tag: DW_TAG_member, name: "kl", scope: !1692, file: !54, line: 403, baseType: !528, size: 1, offset: 31, flags: DIFlagBitField, extraData: i64 0)
+!1707 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_other", scope: !1692, file: !54, line: 404, baseType: !528, size: 30, offset: 32, flags: DIFlagBitField, extraData: i64 0)
+!1708 = !DIDerivedType(tag: DW_TAG_member, name: "tpa", scope: !1692, file: !54, line: 405, baseType: !528, size: 1, offset: 62, flags: DIFlagBitField, extraData: i64 0)
+!1709 = !DIDerivedType(tag: DW_TAG_member, name: "perfmon", scope: !1692, file: !54, line: 406, baseType: !528, size: 1, offset: 63, flags: DIFlagBitField, extraData: i64 0)
+!1710 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1689, file: !54, line: 408, baseType: !528, size: 64)
+!1711 = !DIDerivedType(tag: DW_TAG_member, name: "xfam", scope: !1685, file: !4, line: 512, baseType: !528, size: 64, align: 64, offset: 64)
+!1712 = !DIDerivedType(tag: DW_TAG_member, name: "max_vcpus", scope: !1685, file: !4, line: 513, baseType: !555, size: 32, align: 32, offset: 128)
+!1713 = !DIDerivedType(tag: DW_TAG_member, name: "gpaw", scope: !1685, file: !4, line: 514, baseType: !525, size: 8, align: 8, offset: 160)
+!1714 = !DIDerivedType(tag: DW_TAG_member, name: "eptp", scope: !1685, file: !4, line: 519, baseType: !1715, size: 64, align: 64, offset: 192)
+!1715 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32e_eptp_t", file: !699, line: 614, baseType: !1716)
+!1716 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "ia32e_eptp_u", file: !699, line: 602, size: 64, elements: !1717)
+!1717 = !{!1718, !1728}
+!1718 = !DIDerivedType(tag: DW_TAG_member, name: "fields", scope: !1716, file: !699, line: 612, baseType: !1719, size: 64)
+!1719 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1716, file: !699, line: 603, size: 64, elements: !1720)
+!1720 = !{!1721, !1722, !1723, !1724, !1725, !1726, !1727}
+!1721 = !DIDerivedType(tag: DW_TAG_member, name: "ept_ps_mt", scope: !1719, file: !699, line: 605, baseType: !528, size: 3, flags: DIFlagBitField, extraData: i64 0)
+!1722 = !DIDerivedType(tag: DW_TAG_member, name: "ept_pwl", scope: !1719, file: !699, line: 606, baseType: !528, size: 3, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!1723 = !DIDerivedType(tag: DW_TAG_member, name: "enable_ad_bits", scope: !1719, file: !699, line: 607, baseType: !528, size: 1, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!1724 = !DIDerivedType(tag: DW_TAG_member, name: "enable_sss_control", scope: !1719, file: !699, line: 608, baseType: !528, size: 1, offset: 7, flags: DIFlagBitField, extraData: i64 0)
+!1725 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !1719, file: !699, line: 609, baseType: !528, size: 4, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!1726 = !DIDerivedType(tag: DW_TAG_member, name: "base_pa", scope: !1719, file: !699, line: 610, baseType: !528, size: 40, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!1727 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1719, file: !699, line: 611, baseType: !528, size: 12, offset: 52, flags: DIFlagBitField, extraData: i64 0)
+!1728 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1716, file: !699, line: 613, baseType: !528, size: 64)
+!1729 = !DIDerivedType(tag: DW_TAG_member, name: "secure_ept_lock", scope: !1685, file: !4, line: 520, baseType: !1605, size: 16, align: 16, offset: 256)
+!1730 = !DIDerivedType(tag: DW_TAG_member, name: "tsc_offset", scope: !1685, file: !4, line: 526, baseType: !528, size: 64, align: 64, offset: 320)
+!1731 = !DIDerivedType(tag: DW_TAG_member, name: "tsc_multiplier", scope: !1685, file: !4, line: 532, baseType: !528, size: 64, align: 64, offset: 384)
+!1732 = !DIDerivedType(tag: DW_TAG_member, name: "tsc_frequency", scope: !1685, file: !4, line: 533, baseType: !548, size: 16, align: 16, offset: 448)
+!1733 = !DIDerivedType(tag: DW_TAG_member, name: "cpuid_flags", scope: !1685, file: !4, line: 534, baseType: !1734, size: 256, align: 8, offset: 464)
+!1734 = !DIDerivedType(tag: DW_TAG_typedef, name: "cpuid_flags_t", file: !4, line: 387, baseType: !1735)
+!1735 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "cpuid_flags_s", file: !4, line: 354, size: 256, elements: !1736)
+!1736 = !{!1737, !1738, !1739, !1740, !1741, !1742, !1743, !1744, !1745, !1746, !1747, !1748, !1749, !1750, !1751, !1752, !1753, !1754, !1755, !1756, !1757, !1758, !1759, !1760, !1761, !1762, !1763, !1764, !1765}
+!1737 = !DIDerivedType(tag: DW_TAG_member, name: "monitor_mwait_supported", scope: !1735, file: !4, line: 356, baseType: !525, size: 8)
+!1738 = !DIDerivedType(tag: DW_TAG_member, name: "dca_supported", scope: !1735, file: !4, line: 357, baseType: !525, size: 8, offset: 8)
+!1739 = !DIDerivedType(tag: DW_TAG_member, name: "tsc_deadline_supported", scope: !1735, file: !4, line: 358, baseType: !525, size: 8, offset: 16)
+!1740 = !DIDerivedType(tag: DW_TAG_member, name: "tsx_supported", scope: !1735, file: !4, line: 359, baseType: !525, size: 8, offset: 24)
+!1741 = !DIDerivedType(tag: DW_TAG_member, name: "waitpkg_supported", scope: !1735, file: !4, line: 360, baseType: !525, size: 8, offset: 32)
+!1742 = !DIDerivedType(tag: DW_TAG_member, name: "tme_supported", scope: !1735, file: !4, line: 361, baseType: !525, size: 8, offset: 40)
+!1743 = !DIDerivedType(tag: DW_TAG_member, name: "pconfig_supported", scope: !1735, file: !4, line: 362, baseType: !525, size: 8, offset: 48)
+!1744 = !DIDerivedType(tag: DW_TAG_member, name: "xfd_supported", scope: !1735, file: !4, line: 363, baseType: !525, size: 8, offset: 56)
+!1745 = !DIDerivedType(tag: DW_TAG_member, name: "ddpd_supported", scope: !1735, file: !4, line: 364, baseType: !525, size: 8, offset: 64)
+!1746 = !DIDerivedType(tag: DW_TAG_member, name: "la57_supported", scope: !1735, file: !4, line: 365, baseType: !525, size: 8, offset: 72)
+!1747 = !DIDerivedType(tag: DW_TAG_member, name: "fred_supported", scope: !1735, file: !4, line: 366, baseType: !525, size: 8, offset: 80)
+!1748 = !DIDerivedType(tag: DW_TAG_member, name: "perfmon_ext_leaf_supported", scope: !1735, file: !4, line: 367, baseType: !525, size: 8, offset: 88)
+!1749 = !DIDerivedType(tag: DW_TAG_member, name: "umsr_supported", scope: !1735, file: !4, line: 368, baseType: !525, size: 8, offset: 96)
+!1750 = !DIDerivedType(tag: DW_TAG_member, name: "arch_pebs_supported", scope: !1735, file: !4, line: 369, baseType: !525, size: 8, offset: 104)
+!1751 = !DIDerivedType(tag: DW_TAG_member, name: "kl_no_backup_supported", scope: !1735, file: !4, line: 370, baseType: !525, size: 8, offset: 112)
+!1752 = !DIDerivedType(tag: DW_TAG_member, name: "kl_random_supported", scope: !1735, file: !4, line: 371, baseType: !525, size: 8, offset: 120)
+!1753 = !DIDerivedType(tag: DW_TAG_member, name: "avx10_512vl_supported", scope: !1735, file: !4, line: 372, baseType: !525, size: 8, offset: 128)
+!1754 = !DIDerivedType(tag: DW_TAG_member, name: "avx10_supported", scope: !1735, file: !4, line: 373, baseType: !525, size: 8, offset: 136)
+!1755 = !DIDerivedType(tag: DW_TAG_member, name: "core_capabilities_not_supported", scope: !1735, file: !4, line: 375, baseType: !525, size: 8, offset: 144)
+!1756 = !DIDerivedType(tag: DW_TAG_member, name: "est_supported", scope: !1735, file: !4, line: 376, baseType: !525, size: 8, offset: 152)
+!1757 = !DIDerivedType(tag: DW_TAG_member, name: "mce_not_supported", scope: !1735, file: !4, line: 377, baseType: !525, size: 8, offset: 160)
+!1758 = !DIDerivedType(tag: DW_TAG_member, name: "mca_not_supported", scope: !1735, file: !4, line: 378, baseType: !525, size: 8, offset: 168)
+!1759 = !DIDerivedType(tag: DW_TAG_member, name: "mtrr_not_supported", scope: !1735, file: !4, line: 379, baseType: !525, size: 8, offset: 176)
+!1760 = !DIDerivedType(tag: DW_TAG_member, name: "rdt_a_supported", scope: !1735, file: !4, line: 380, baseType: !525, size: 8, offset: 184)
+!1761 = !DIDerivedType(tag: DW_TAG_member, name: "rdt_m_supported", scope: !1735, file: !4, line: 381, baseType: !525, size: 8, offset: 192)
+!1762 = !DIDerivedType(tag: DW_TAG_member, name: "acpi_supported", scope: !1735, file: !4, line: 382, baseType: !525, size: 8, offset: 200)
+!1763 = !DIDerivedType(tag: DW_TAG_member, name: "tm2_supported", scope: !1735, file: !4, line: 383, baseType: !525, size: 8, offset: 208)
+!1764 = !DIDerivedType(tag: DW_TAG_member, name: "xtpr_update_supported", scope: !1735, file: !4, line: 384, baseType: !525, size: 8, offset: 216)
+!1765 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1735, file: !4, line: 386, baseType: !1766, size: 32, offset: 224)
+!1766 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 32, elements: !838)
+!1767 = !DIDerivedType(tag: DW_TAG_member, name: "xbuff_size", scope: !1685, file: !4, line: 535, baseType: !555, size: 32, align: 32, offset: 736)
+!1768 = !DIDerivedType(tag: DW_TAG_member, name: "notify_enables", scope: !1685, file: !4, line: 536, baseType: !1769, size: 64, align: 64, offset: 768)
+!1769 = !DIDerivedType(tag: DW_TAG_typedef, name: "notify_enables_t", file: !4, line: 398, baseType: !1770)
+!1770 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !4, line: 390, size: 64, elements: !1771)
+!1771 = !{!1772, !1777}
+!1772 = !DIDerivedType(tag: DW_TAG_member, scope: !1770, file: !4, line: 392, baseType: !1773, size: 64)
+!1773 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1770, file: !4, line: 392, size: 64, elements: !1774)
+!1774 = !{!1775, !1776}
+!1775 = !DIDerivedType(tag: DW_TAG_member, name: "notify_ept_faults", scope: !1773, file: !4, line: 394, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1776 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_63_1", scope: !1773, file: !4, line: 395, baseType: !528, size: 63, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1777 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1770, file: !4, line: 397, baseType: !528, size: 64)
+!1778 = !DIDerivedType(tag: DW_TAG_member, name: "hp_lock_timeout", scope: !1685, file: !4, line: 537, baseType: !528, size: 64, align: 64, offset: 832)
+!1779 = !DIDerivedType(tag: DW_TAG_member, name: "vm_ctls", scope: !1685, file: !4, line: 538, baseType: !1780, size: 256, align: 64, offset: 896)
+!1780 = !DICompositeType(tag: DW_TAG_array_type, baseType: !1781, size: 256, elements: !838)
+!1781 = !DIDerivedType(tag: DW_TAG_typedef, name: "vm_ctls_t", file: !4, line: 412, baseType: !1782)
+!1782 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !4, line: 401, size: 64, elements: !1783)
+!1783 = !{!1784, !1792}
+!1784 = !DIDerivedType(tag: DW_TAG_member, scope: !1782, file: !4, line: 403, baseType: !1785, size: 64)
+!1785 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1782, file: !4, line: 403, size: 64, elements: !1786)
+!1786 = !{!1787, !1788, !1789, !1790, !1791}
+!1787 = !DIDerivedType(tag: DW_TAG_member, name: "ept_violation_on_l2_sept_walk_failure", scope: !1785, file: !4, line: 405, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1788 = !DIDerivedType(tag: DW_TAG_member, name: "hint_on_vintr_pending", scope: !1785, file: !4, line: 406, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1789 = !DIDerivedType(tag: DW_TAG_member, name: "hint_on_vintr_in_service", scope: !1785, file: !4, line: 407, baseType: !528, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!1790 = !DIDerivedType(tag: DW_TAG_member, name: "hint_on_vnmi_pending", scope: !1785, file: !4, line: 408, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!1791 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1785, file: !4, line: 409, baseType: !528, size: 60, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1792 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1782, file: !4, line: 411, baseType: !528, size: 64)
+!1793 = !DIDerivedType(tag: DW_TAG_member, name: "ia32_spec_ctrl_mask", scope: !1685, file: !4, line: 539, baseType: !528, size: 64, align: 64, offset: 1152)
+!1794 = !DIDerivedType(tag: DW_TAG_member, name: "config_flags", scope: !1685, file: !4, line: 540, baseType: !1423, size: 64, align: 64, offset: 1216)
+!1795 = !DIDerivedType(tag: DW_TAG_member, name: "td_ctls", scope: !1685, file: !4, line: 541, baseType: !1796, size: 64, align: 64, offset: 1280)
+!1796 = !DIDerivedType(tag: DW_TAG_typedef, name: "td_ctls_t", file: !4, line: 429, baseType: !1797)
+!1797 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !4, line: 417, size: 64, elements: !1798)
+!1798 = !{!1799, !1808}
+!1799 = !DIDerivedType(tag: DW_TAG_member, scope: !1797, file: !4, line: 419, baseType: !1800, size: 64)
+!1800 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1797, file: !4, line: 419, size: 64, elements: !1801)
+!1801 = !{!1802, !1803, !1804, !1805, !1806, !1807}
+!1802 = !DIDerivedType(tag: DW_TAG_member, name: "pending_ve_disable", scope: !1800, file: !4, line: 421, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1803 = !DIDerivedType(tag: DW_TAG_member, name: "enum_topology", scope: !1800, file: !4, line: 422, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1804 = !DIDerivedType(tag: DW_TAG_member, name: "virt_cpuid2", scope: !1800, file: !4, line: 423, baseType: !528, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!1805 = !DIDerivedType(tag: DW_TAG_member, name: "reduce_ve", scope: !1800, file: !4, line: 424, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!1806 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1800, file: !4, line: 425, baseType: !528, size: 59, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!1807 = !DIDerivedType(tag: DW_TAG_member, name: "lock", scope: !1800, file: !4, line: 426, baseType: !528, size: 1, offset: 63, flags: DIFlagBitField, extraData: i64 0)
+!1808 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1797, file: !4, line: 428, baseType: !528, size: 64)
+!1809 = !DIDerivedType(tag: DW_TAG_member, name: "virt_maxpa", scope: !1685, file: !4, line: 542, baseType: !527, size: 8, offset: 1344)
+!1810 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_2", scope: !1685, file: !4, line: 543, baseType: !1811, size: 24, offset: 1352)
+!1811 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 24, elements: !1633)
+!1812 = !DIDerivedType(tag: DW_TAG_member, name: "topology_enum_configured", scope: !1685, file: !4, line: 544, baseType: !525, size: 8, offset: 1376)
+!1813 = !DIDerivedType(tag: DW_TAG_member, name: "ve_reduction_valid", scope: !1685, file: !4, line: 545, baseType: !525, size: 8, offset: 1384)
+!1814 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_3", scope: !1685, file: !4, line: 546, baseType: !1677, size: 16, offset: 1392)
+!1815 = !DIDerivedType(tag: DW_TAG_member, name: "perfmon_ext_subleaves_bitmap", scope: !1685, file: !4, line: 547, baseType: !555, size: 32, offset: 1408)
+!1816 = !DIDerivedType(tag: DW_TAG_member, name: "cpuid_valid", scope: !1685, file: !4, line: 548, baseType: !1817, size: 640, offset: 1440)
+!1817 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 640, elements: !1818)
+!1818 = !{!1819}
+!1819 = !DISubrange(count: 80)
+!1820 = !DIDerivedType(tag: DW_TAG_member, name: "xbuff_offsets", scope: !1685, file: !4, line: 549, baseType: !1821, size: 608, align: 128, offset: 2176)
+!1821 = !DICompositeType(tag: DW_TAG_array_type, baseType: !555, size: 608, elements: !1344)
+!1822 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_4", scope: !1685, file: !4, line: 550, baseType: !1823, size: 288, offset: 2784)
+!1823 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 288, elements: !1824)
+!1824 = !{!1825}
+!1825 = !DISubrange(count: 36)
+!1826 = !DIDerivedType(tag: DW_TAG_member, name: "epoch_tracking", scope: !1665, file: !4, line: 776, baseType: !1827, size: 512, offset: 4096)
+!1827 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdcs_epoch_tracking_fields_t", file: !4, line: 341, baseType: !1828)
+!1828 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdcs_epoch_tracking_fields_s", file: !4, line: 334, size: 512, elements: !1829)
+!1829 = !{!1830, !1845, !1846}
+!1830 = !DIDerivedType(tag: DW_TAG_member, name: "epoch_and_refcount", scope: !1828, file: !4, line: 336, baseType: !1831, size: 128)
+!1831 = !DIDerivedType(tag: DW_TAG_typedef, name: "epoch_and_refcount_t", file: !4, line: 326, baseType: !1832)
+!1832 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "epoch_and_refcount_s", file: !4, line: 306, size: 128, elements: !1833)
+!1833 = !{!1834}
+!1834 = !DIDerivedType(tag: DW_TAG_member, scope: !1832, file: !4, line: 308, baseType: !1835, size: 128)
+!1835 = distinct !DICompositeType(tag: DW_TAG_union_type, scope: !1832, file: !4, line: 308, size: 128, elements: !1836)
+!1836 = !{!1837, !1844}
+!1837 = !DIDerivedType(tag: DW_TAG_member, scope: !1835, file: !4, line: 310, baseType: !1838, size: 128)
+!1838 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1835, file: !4, line: 310, size: 128, elements: !1839)
+!1839 = !{!1840, !1841, !1843}
+!1840 = !DIDerivedType(tag: DW_TAG_member, name: "td_epoch", scope: !1838, file: !4, line: 315, baseType: !528, size: 64)
+!1841 = !DIDerivedType(tag: DW_TAG_member, name: "refcount", scope: !1838, file: !4, line: 320, baseType: !1842, size: 32, offset: 64)
+!1842 = !DICompositeType(tag: DW_TAG_array_type, baseType: !548, size: 32, elements: !782)
+!1843 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1838, file: !4, line: 321, baseType: !1766, size: 32, offset: 96)
+!1844 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1835, file: !4, line: 323, baseType: !832, size: 128, align: 128)
+!1845 = !DIDerivedType(tag: DW_TAG_member, name: "epoch_lock", scope: !1828, file: !4, line: 338, baseType: !860, size: 16, align: 16, offset: 128)
+!1846 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1828, file: !4, line: 340, baseType: !1847, size: 368, offset: 144)
+!1847 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 368, elements: !1848)
+!1848 = !{!1849}
+!1849 = !DISubrange(count: 46)
+!1850 = !DIDerivedType(tag: DW_TAG_member, name: "measurement_fields", scope: !1665, file: !4, line: 777, baseType: !1851, size: 6656, offset: 4608)
+!1851 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdcs_measurement_fields_t", file: !4, line: 590, baseType: !1852)
+!1852 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdcs_measurement_fields_s", file: !4, line: 564, size: 6656, elements: !1853)
+!1853 = !{!1854, !1861, !1862, !1863, !1864, !1866, !1867, !1868, !1869, !1873, !1874, !1883}
+!1854 = !DIDerivedType(tag: DW_TAG_member, name: "mrtd", scope: !1852, file: !4, line: 566, baseType: !1855, size: 384)
+!1855 = !DIDerivedType(tag: DW_TAG_typedef, name: "measurement_t", file: !1478, line: 57, baseType: !1856)
+!1856 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "measurement_u", file: !1478, line: 53, size: 384, elements: !1857)
+!1857 = !{!1858, !1860}
+!1858 = !DIDerivedType(tag: DW_TAG_member, name: "qwords", scope: !1856, file: !1478, line: 55, baseType: !1859, size: 384)
+!1859 = !DICompositeType(tag: DW_TAG_array_type, baseType: !528, size: 384, elements: !619)
+!1860 = !DIDerivedType(tag: DW_TAG_member, name: "bytes", scope: !1856, file: !1478, line: 56, baseType: !856, size: 384)
+!1861 = !DIDerivedType(tag: DW_TAG_member, name: "mrconfigid", scope: !1852, file: !4, line: 567, baseType: !1855, size: 384, offset: 384)
+!1862 = !DIDerivedType(tag: DW_TAG_member, name: "mrowner", scope: !1852, file: !4, line: 568, baseType: !1855, size: 384, offset: 768)
+!1863 = !DIDerivedType(tag: DW_TAG_member, name: "mrownerconfig", scope: !1852, file: !4, line: 574, baseType: !1855, size: 384, offset: 1152)
+!1864 = !DIDerivedType(tag: DW_TAG_member, name: "rtmr", scope: !1852, file: !4, line: 575, baseType: !1865, size: 1536, offset: 1536)
+!1865 = !DICompositeType(tag: DW_TAG_array_type, baseType: !1855, size: 1536, elements: !838)
+!1866 = !DIDerivedType(tag: DW_TAG_member, name: "last_teeinfo_hash", scope: !1852, file: !4, line: 577, baseType: !1855, size: 384, offset: 3072)
+!1867 = !DIDerivedType(tag: DW_TAG_member, name: "rtmr_lock", scope: !1852, file: !4, line: 579, baseType: !1605, size: 16, align: 16, offset: 3456)
+!1868 = !DIDerivedType(tag: DW_TAG_member, name: "last_teeinfo_hash_valid", scope: !1852, file: !4, line: 581, baseType: !525, size: 8, offset: 3472)
+!1869 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !1852, file: !4, line: 582, baseType: !1870, size: 344, offset: 3480)
+!1870 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 344, elements: !1871)
+!1871 = !{!1872}
+!1872 = !DISubrange(count: 43)
+!1873 = !DIDerivedType(tag: DW_TAG_member, name: "mrtd_context_version", scope: !1852, file: !4, line: 583, baseType: !548, size: 16, offset: 3824)
+!1874 = !DIDerivedType(tag: DW_TAG_member, name: "td_sha_ctx", scope: !1852, file: !4, line: 587, baseType: !1875, size: 2112, offset: 3840)
+!1875 = !DIDerivedType(tag: DW_TAG_typedef, name: "sha384_ctx_t", file: !1478, line: 69, baseType: !1876)
+!1876 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "sha384_ctx_s", file: !1478, line: 65, size: 2112, elements: !1877)
+!1877 = !{!1878, !1879}
+!1878 = !DIDerivedType(tag: DW_TAG_member, name: "last_init_seamdb_index", scope: !1876, file: !1478, line: 67, baseType: !528, size: 64)
+!1879 = !DIDerivedType(tag: DW_TAG_member, name: "buffer", scope: !1876, file: !1478, line: 68, baseType: !1880, size: 2048, offset: 64)
+!1880 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 2048, elements: !1881)
+!1881 = !{!1882}
+!1882 = !DISubrange(count: 256)
+!1883 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1852, file: !4, line: 589, baseType: !1884, size: 704, offset: 5952)
+!1884 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 704, elements: !1885)
+!1885 = !{!1886}
+!1886 = !DISubrange(count: 88)
+!1887 = !DIDerivedType(tag: DW_TAG_member, name: "migration_fields", scope: !1665, file: !4, line: 782, baseType: !1888, size: 3072, offset: 11264)
+!1888 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdcs_migration_fields_t", file: !4, line: 635, baseType: !1889)
+!1889 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdcs_migration_fields_s", file: !4, line: 602, size: 3072, elements: !1890)
+!1890 = !{!1891, !1892, !1893, !1894, !1895, !1896, !1897, !1899, !1900, !1901, !1902, !1903, !1904, !1905, !1906, !1907, !1908, !1909, !1910, !1911, !1912, !1913, !1914, !1915, !1916, !1917, !1918, !1919, !1920, !1921, !1922}
+!1891 = !DIDerivedType(tag: DW_TAG_member, name: "mig_dec_key_set", scope: !1889, file: !4, line: 604, baseType: !525, size: 8)
+!1892 = !DIDerivedType(tag: DW_TAG_member, name: "export_count", scope: !1889, file: !4, line: 605, baseType: !555, size: 32, offset: 32)
+!1893 = !DIDerivedType(tag: DW_TAG_member, name: "import_count", scope: !1889, file: !4, line: 606, baseType: !555, size: 32, offset: 64)
+!1894 = !DIDerivedType(tag: DW_TAG_member, name: "mig_epoch", scope: !1889, file: !4, line: 607, baseType: !555, size: 32, offset: 96)
+!1895 = !DIDerivedType(tag: DW_TAG_member, name: "bw_epoch", scope: !1889, file: !4, line: 608, baseType: !1623, size: 64, offset: 128)
+!1896 = !DIDerivedType(tag: DW_TAG_member, name: "total_mb_count", scope: !1889, file: !4, line: 609, baseType: !528, size: 64, offset: 192)
+!1897 = !DIDerivedType(tag: DW_TAG_member, name: "mig_dec_key", scope: !1889, file: !4, line: 610, baseType: !1898, size: 256, offset: 256)
+!1898 = !DIDerivedType(tag: DW_TAG_typedef, name: "key256_t", file: !798, line: 36, baseType: !885)
+!1899 = !DIDerivedType(tag: DW_TAG_member, name: "mig_dec_working_key", scope: !1889, file: !4, line: 611, baseType: !1898, size: 256, offset: 512)
+!1900 = !DIDerivedType(tag: DW_TAG_member, name: "mig_enc_key", scope: !1889, file: !4, line: 612, baseType: !1898, size: 256, offset: 768)
+!1901 = !DIDerivedType(tag: DW_TAG_member, name: "mig_enc_working_key", scope: !1889, file: !4, line: 613, baseType: !1898, size: 256, offset: 1024)
+!1902 = !DIDerivedType(tag: DW_TAG_member, name: "mig_version", scope: !1889, file: !4, line: 614, baseType: !548, size: 16, offset: 1280)
+!1903 = !DIDerivedType(tag: DW_TAG_member, name: "mig_working_version", scope: !1889, file: !4, line: 615, baseType: !548, size: 16, offset: 1296)
+!1904 = !DIDerivedType(tag: DW_TAG_member, name: "reserved2", scope: !1889, file: !4, line: 616, baseType: !555, size: 32, offset: 1312)
+!1905 = !DIDerivedType(tag: DW_TAG_member, name: "dirty_count", scope: !1889, file: !4, line: 617, baseType: !528, size: 64, offset: 1344)
+!1906 = !DIDerivedType(tag: DW_TAG_member, name: "mig_count", scope: !1889, file: !4, line: 618, baseType: !528, size: 64, offset: 1408)
+!1907 = !DIDerivedType(tag: DW_TAG_member, name: "num_migs", scope: !1889, file: !4, line: 619, baseType: !548, size: 16, offset: 1472)
+!1908 = !DIDerivedType(tag: DW_TAG_member, name: "S4_migrated", scope: !1889, file: !4, line: 620, baseType: !527, size: 8, offset: 1488)
+!1909 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !1889, file: !4, line: 621, baseType: !527, size: 8, offset: 1496)
+!1910 = !DIDerivedType(tag: DW_TAG_member, name: "num_migrated_vcpus", scope: !1889, file: !4, line: 622, baseType: !555, size: 32, offset: 1504)
+!1911 = !DIDerivedType(tag: DW_TAG_member, name: "pre_import_uuid", scope: !1889, file: !4, line: 623, baseType: !885, size: 256, offset: 1536)
+!1912 = !DIDerivedType(tag: DW_TAG_member, name: "mig_lock", scope: !1889, file: !4, line: 624, baseType: !860, size: 16, align: 16, offset: 1792)
+!1913 = !DIDerivedType(tag: DW_TAG_member, name: "mem_scan_lock", scope: !1889, file: !4, line: 625, baseType: !860, size: 16, align: 16, offset: 1808)
+!1914 = !DIDerivedType(tag: DW_TAG_member, name: "num_mem_scan_ranges", scope: !1889, file: !4, line: 626, baseType: !527, size: 8, offset: 1824)
+!1915 = !DIDerivedType(tag: DW_TAG_member, name: "num_mem_scan_ranges_completed", scope: !1889, file: !4, line: 627, baseType: !527, size: 8, offset: 1832)
+!1916 = !DIDerivedType(tag: DW_TAG_member, name: "mem_scan_operation", scope: !1889, file: !4, line: 628, baseType: !527, size: 8, offset: 1840)
+!1917 = !DIDerivedType(tag: DW_TAG_member, name: "mem_scan_qualifier", scope: !1889, file: !4, line: 629, baseType: !527, size: 8, offset: 1848)
+!1918 = !DIDerivedType(tag: DW_TAG_member, name: "mem_scan_state", scope: !1889, file: !4, line: 630, baseType: !527, size: 8, offset: 1856)
+!1919 = !DIDerivedType(tag: DW_TAG_member, name: "mem_scan_control_page_hpas", scope: !1889, file: !4, line: 631, baseType: !788, size: 128, offset: 1920)
+!1920 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1889, file: !4, line: 632, baseType: !570, size: 128, offset: 2048)
+!1921 = !DIDerivedType(tag: DW_TAG_member, name: "mig_interrupted_count", scope: !1889, file: !4, line: 633, baseType: !548, size: 16, offset: 2176)
+!1922 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_2", scope: !1889, file: !4, line: 634, baseType: !1680, size: 880, offset: 2192)
+!1923 = !DIDerivedType(tag: DW_TAG_member, name: "virt_msrs", scope: !1665, file: !4, line: 784, baseType: !1924, size: 2048, offset: 14336)
+!1924 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdcs_virt_msrs_t", file: !4, line: 664, baseType: !1925)
+!1925 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdcs_virt_msrs_s", file: !4, line: 644, size: 2048, elements: !1926)
+!1926 = !{!1927, !1928, !1929, !1930, !1931, !1932, !1933, !1934, !1970, !1971, !1972, !1973, !1974, !1975, !1976, !1977, !1978}
+!1927 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_basic", scope: !1925, file: !4, line: 646, baseType: !988, size: 64)
+!1928 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_misc", scope: !1925, file: !4, line: 647, baseType: !1007, size: 64, offset: 64)
+!1929 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_cr0_fixed0", scope: !1925, file: !4, line: 648, baseType: !1063, size: 64, offset: 128)
+!1930 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_cr0_fixed1", scope: !1925, file: !4, line: 649, baseType: !1063, size: 64, offset: 192)
+!1931 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_cr4_fixed0", scope: !1925, file: !4, line: 650, baseType: !1087, size: 64, offset: 256)
+!1932 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_cr4_fixed1", scope: !1925, file: !4, line: 651, baseType: !1087, size: 64, offset: 320)
+!1933 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_procbased_ctls2", scope: !1925, file: !4, line: 652, baseType: !1030, size: 64, offset: 384)
+!1934 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_ept_vpid_cap", scope: !1925, file: !4, line: 653, baseType: !1935, size: 64, offset: 448)
+!1935 = !DIDerivedType(tag: DW_TAG_typedef, name: "ia32_vmx_ept_vpid_cap_t", file: !959, line: 397, baseType: !1936)
+!1936 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "ia32_vmx_ept_vpid_cap_u", file: !959, line: 363, size: 64, elements: !1937)
+!1937 = !{!1938, !1969}
+!1938 = !DIDerivedType(tag: DW_TAG_member, scope: !1936, file: !959, line: 365, baseType: !1939, size: 64)
+!1939 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !1936, file: !959, line: 365, size: 64, elements: !1940)
+!1940 = !{!1941, !1942, !1943, !1944, !1945, !1946, !1947, !1948, !1949, !1950, !1951, !1952, !1953, !1954, !1955, !1956, !1957, !1958, !1959, !1960, !1961, !1962, !1963, !1964, !1965, !1966, !1967, !1968}
+!1941 = !DIDerivedType(tag: DW_TAG_member, name: "exe_only_supported", scope: !1939, file: !959, line: 367, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!1942 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1939, file: !959, line: 368, baseType: !528, size: 5, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!1943 = !DIDerivedType(tag: DW_TAG_member, name: "pml4_supported", scope: !1939, file: !959, line: 369, baseType: !528, size: 1, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!1944 = !DIDerivedType(tag: DW_TAG_member, name: "pml5_supported", scope: !1939, file: !959, line: 370, baseType: !528, size: 1, offset: 7, flags: DIFlagBitField, extraData: i64 0)
+!1945 = !DIDerivedType(tag: DW_TAG_member, name: "uc_supported", scope: !1939, file: !959, line: 371, baseType: !528, size: 1, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!1946 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_2", scope: !1939, file: !959, line: 372, baseType: !528, size: 5, offset: 9, flags: DIFlagBitField, extraData: i64 0)
+!1947 = !DIDerivedType(tag: DW_TAG_member, name: "wb_supported", scope: !1939, file: !959, line: 373, baseType: !528, size: 1, offset: 14, flags: DIFlagBitField, extraData: i64 0)
+!1948 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_3", scope: !1939, file: !959, line: 374, baseType: !528, size: 1, offset: 15, flags: DIFlagBitField, extraData: i64 0)
+!1949 = !DIDerivedType(tag: DW_TAG_member, name: "ps_2m_supported", scope: !1939, file: !959, line: 375, baseType: !528, size: 1, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!1950 = !DIDerivedType(tag: DW_TAG_member, name: "ps_1g_supported", scope: !1939, file: !959, line: 376, baseType: !528, size: 1, offset: 17, flags: DIFlagBitField, extraData: i64 0)
+!1951 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_4", scope: !1939, file: !959, line: 377, baseType: !528, size: 2, offset: 18, flags: DIFlagBitField, extraData: i64 0)
+!1952 = !DIDerivedType(tag: DW_TAG_member, name: "invept_supported", scope: !1939, file: !959, line: 378, baseType: !528, size: 1, offset: 20, flags: DIFlagBitField, extraData: i64 0)
+!1953 = !DIDerivedType(tag: DW_TAG_member, name: "ad_supported", scope: !1939, file: !959, line: 379, baseType: !528, size: 1, offset: 21, flags: DIFlagBitField, extraData: i64 0)
+!1954 = !DIDerivedType(tag: DW_TAG_member, name: "advanced_vmexit_info_supported", scope: !1939, file: !959, line: 380, baseType: !528, size: 1, offset: 22, flags: DIFlagBitField, extraData: i64 0)
+!1955 = !DIDerivedType(tag: DW_TAG_member, name: "sss_support", scope: !1939, file: !959, line: 381, baseType: !528, size: 1, offset: 23, flags: DIFlagBitField, extraData: i64 0)
+!1956 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_5", scope: !1939, file: !959, line: 382, baseType: !528, size: 1, offset: 24, flags: DIFlagBitField, extraData: i64 0)
+!1957 = !DIDerivedType(tag: DW_TAG_member, name: "single_context_invept_supported", scope: !1939, file: !959, line: 383, baseType: !528, size: 1, offset: 25, flags: DIFlagBitField, extraData: i64 0)
+!1958 = !DIDerivedType(tag: DW_TAG_member, name: "all_context_invept_supported", scope: !1939, file: !959, line: 384, baseType: !528, size: 1, offset: 26, flags: DIFlagBitField, extraData: i64 0)
+!1959 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_6", scope: !1939, file: !959, line: 385, baseType: !528, size: 5, offset: 27, flags: DIFlagBitField, extraData: i64 0)
+!1960 = !DIDerivedType(tag: DW_TAG_member, name: "invvpid_supported", scope: !1939, file: !959, line: 386, baseType: !528, size: 1, offset: 32, flags: DIFlagBitField, extraData: i64 0)
+!1961 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_7", scope: !1939, file: !959, line: 387, baseType: !528, size: 7, offset: 33, flags: DIFlagBitField, extraData: i64 0)
+!1962 = !DIDerivedType(tag: DW_TAG_member, name: "individual_addr_invvpid_supported", scope: !1939, file: !959, line: 388, baseType: !528, size: 1, offset: 40, flags: DIFlagBitField, extraData: i64 0)
+!1963 = !DIDerivedType(tag: DW_TAG_member, name: "single_context_invvpid_supported", scope: !1939, file: !959, line: 389, baseType: !528, size: 1, offset: 41, flags: DIFlagBitField, extraData: i64 0)
+!1964 = !DIDerivedType(tag: DW_TAG_member, name: "all_context_invvpid_supported", scope: !1939, file: !959, line: 390, baseType: !528, size: 1, offset: 42, flags: DIFlagBitField, extraData: i64 0)
+!1965 = !DIDerivedType(tag: DW_TAG_member, name: "single_contx_retaining_globals_invvpid_supp", scope: !1939, file: !959, line: 391, baseType: !528, size: 1, offset: 43, flags: DIFlagBitField, extraData: i64 0)
+!1966 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_8", scope: !1939, file: !959, line: 392, baseType: !528, size: 4, offset: 44, flags: DIFlagBitField, extraData: i64 0)
+!1967 = !DIDerivedType(tag: DW_TAG_member, name: "hlat_prefix_size", scope: !1939, file: !959, line: 393, baseType: !528, size: 6, offset: 48, flags: DIFlagBitField, extraData: i64 0)
+!1968 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_9", scope: !1939, file: !959, line: 394, baseType: !528, size: 10, offset: 54, flags: DIFlagBitField, extraData: i64 0)
+!1969 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !1936, file: !959, line: 396, baseType: !528, size: 64)
+!1970 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_true_pinbased_ctls", scope: !1925, file: !4, line: 654, baseType: !1030, size: 64, offset: 512)
+!1971 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_true_procbased_ctls", scope: !1925, file: !4, line: 655, baseType: !1030, size: 64, offset: 576)
+!1972 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_true_exit_ctls", scope: !1925, file: !4, line: 656, baseType: !1030, size: 64, offset: 640)
+!1973 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_true_entry_ctls", scope: !1925, file: !4, line: 657, baseType: !1030, size: 64, offset: 704)
+!1974 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_vmfunc", scope: !1925, file: !4, line: 658, baseType: !528, size: 64, offset: 768)
+!1975 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_procbased_ctls3", scope: !1925, file: !4, line: 659, baseType: !528, size: 64, offset: 832)
+!1976 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_vmx_exit_ctls2", scope: !1925, file: !4, line: 660, baseType: !528, size: 64, offset: 896)
+!1977 = !DIDerivedType(tag: DW_TAG_member, name: "virtual_ia32_arch_capabilities", scope: !1925, file: !4, line: 661, baseType: !528, size: 64, offset: 960)
+!1978 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !1925, file: !4, line: 663, baseType: !1559, size: 1024, offset: 1024)
+!1979 = !DIDerivedType(tag: DW_TAG_member, name: "cpuid_values", scope: !1665, file: !4, line: 789, baseType: !1980, size: 10240, offset: 16384)
+!1980 = !DICompositeType(tag: DW_TAG_array_type, baseType: !1362, size: 10240, elements: !1818)
+!1981 = !DIDerivedType(tag: DW_TAG_member, name: "service_td_fields", scope: !1665, file: !4, line: 794, baseType: !1982, size: 4096, offset: 26624)
+!1982 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdcs_service_td_fields_t", file: !4, line: 705, baseType: !1983)
+!1983 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdcs_service_td_fields_s", file: !4, line: 691, size: 4096, elements: !1984)
+!1984 = !{!1985, !1986, !1987, !1988, !1989, !2038}
+!1985 = !DIDerivedType(tag: DW_TAG_member, name: "servtd_hash", scope: !1983, file: !4, line: 693, baseType: !1855, size: 384)
+!1986 = !DIDerivedType(tag: DW_TAG_member, name: "servtd_num", scope: !1983, file: !4, line: 694, baseType: !548, size: 16, offset: 384)
+!1987 = !DIDerivedType(tag: DW_TAG_member, name: "servtd_bindings_lock", scope: !1983, file: !4, line: 695, baseType: !1605, size: 16, align: 16, offset: 400)
+!1988 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !1983, file: !4, line: 697, baseType: !1817, size: 640, offset: 416)
+!1989 = !DIDerivedType(tag: DW_TAG_member, name: "servtd_bindings_table", scope: !1983, file: !4, line: 702, baseType: !1990, size: 1024, align: 128, offset: 1152)
+!1990 = !DICompositeType(tag: DW_TAG_array_type, baseType: !1991, size: 1024, elements: !2036)
+!1991 = !DIDerivedType(tag: DW_TAG_typedef, name: "servtd_binding_t", file: !4, line: 683, baseType: !1992)
+!1992 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "servtd_binding_s", file: !4, line: 673, size: 1024, elements: !1993)
+!1993 = !{!1994, !1995, !1996, !1997, !1998, !2033, !2034, !2035}
+!1994 = !DIDerivedType(tag: DW_TAG_member, name: "state", scope: !1992, file: !4, line: 675, baseType: !527, size: 8)
+!1995 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !1992, file: !4, line: 676, baseType: !527, size: 8, offset: 8)
+!1996 = !DIDerivedType(tag: DW_TAG_member, name: "type", scope: !1992, file: !4, line: 677, baseType: !548, size: 16, offset: 16)
+!1997 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1992, file: !4, line: 678, baseType: !555, size: 32, offset: 32)
+!1998 = !DIDerivedType(tag: DW_TAG_member, name: "attributes", scope: !1992, file: !4, line: 679, baseType: !1999, size: 64, offset: 64)
+!1999 = !DIDerivedType(tag: DW_TAG_typedef, name: "servtd_attributes_t", file: !2000, line: 90, baseType: !2001)
+!2000 = !DIFile(filename: "src/common/helpers/service_td.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "2465dd53e64bdbe185e4f34062f7bbcd")
+!2001 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "servtd_attributes_u", file: !2000, line: 74, size: 64, elements: !2002)
+!2002 = !{!2003, !2032}
+!2003 = !DIDerivedType(tag: DW_TAG_member, scope: !2001, file: !2000, line: 76, baseType: !2004, size: 64)
+!2004 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !2001, file: !2000, line: 76, size: 64, elements: !2005)
+!2005 = !{!2006, !2014, !2031}
+!2006 = !DIDerivedType(tag: DW_TAG_member, scope: !2004, file: !2000, line: 78, baseType: !2007, size: 32)
+!2007 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !2004, file: !2000, line: 78, size: 32, elements: !2008)
+!2008 = !{!2009, !2010, !2011, !2012, !2013}
+!2009 = !DIDerivedType(tag: DW_TAG_member, name: "instance_binding", scope: !2007, file: !2000, line: 80, baseType: !555, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!2010 = !DIDerivedType(tag: DW_TAG_member, name: "solicited_binding", scope: !2007, file: !2000, line: 81, baseType: !555, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!2011 = !DIDerivedType(tag: DW_TAG_member, name: "platform_binding", scope: !2007, file: !2000, line: 82, baseType: !555, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!2012 = !DIDerivedType(tag: DW_TAG_member, name: "migratable_binding", scope: !2007, file: !2000, line: 83, baseType: !555, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!2013 = !DIDerivedType(tag: DW_TAG_member, name: "reserved0", scope: !2007, file: !2000, line: 84, baseType: !555, size: 28, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!2014 = !DIDerivedType(tag: DW_TAG_member, name: "ignore_tdinfo", scope: !2004, file: !2000, line: 86, baseType: !2015, size: 16, offset: 32)
+!2015 = !DIDerivedType(tag: DW_TAG_typedef, name: "ignore_tdinfo_bitmap_t", file: !2000, line: 71, baseType: !2016)
+!2016 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "ignore_tdinfo_bitmap_u", file: !2000, line: 55, size: 16, elements: !2017)
+!2017 = !{!2018, !2030}
+!2018 = !DIDerivedType(tag: DW_TAG_member, scope: !2016, file: !2000, line: 57, baseType: !2019, size: 16)
+!2019 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !2016, file: !2000, line: 57, size: 16, elements: !2020)
+!2020 = !{!2021, !2022, !2023, !2024, !2025, !2026, !2027, !2028, !2029}
+!2021 = !DIDerivedType(tag: DW_TAG_member, name: "attributes", scope: !2019, file: !2000, line: 59, baseType: !548, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!2022 = !DIDerivedType(tag: DW_TAG_member, name: "xfam", scope: !2019, file: !2000, line: 60, baseType: !548, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!2023 = !DIDerivedType(tag: DW_TAG_member, name: "mrtd", scope: !2019, file: !2000, line: 61, baseType: !548, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!2024 = !DIDerivedType(tag: DW_TAG_member, name: "mrconfig", scope: !2019, file: !2000, line: 62, baseType: !548, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!2025 = !DIDerivedType(tag: DW_TAG_member, name: "mrowner", scope: !2019, file: !2000, line: 63, baseType: !548, size: 1, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!2026 = !DIDerivedType(tag: DW_TAG_member, name: "mrownerconfig", scope: !2019, file: !2000, line: 64, baseType: !548, size: 1, offset: 5, flags: DIFlagBitField, extraData: i64 0)
+!2027 = !DIDerivedType(tag: DW_TAG_member, name: "rtmr", scope: !2019, file: !2000, line: 65, baseType: !548, size: 4, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!2028 = !DIDerivedType(tag: DW_TAG_member, name: "servtd_hash", scope: !2019, file: !2000, line: 66, baseType: !548, size: 1, offset: 10, flags: DIFlagBitField, extraData: i64 0)
+!2029 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !2019, file: !2000, line: 67, baseType: !548, size: 5, offset: 11, flags: DIFlagBitField, extraData: i64 0)
+!2030 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !2016, file: !2000, line: 70, baseType: !548, size: 16)
+!2031 = !DIDerivedType(tag: DW_TAG_member, name: "reserved1", scope: !2004, file: !2000, line: 87, baseType: !548, size: 16, offset: 48)
+!2032 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !2001, file: !2000, line: 89, baseType: !528, size: 64)
+!2033 = !DIDerivedType(tag: DW_TAG_member, name: "uuid", scope: !1992, file: !4, line: 680, baseType: !885, size: 256, offset: 128)
+!2034 = !DIDerivedType(tag: DW_TAG_member, name: "info_hash", scope: !1992, file: !4, line: 681, baseType: !1855, size: 384, offset: 384)
+!2035 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_2", scope: !1992, file: !4, line: 682, baseType: !893, size: 256, offset: 768)
+!2036 = !{!2037}
+!2037 = !DISubrange(count: 1)
+!2038 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !1983, file: !4, line: 704, baseType: !2039, size: 1920, offset: 2176)
+!2039 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 1920, elements: !2040)
+!2040 = !{!2041}
+!2041 = !DISubrange(count: 240)
+!2042 = !DIDerivedType(tag: DW_TAG_member, name: "executions_ctl2_fields", scope: !1665, file: !4, line: 796, baseType: !2043, size: 4096, offset: 30720)
+!2043 = !DIDerivedType(tag: DW_TAG_typedef, name: "tdcs_execution_control2_field_t", file: !4, line: 741, baseType: !2044)
+!2044 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "tdcs_execution_control2_field_s", file: !4, line: 715, size: 4096, elements: !2045)
+!2045 = !{!2046, !2047, !2048, !2049, !2051, !2053, !2054, !2075, !2076, !2077, !2078, !2079, !2080, !2081, !2082, !2084, !2085, !2087, !2090, !2091, !2092, !2093, !2094, !2095}
+!2046 = !DIDerivedType(tag: DW_TAG_member, name: "cpuid_last_base_leaf", scope: !2044, file: !4, line: 717, baseType: !555, size: 32)
+!2047 = !DIDerivedType(tag: DW_TAG_member, name: "cpuid_last_ext_leaf", scope: !2044, file: !4, line: 718, baseType: !555, size: 32, offset: 32)
+!2048 = !DIDerivedType(tag: DW_TAG_member, name: "cpuid_fixed0_bitmap", scope: !2044, file: !4, line: 719, baseType: !528, size: 64, offset: 64)
+!2049 = !DIDerivedType(tag: DW_TAG_member, name: "cpuid4_native_values", scope: !2044, file: !4, line: 720, baseType: !2050, size: 512, offset: 128)
+!2050 = !DICompositeType(tag: DW_TAG_array_type, baseType: !1362, size: 512, elements: !838)
+!2051 = !DIDerivedType(tag: DW_TAG_member, name: "cpuid4_native_valid", scope: !2044, file: !4, line: 721, baseType: !2052, size: 32, offset: 640)
+!2052 = !DICompositeType(tag: DW_TAG_array_type, baseType: !525, size: 32, elements: !838)
+!2053 = !DIDerivedType(tag: DW_TAG_member, name: "reserved0", scope: !2044, file: !4, line: 722, baseType: !1766, size: 32, offset: 672)
+!2054 = !DIDerivedType(tag: DW_TAG_member, name: "feature_paravirt_ctls", scope: !2044, file: !4, line: 723, baseType: !2055, size: 64, offset: 704)
+!2055 = !DIDerivedType(tag: DW_TAG_typedef, name: "feature_paravirt_ctls_t", file: !4, line: 490, baseType: !2056)
+!2056 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "feature_paravirt_ctls_u", file: !4, line: 471, size: 64, elements: !2057)
+!2057 = !{!2058, !2074}
+!2058 = !DIDerivedType(tag: DW_TAG_member, scope: !2056, file: !4, line: 473, baseType: !2059, size: 64)
+!2059 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !2056, file: !4, line: 473, size: 64, elements: !2060)
+!2060 = !{!2061, !2062, !2063, !2064, !2065, !2066, !2067, !2068, !2069, !2070, !2071, !2072, !2073}
+!2061 = !DIDerivedType(tag: DW_TAG_member, name: "core_capabilities", scope: !2059, file: !4, line: 475, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!2062 = !DIDerivedType(tag: DW_TAG_member, name: "dca", scope: !2059, file: !4, line: 476, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!2063 = !DIDerivedType(tag: DW_TAG_member, name: "est", scope: !2059, file: !4, line: 477, baseType: !528, size: 1, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!2064 = !DIDerivedType(tag: DW_TAG_member, name: "mca", scope: !2059, file: !4, line: 478, baseType: !528, size: 1, offset: 3, flags: DIFlagBitField, extraData: i64 0)
+!2065 = !DIDerivedType(tag: DW_TAG_member, name: "mtrr", scope: !2059, file: !4, line: 479, baseType: !528, size: 1, offset: 4, flags: DIFlagBitField, extraData: i64 0)
+!2066 = !DIDerivedType(tag: DW_TAG_member, name: "pconfig", scope: !2059, file: !4, line: 480, baseType: !528, size: 1, offset: 5, flags: DIFlagBitField, extraData: i64 0)
+!2067 = !DIDerivedType(tag: DW_TAG_member, name: "rdt_a", scope: !2059, file: !4, line: 481, baseType: !528, size: 1, offset: 6, flags: DIFlagBitField, extraData: i64 0)
+!2068 = !DIDerivedType(tag: DW_TAG_member, name: "rdt_m", scope: !2059, file: !4, line: 482, baseType: !528, size: 1, offset: 7, flags: DIFlagBitField, extraData: i64 0)
+!2069 = !DIDerivedType(tag: DW_TAG_member, name: "acpi", scope: !2059, file: !4, line: 483, baseType: !528, size: 1, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!2070 = !DIDerivedType(tag: DW_TAG_member, name: "tm2", scope: !2059, file: !4, line: 484, baseType: !528, size: 1, offset: 9, flags: DIFlagBitField, extraData: i64 0)
+!2071 = !DIDerivedType(tag: DW_TAG_member, name: "tme", scope: !2059, file: !4, line: 485, baseType: !528, size: 1, offset: 10, flags: DIFlagBitField, extraData: i64 0)
+!2072 = !DIDerivedType(tag: DW_TAG_member, name: "tsc_deadline", scope: !2059, file: !4, line: 486, baseType: !528, size: 1, offset: 11, flags: DIFlagBitField, extraData: i64 0)
+!2073 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !2059, file: !4, line: 487, baseType: !528, size: 52, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!2074 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !2056, file: !4, line: 489, baseType: !528, size: 64)
+!2075 = !DIDerivedType(tag: DW_TAG_member, name: "filtered_events_count", scope: !2044, file: !4, line: 724, baseType: !889, size: 256, offset: 768)
+!2076 = !DIDerivedType(tag: DW_TAG_member, name: "event_filters_num", scope: !2044, file: !4, line: 725, baseType: !548, size: 16, offset: 1024)
+!2077 = !DIDerivedType(tag: DW_TAG_member, name: "field_support_at_init", scope: !2044, file: !4, line: 726, baseType: !555, size: 32, offset: 1056)
+!2078 = !DIDerivedType(tag: DW_TAG_member, name: "blocked_count", scope: !2044, file: !4, line: 727, baseType: !528, size: 64, offset: 1088)
+!2079 = !DIDerivedType(tag: DW_TAG_member, name: "pending_blocked_count", scope: !2044, file: !4, line: 728, baseType: !528, size: 64, offset: 1152)
+!2080 = !DIDerivedType(tag: DW_TAG_member, name: "mem_count", scope: !2044, file: !4, line: 729, baseType: !528, size: 64, offset: 1216)
+!2081 = !DIDerivedType(tag: DW_TAG_member, name: "intr_config_state", scope: !2044, file: !4, line: 730, baseType: !1766, size: 32, offset: 1280)
+!2082 = !DIDerivedType(tag: DW_TAG_member, name: "pidpt_num_pages", scope: !2044, file: !4, line: 731, baseType: !2083, size: 64, offset: 1312)
+!2083 = !DICompositeType(tag: DW_TAG_array_type, baseType: !548, size: 64, elements: !838)
+!2084 = !DIDerivedType(tag: DW_TAG_member, name: "pidpt_num_entries", scope: !2044, file: !4, line: 732, baseType: !2083, size: 64, offset: 1376)
+!2085 = !DIDerivedType(tag: DW_TAG_member, name: "pidpt_hpa", scope: !2044, file: !4, line: 733, baseType: !2086, size: 256, offset: 1472)
+!2086 = !DICompositeType(tag: DW_TAG_array_type, baseType: !698, size: 256, elements: !838)
+!2087 = !DIDerivedType(tag: DW_TAG_member, name: "pir_mask", scope: !2044, file: !4, line: 734, baseType: !2088, size: 1024, offset: 1728)
+!2088 = !DICompositeType(tag: DW_TAG_array_type, baseType: !555, size: 1024, elements: !2089)
+!2089 = !{!839, !842}
+!2090 = !DIDerivedType(tag: DW_TAG_member, name: "wakeup_virt_vector", scope: !2044, file: !4, line: 735, baseType: !1766, size: 32, offset: 2752)
+!2091 = !DIDerivedType(tag: DW_TAG_member, name: "main_nv", scope: !2044, file: !4, line: 736, baseType: !1766, size: 32, offset: 2784)
+!2092 = !DIDerivedType(tag: DW_TAG_member, name: "shr_nv", scope: !2044, file: !4, line: 737, baseType: !1766, size: 32, offset: 2816)
+!2093 = !DIDerivedType(tag: DW_TAG_member, name: "main_nv_shared", scope: !2044, file: !4, line: 738, baseType: !2052, size: 32, offset: 2848)
+!2094 = !DIDerivedType(tag: DW_TAG_member, name: "pid_mode", scope: !2044, file: !4, line: 739, baseType: !1766, size: 32, offset: 2880)
+!2095 = !DIDerivedType(tag: DW_TAG_member, name: "reserved1", scope: !2044, file: !4, line: 740, baseType: !2096, size: 1184, offset: 2912)
+!2096 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 1184, elements: !2097)
+!2097 = !{!2098}
+!2098 = !DISubrange(count: 148)
+!2099 = !DIDerivedType(tag: DW_TAG_member, name: "x2apic_ids", scope: !1665, file: !4, line: 798, baseType: !2100, size: 18432, offset: 34816)
+!2100 = !DICompositeType(tag: DW_TAG_array_type, baseType: !555, size: 18432, elements: !2101)
+!2101 = !{!2102}
+!2102 = !DISubrange(count: 576)
+!2103 = !DIDerivedType(tag: DW_TAG_member, name: "event_filters_internal", scope: !1665, file: !4, line: 800, baseType: !2104, size: 8192, offset: 53248)
+!2104 = !DICompositeType(tag: DW_TAG_array_type, baseType: !2105, size: 8192, elements: !2114)
+!2105 = !DIDerivedType(tag: DW_TAG_typedef, name: "event_filter_internal_t", file: !4, line: 442, baseType: !2106)
+!2106 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "event_filter_internal_s", file: !4, line: 434, size: 16, elements: !2107)
+!2107 = !{!2108, !2113}
+!2108 = !DIDerivedType(tag: DW_TAG_member, scope: !2106, file: !4, line: 436, baseType: !2109, size: 16)
+!2109 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !2106, file: !4, line: 436, size: 16, elements: !2110)
+!2110 = !{!2111, !2112}
+!2111 = !DIDerivedType(tag: DW_TAG_member, name: "event_select", scope: !2109, file: !4, line: 438, baseType: !527, size: 8)
+!2112 = !DIDerivedType(tag: DW_TAG_member, name: "umask", scope: !2109, file: !4, line: 439, baseType: !527, size: 8, offset: 8)
+!2113 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !2106, file: !4, line: 441, baseType: !548, size: 16)
+!2114 = !{!2115}
+!2115 = !DISubrange(count: 512)
+!2116 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_io", scope: !1665, file: !4, line: 802, baseType: !1880, size: 2048, offset: 61440)
+!2117 = !DIDerivedType(tag: DW_TAG_member, name: "msr_bitmaps", scope: !1665, file: !4, line: 808, baseType: !2118, size: 32768, align: 32768, offset: 65536)
+!2118 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 32768, elements: !2119)
+!2119 = !{!2120}
+!2120 = !DISubrange(count: 4096)
+!2121 = !DIDerivedType(tag: DW_TAG_member, name: "sept_root", scope: !1665, file: !4, line: 813, baseType: !2118, size: 32768, offset: 98304)
+!2122 = !DIDerivedType(tag: DW_TAG_member, name: "zero_page", scope: !1665, file: !4, line: 818, baseType: !2118, size: 32768, offset: 131072)
+!2123 = !DIDerivedType(tag: DW_TAG_member, scope: !1665, file: !4, line: 823, baseType: !2124, size: 32768, offset: 163840)
+!2124 = distinct !DICompositeType(tag: DW_TAG_union_type, scope: !1665, file: !4, line: 823, size: 32768, elements: !2125)
+!2125 = !{!2126, !2127, !2141}
+!2126 = !DIDerivedType(tag: DW_TAG_member, name: "migsc_links_page", scope: !2124, file: !4, line: 825, baseType: !2118, size: 32768)
+!2127 = !DIDerivedType(tag: DW_TAG_member, name: "migsc_links", scope: !2124, file: !4, line: 826, baseType: !2128, size: 32768)
+!2128 = !DICompositeType(tag: DW_TAG_array_type, baseType: !2129, size: 32768, elements: !2114)
+!2129 = !DIDerivedType(tag: DW_TAG_typedef, name: "migsc_link_t", file: !515, line: 339, baseType: !2130)
+!2130 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "migsc_link_u", file: !515, line: 328, size: 64, elements: !2131)
+!2131 = !{!2132, !2140}
+!2132 = !DIDerivedType(tag: DW_TAG_member, scope: !2130, file: !515, line: 330, baseType: !2133, size: 64)
+!2133 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !2130, file: !515, line: 330, size: 64, elements: !2134)
+!2134 = !{!2135, !2136, !2137, !2138, !2139}
+!2135 = !DIDerivedType(tag: DW_TAG_member, name: "lock", scope: !2133, file: !515, line: 332, baseType: !528, size: 1, flags: DIFlagBitField, extraData: i64 0)
+!2136 = !DIDerivedType(tag: DW_TAG_member, name: "initialized", scope: !2133, file: !515, line: 333, baseType: !528, size: 1, offset: 1, flags: DIFlagBitField, extraData: i64 0)
+!2137 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_0", scope: !2133, file: !515, line: 334, baseType: !528, size: 10, offset: 2, flags: DIFlagBitField, extraData: i64 0)
+!2138 = !DIDerivedType(tag: DW_TAG_member, name: "migsc_hpa", scope: !2133, file: !515, line: 335, baseType: !528, size: 40, offset: 12, flags: DIFlagBitField, extraData: i64 0)
+!2139 = !DIDerivedType(tag: DW_TAG_member, name: "reserved_1", scope: !2133, file: !515, line: 336, baseType: !528, size: 12, offset: 52, flags: DIFlagBitField, extraData: i64 0)
+!2140 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !2130, file: !515, line: 338, baseType: !528, size: 64)
+!2141 = !DIDerivedType(tag: DW_TAG_member, scope: !2124, file: !4, line: 827, baseType: !2142, size: 32768)
+!2142 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !2124, file: !4, line: 827, size: 32768, elements: !2143)
+!2143 = !{!2144, !2145}
+!2144 = !DIDerivedType(tag: DW_TAG_member, name: "b_migsc_link", scope: !2142, file: !4, line: 828, baseType: !2129, size: 64)
+!2145 = !DIDerivedType(tag: DW_TAG_member, name: "f_migsc_links", scope: !2142, file: !4, line: 829, baseType: !2146, size: 32704, offset: 64)
+!2146 = !DICompositeType(tag: DW_TAG_array_type, baseType: !2129, size: 32704, elements: !2147)
+!2147 = !{!2148}
+!2148 = !DISubrange(count: 511)
+!2149 = !DIDerivedType(tag: DW_TAG_member, name: "l2_sept_root_1", scope: !1665, file: !4, line: 836, baseType: !2118, size: 32768, offset: 196608)
+!2150 = !DIDerivedType(tag: DW_TAG_member, name: "l2_sept_root_2", scope: !1665, file: !4, line: 837, baseType: !2118, size: 32768, offset: 229376)
+!2151 = !DIDerivedType(tag: DW_TAG_member, name: "l2_sept_root_3", scope: !1665, file: !4, line: 838, baseType: !2118, size: 32768, offset: 262144)
+!2152 = !DILocation(line: 44, column: 24, scope: !1528)
+!2153 = !DILocalVariable(name: "tdr_pamt_locked_flag", scope: !1528, file: !1529, line: 45, type: !525)
+!2154 = !DILocation(line: 45, column: 24, scope: !1528)
+!2155 = !DILocalVariable(name: "mbmd_p", scope: !1528, file: !1529, line: 48, type: !530)
+!2156 = !DILocation(line: 48, column: 24, scope: !1528)
+!2157 = !DILocalVariable(name: "mbmd_hpa_and_size", scope: !1528, file: !1529, line: 49, type: !2158)
+!2158 = !DIDerivedType(tag: DW_TAG_typedef, name: "hpa_and_size_t", file: !515, line: 310, baseType: !2159)
+!2159 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "hpa_and_size_u", file: !515, line: 302, size: 64, elements: !2160)
+!2160 = !{!2161, !2166}
+!2161 = !DIDerivedType(tag: DW_TAG_member, scope: !2159, file: !515, line: 304, baseType: !2162, size: 64)
+!2162 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !2159, file: !515, line: 304, size: 64, elements: !2163)
+!2163 = !{!2164, !2165}
+!2164 = !DIDerivedType(tag: DW_TAG_member, name: "hpa", scope: !2162, file: !515, line: 306, baseType: !528, size: 52, flags: DIFlagBitField, extraData: i64 0)
+!2165 = !DIDerivedType(tag: DW_TAG_member, name: "size", scope: !2162, file: !515, line: 307, baseType: !528, size: 12, offset: 52, flags: DIFlagBitField, extraData: i64 0)
+!2166 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !2159, file: !515, line: 309, baseType: !528, size: 64)
+!2167 = !DILocation(line: 49, column: 24, scope: !1528)
+!2168 = !DILocalVariable(name: "mbmd", scope: !1528, file: !1529, line: 50, type: !531)
+!2169 = !DILocation(line: 50, column: 24, scope: !1528)
+!2170 = !DILocalVariable(name: "return_val", scope: !1528, file: !1529, line: 52, type: !786)
+!2171 = !DILocation(line: 52, column: 24, scope: !1528)
+!2172 = !DILocalVariable(name: "migsc_p", scope: !1528, file: !1529, line: 55, type: !612)
+!2173 = !DILocation(line: 55, column: 24, scope: !1528)
+!2174 = !DILocalVariable(name: "migsc_pa", scope: !1528, file: !1529, line: 56, type: !698)
+!2175 = !DILocation(line: 56, column: 24, scope: !1528)
+!2176 = !DILocalVariable(name: "migsc_locked_flag", scope: !1528, file: !1529, line: 57, type: !525)
+!2177 = !DILocation(line: 57, column: 24, scope: !1528)
+!2178 = !DILocation(line: 60, column: 18, scope: !1528)
+!2179 = !DILocation(line: 60, column: 16, scope: !1528)
+!2180 = !DILocation(line: 61, column: 29, scope: !1528)
+!2181 = !DILocation(line: 61, column: 27, scope: !1528)
+!2182 = !DILocation(line: 64, column: 18, scope: !1528)
+!2183 = !DILocation(line: 64, column: 16, scope: !1528)
+!2184 = !DILocation(line: 73, column: 9, scope: !2185)
+!2185 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 73, column: 9)
+!2186 = !DILocation(line: 73, column: 20, scope: !2185)
+!2187 = !DILocation(line: 73, column: 9, scope: !1528)
+!2188 = !DILocation(line: 76, column: 9, scope: !2189)
+!2189 = distinct !DILexicalBlock(scope: !2185, file: !1529, line: 74, column: 5)
+!2190 = !DILocation(line: 80, column: 48, scope: !1528)
+!2191 = !DILocation(line: 80, column: 18, scope: !1528)
+!2192 = !DILocation(line: 80, column: 16, scope: !1528)
+!2193 = !DILocation(line: 82, column: 9, scope: !2194)
+!2194 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 82, column: 9)
+!2195 = !DILocation(line: 82, column: 20, scope: !2194)
+!2196 = !DILocation(line: 82, column: 9, scope: !1528)
+!2197 = !DILocation(line: 85, column: 9, scope: !2198)
+!2198 = distinct !DILexicalBlock(scope: !2194, file: !1529, line: 83, column: 5)
+!2199 = !DILocation(line: 89, column: 9, scope: !2200)
+!2200 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 89, column: 9)
+!2201 = !DILocation(line: 89, column: 16, scope: !2200)
+!2202 = !DILocation(line: 89, column: 9, scope: !1528)
+!2203 = !DILocation(line: 91, column: 22, scope: !2204)
+!2204 = distinct !DILexicalBlock(scope: !2200, file: !1529, line: 90, column: 5)
+!2205 = !DILocation(line: 91, column: 20, scope: !2204)
+!2206 = !DILocation(line: 92, column: 9, scope: !2204)
+!2207 = !DILocation(line: 96, column: 27, scope: !2208)
+!2208 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 96, column: 9)
+!2209 = !DILocation(line: 96, column: 32, scope: !2208)
+!2210 = !DILocation(line: 96, column: 9, scope: !1528)
+!2211 = !DILocation(line: 98, column: 22, scope: !2212)
+!2212 = distinct !DILexicalBlock(scope: !2208, file: !1529, line: 97, column: 5)
+!2213 = !DILocation(line: 98, column: 20, scope: !2212)
+!2214 = !DILocation(line: 99, column: 9, scope: !2212)
+!2215 = !DILocation(line: 101, column: 28, scope: !1528)
+!2216 = !DILocalVariable(name: "mbmd_hpa", scope: !1528, file: !1529, line: 104, type: !698)
+!2217 = !DILocation(line: 104, column: 10, scope: !1528)
+!2218 = !DILocation(line: 104, column: 48, scope: !1528)
+!2219 = !DILocation(line: 104, column: 21, scope: !1528)
+!2220 = !DILocation(line: 105, column: 23, scope: !2221)
+!2221 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 105, column: 9)
+!2222 = !DILocation(line: 105, column: 21, scope: !2221)
+!2223 = !DILocation(line: 105, column: 84, scope: !2221)
+!2224 = !DILocation(line: 105, column: 9, scope: !1528)
+!2225 = !DILocation(line: 107, column: 48, scope: !2226)
+!2226 = distinct !DILexicalBlock(scope: !2221, file: !1529, line: 106, column: 5)
+!2227 = !DILocation(line: 107, column: 22, scope: !2226)
+!2228 = !DILocation(line: 107, column: 20, scope: !2226)
+!2229 = !DILocation(line: 108, column: 9, scope: !2226)
+!2230 = !DILocation(line: 111, column: 5, scope: !1528)
+!2231 = !DILocation(line: 113, column: 23, scope: !2232)
+!2232 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 113, column: 9)
+!2233 = !DILocation(line: 113, column: 31, scope: !2232)
+!2234 = !DILocation(line: 113, column: 11, scope: !2232)
+!2235 = !DILocation(line: 113, column: 9, scope: !1528)
+!2236 = !DILocation(line: 115, column: 22, scope: !2237)
+!2237 = distinct !DILexicalBlock(scope: !2232, file: !1529, line: 114, column: 5)
+!2238 = !DILocation(line: 115, column: 20, scope: !2237)
+!2239 = !DILocation(line: 116, column: 9, scope: !2237)
+!2240 = !DILocation(line: 118, column: 23, scope: !1528)
+!2241 = !DILocation(line: 124, column: 17, scope: !2242)
+!2242 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 124, column: 9)
+!2243 = !DILocation(line: 124, column: 25, scope: !2242)
+!2244 = !DILocation(line: 124, column: 48, scope: !2242)
+!2245 = !DILocation(line: 124, column: 9, scope: !2242)
+!2246 = !DILocation(line: 124, column: 70, scope: !2242)
+!2247 = !DILocation(line: 124, column: 9, scope: !1528)
+!2248 = !DILocalVariable(name: "old_val", scope: !2249, file: !1529, line: 126, type: !548)
+!2249 = distinct !DILexicalBlock(scope: !2242, file: !1529, line: 125, column: 5)
+!2250 = !DILocation(line: 126, column: 18, scope: !2249)
+!2251 = !DILocation(line: 126, column: 44, scope: !2249)
+!2252 = !DILocation(line: 126, column: 63, scope: !2249)
+!2253 = !DILocation(line: 126, column: 88, scope: !2249)
+!2254 = !DILocation(line: 126, column: 96, scope: !2249)
+!2255 = !DILocation(line: 126, column: 113, scope: !2249)
+!2256 = !DILocation(line: 126, column: 87, scope: !2249)
+!2257 = !DILocation(line: 126, column: 86, scope: !2249)
+!2258 = !DILocation(line: 126, column: 28, scope: !2249)
+!2259 = !DILocation(line: 127, column: 9, scope: !2260)
+!2260 = distinct !DILexicalBlock(scope: !2249, file: !1529, line: 127, column: 9)
+!2261 = !DILocation(line: 127, column: 9, scope: !2249)
+!2262 = !DILocation(line: 127, column: 9, scope: !2263)
+!2263 = distinct !DILexicalBlock(scope: !2260, file: !1529, line: 127, column: 9)
+!2264 = !DILocation(line: 128, column: 9, scope: !2249)
+!2265 = !DILocation(line: 128, column: 17, scope: !2249)
+!2266 = !DILocation(line: 128, column: 34, scope: !2249)
+!2267 = !DILocation(line: 128, column: 56, scope: !2249)
+!2268 = !DILocation(line: 129, column: 5, scope: !2249)
+!2269 = !DILocation(line: 132, column: 5, scope: !1528)
+!2270 = !DILocation(line: 132, column: 13, scope: !1528)
+!2271 = !DILocation(line: 132, column: 31, scope: !1528)
+!2272 = !DILocation(line: 132, column: 40, scope: !1528)
+!2273 = !DILocation(line: 135, column: 39, scope: !1528)
+!2274 = !DILocation(line: 135, column: 23, scope: !1528)
+!2275 = !DILocation(line: 135, column: 12, scope: !1528)
+!2276 = !DILocation(line: 138, column: 18, scope: !1528)
+!2277 = !DILocation(line: 139, column: 28, scope: !1528)
+!2278 = !DILocation(line: 139, column: 36, scope: !1528)
+!2279 = !DILocation(line: 139, column: 49, scope: !1528)
+!2280 = !DILocation(line: 139, column: 14, scope: !1528)
+!2281 = !DILocation(line: 139, column: 26, scope: !1528)
+!2282 = !DILocation(line: 140, column: 52, scope: !1528)
+!2283 = !DILocation(line: 140, column: 62, scope: !1528)
+!2284 = !DILocation(line: 140, column: 69, scope: !1528)
+!2285 = !DILocation(line: 140, column: 91, scope: !1528)
+!2286 = !DILocation(line: 140, column: 26, scope: !1528)
+!2287 = !DILocation(line: 140, column: 13, scope: !1528)
+!2288 = !DILocation(line: 142, column: 10, scope: !2289)
+!2289 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 142, column: 9)
+!2290 = !DILocation(line: 142, column: 18, scope: !2289)
+!2291 = !DILocation(line: 142, column: 31, scope: !2289)
+!2292 = !DILocation(line: 142, column: 9, scope: !1528)
+!2293 = !DILocation(line: 144, column: 20, scope: !2294)
+!2294 = distinct !DILexicalBlock(scope: !2289, file: !1529, line: 143, column: 5)
+!2295 = !DILocation(line: 144, column: 30, scope: !2294)
+!2296 = !DILocation(line: 144, column: 38, scope: !2294)
+!2297 = !DILocation(line: 144, column: 55, scope: !2294)
+!2298 = !DILocation(line: 144, column: 9, scope: !2294)
+!2299 = !DILocation(line: 145, column: 9, scope: !2294)
+!2300 = !DILocation(line: 145, column: 17, scope: !2294)
+!2301 = !DILocation(line: 145, column: 42, scope: !2294)
+!2302 = !DILocation(line: 146, column: 5, scope: !2294)
+!2303 = !DILocation(line: 149, column: 5, scope: !1528)
+!2304 = !DILocation(line: 149, column: 14, scope: !1528)
+!2305 = !DILocation(line: 149, column: 32, scope: !1528)
+!2306 = !DILocation(line: 149, column: 38, scope: !1528)
+!2307 = !DILocation(line: 152, column: 5, scope: !1528)
+!2308 = !DILocation(line: 152, column: 14, scope: !1528)
+!2309 = !DILocation(line: 152, column: 24, scope: !1528)
+!2310 = !DILocation(line: 155, column: 31, scope: !1528)
+!2311 = !DILocation(line: 155, column: 39, scope: !1528)
+!2312 = !DILocation(line: 155, column: 56, scope: !1528)
+!2313 = !DILocation(line: 155, column: 10, scope: !1528)
+!2314 = !DILocation(line: 155, column: 17, scope: !1528)
+!2315 = !DILocation(line: 155, column: 29, scope: !1528)
+!2316 = !DILocation(line: 156, column: 10, scope: !1528)
+!2317 = !DILocation(line: 156, column: 17, scope: !1528)
+!2318 = !DILocation(line: 156, column: 22, scope: !1528)
+!2319 = !DILocation(line: 157, column: 10, scope: !1528)
+!2320 = !DILocation(line: 157, column: 17, scope: !1528)
+!2321 = !DILocation(line: 157, column: 28, scope: !1528)
+!2322 = !DILocation(line: 158, column: 10, scope: !1528)
+!2323 = !DILocation(line: 158, column: 17, scope: !1528)
+!2324 = !DILocation(line: 158, column: 25, scope: !1528)
+!2325 = !DILocation(line: 159, column: 10, scope: !1528)
+!2326 = !DILocation(line: 159, column: 17, scope: !1528)
+!2327 = !DILocation(line: 159, column: 28, scope: !1528)
+!2328 = !DILocation(line: 160, column: 30, scope: !1528)
+!2329 = !DILocation(line: 160, column: 39, scope: !1528)
+!2330 = !DILocation(line: 160, column: 10, scope: !1528)
+!2331 = !DILocation(line: 160, column: 17, scope: !1528)
+!2332 = !DILocation(line: 160, column: 28, scope: !1528)
+!2333 = !DILocation(line: 161, column: 10, scope: !1528)
+!2334 = !DILocation(line: 161, column: 17, scope: !1528)
+!2335 = !DILocation(line: 161, column: 28, scope: !1528)
+!2336 = !DILocation(line: 162, column: 10, scope: !1528)
+!2337 = !DILocation(line: 162, column: 17, scope: !1528)
+!2338 = !DILocation(line: 162, column: 27, scope: !1528)
+!2339 = !DILocation(line: 163, column: 10, scope: !1528)
+!2340 = !DILocation(line: 163, column: 22, scope: !1528)
+!2341 = !DILocation(line: 163, column: 31, scope: !1528)
+!2342 = !DILocation(line: 166, column: 22, scope: !1528)
+!2343 = !DILocation(line: 166, column: 31, scope: !1528)
+!2344 = !DILocation(line: 166, column: 40, scope: !1528)
+!2345 = !DILocation(line: 166, column: 5, scope: !1528)
+!2346 = !DILocation(line: 167, column: 30, scope: !2347)
+!2347 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 167, column: 9)
+!2348 = !DILocation(line: 167, column: 39, scope: !2347)
+!2349 = !DILocation(line: 167, column: 71, scope: !2347)
+!2350 = !DILocation(line: 167, column: 9, scope: !2347)
+!2351 = !DILocation(line: 168, column: 51, scope: !2347)
+!2352 = !DILocation(line: 167, column: 9, scope: !1528)
+!2353 = !DILocation(line: 170, column: 9, scope: !2354)
+!2354 = distinct !DILexicalBlock(scope: !2347, file: !1529, line: 169, column: 5)
+!2355 = !DILocation(line: 171, column: 5, scope: !2354)
+!2356 = !DILocation(line: 172, column: 27, scope: !2357)
+!2357 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 172, column: 9)
+!2358 = !DILocation(line: 172, column: 36, scope: !2357)
+!2359 = !DILocation(line: 172, column: 58, scope: !2357)
+!2360 = !DILocation(line: 172, column: 70, scope: !2357)
+!2361 = !DILocation(line: 172, column: 53, scope: !2357)
+!2362 = !DILocation(line: 172, column: 9, scope: !2357)
+!2363 = !DILocation(line: 172, column: 9, scope: !1528)
+!2364 = !DILocation(line: 174, column: 9, scope: !2365)
+!2365 = distinct !DILexicalBlock(scope: !2357, file: !1529, line: 173, column: 5)
+!2366 = !DILocation(line: 175, column: 5, scope: !2365)
+!2367 = !DILocation(line: 178, column: 10, scope: !1528)
+!2368 = !DILocation(line: 178, column: 17, scope: !1528)
+!2369 = !DILocation(line: 178, column: 28, scope: !1528)
+!2370 = !DILocation(line: 179, column: 30, scope: !1528)
+!2371 = !DILocation(line: 179, column: 39, scope: !1528)
+!2372 = !DILocation(line: 179, column: 10, scope: !1528)
+!2373 = !DILocation(line: 179, column: 17, scope: !1528)
+!2374 = !DILocation(line: 179, column: 28, scope: !1528)
+!2375 = !DILocation(line: 183, column: 15, scope: !1528)
+!2376 = !DILocation(line: 183, column: 5, scope: !1528)
+!2377 = !DILocation(line: 186, column: 5, scope: !1528)
+!2378 = !DILocation(line: 186, column: 14, scope: !1528)
+!2379 = !DILocation(line: 186, column: 29, scope: !1528)
+!2380 = !DILocation(line: 189, column: 18, scope: !1528)
+!2381 = !DILocation(line: 189, column: 16, scope: !1528)
+!2382 = !DILocation(line: 189, column: 5, scope: !1528)
+!2383 = !DILabel(scope: !1528, name: "EXIT", file: !1529, line: 191)
+!2384 = !DILocation(line: 191, column: 1, scope: !1528)
+!2385 = !DILocation(line: 194, column: 9, scope: !2386)
+!2386 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 194, column: 9)
+!2387 = !DILocation(line: 194, column: 17, scope: !2386)
+!2388 = !DILocation(line: 194, column: 9, scope: !1528)
+!2389 = !DILocation(line: 196, column: 17, scope: !2390)
+!2390 = distinct !DILexicalBlock(scope: !2386, file: !1529, line: 195, column: 5)
+!2391 = !DILocation(line: 196, column: 9, scope: !2390)
+!2392 = !DILocation(line: 197, column: 5, scope: !2390)
+!2393 = !DILocation(line: 199, column: 9, scope: !2394)
+!2394 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 199, column: 9)
+!2395 = !DILocation(line: 199, column: 16, scope: !2394)
+!2396 = !DILocation(line: 199, column: 9, scope: !1528)
+!2397 = !DILocation(line: 201, column: 17, scope: !2398)
+!2398 = distinct !DILexicalBlock(scope: !2394, file: !1529, line: 200, column: 5)
+!2399 = !DILocation(line: 201, column: 9, scope: !2398)
+!2400 = !DILocation(line: 202, column: 5, scope: !2398)
+!2401 = !DILocation(line: 204, column: 9, scope: !2402)
+!2402 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 204, column: 9)
+!2403 = !DILocation(line: 204, column: 9, scope: !1528)
+!2404 = !DILocation(line: 206, column: 23, scope: !2405)
+!2405 = distinct !DILexicalBlock(scope: !2402, file: !1529, line: 205, column: 5)
+!2406 = !DILocation(line: 206, column: 31, scope: !2405)
+!2407 = !DILocation(line: 206, column: 9, scope: !2405)
+!2408 = !DILocation(line: 207, column: 5, scope: !2405)
+!2409 = !DILocation(line: 209, column: 9, scope: !2410)
+!2410 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 209, column: 9)
+!2411 = !DILocation(line: 209, column: 16, scope: !2410)
+!2412 = !DILocation(line: 209, column: 9, scope: !1528)
+!2413 = !DILocation(line: 211, column: 17, scope: !2414)
+!2414 = distinct !DILexicalBlock(scope: !2410, file: !1529, line: 210, column: 5)
+!2415 = !DILocation(line: 211, column: 9, scope: !2414)
+!2416 = !DILocation(line: 212, column: 5, scope: !2414)
+!2417 = !DILocation(line: 214, column: 9, scope: !2418)
+!2418 = distinct !DILexicalBlock(scope: !1528, file: !1529, line: 214, column: 9)
+!2419 = !DILocation(line: 214, column: 9, scope: !1528)
+!2420 = !DILocation(line: 216, column: 9, scope: !2421)
+!2421 = distinct !DILexicalBlock(scope: !2418, file: !1529, line: 215, column: 5)
+!2422 = !DILocation(line: 217, column: 17, scope: !2421)
+!2423 = !DILocation(line: 217, column: 9, scope: !2421)
+!2424 = !DILocation(line: 218, column: 5, scope: !2421)
+!2425 = !DILocation(line: 220, column: 12, scope: !1528)
+!2426 = !DILocation(line: 220, column: 5, scope: !1528)
+!2427 = distinct !DISubprogram(name: "api_error_with_operand_id", scope: !54, file: !54, line: 908, type: !2428, scopeLine: 909, flags: DIFlagPrototyped, spFlags: DISPFlagLocalToUnit | DISPFlagDefinition, unit: !0, retainedNodes: !1532)
+!2428 = !DISubroutineType(types: !2429)
+!2429 = !{!786, !786, !528}
+!2430 = !DILocalVariable(name: "error", arg: 1, scope: !2427, file: !54, line: 908, type: !786)
+!2431 = !DILocation(line: 908, column: 73, scope: !2427)
+!2432 = !DILocalVariable(name: "operand_id", arg: 2, scope: !2427, file: !54, line: 908, type: !528)
+!2433 = !DILocation(line: 908, column: 89, scope: !2427)
+!2434 = !DILocalVariable(name: "error_code", scope: !2427, file: !54, line: 910, type: !2435)
+!2435 = !DIDerivedType(tag: DW_TAG_typedef, name: "api_error_code_t", file: !54, line: 903, baseType: !2436)
+!2436 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "api_error_code_u", file: !54, line: 870, size: 64, elements: !2437)
+!2437 = !{!2438, !2458, !2466}
+!2438 = !DIDerivedType(tag: DW_TAG_member, scope: !2436, file: !54, line: 872, baseType: !2439, size: 64)
+!2439 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !2436, file: !54, line: 872, size: 64, elements: !2440)
+!2440 = !{!2441, !2451, !2452, !2453, !2454, !2455, !2456, !2457}
+!2441 = !DIDerivedType(tag: DW_TAG_member, scope: !2439, file: !54, line: 874, baseType: !2442, size: 32)
+!2442 = distinct !DICompositeType(tag: DW_TAG_union_type, scope: !2439, file: !54, line: 874, size: 32, elements: !2443)
+!2443 = !{!2444, !2445, !2446}
+!2444 = !DIDerivedType(tag: DW_TAG_member, name: "operand", scope: !2442, file: !54, line: 876, baseType: !555, size: 32)
+!2445 = !DIDerivedType(tag: DW_TAG_member, name: "details_l2", scope: !2442, file: !54, line: 877, baseType: !555, size: 32)
+!2446 = !DIDerivedType(tag: DW_TAG_member, scope: !2442, file: !54, line: 878, baseType: !2447, size: 32)
+!2447 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !2442, file: !54, line: 878, size: 32, elements: !2448)
+!2448 = !{!2449, !2450}
+!2449 = !DIDerivedType(tag: DW_TAG_member, name: "details_l2_low", scope: !2447, file: !54, line: 880, baseType: !548, size: 16)
+!2450 = !DIDerivedType(tag: DW_TAG_member, name: "details_l2_high", scope: !2447, file: !54, line: 881, baseType: !548, size: 16, offset: 16)
+!2451 = !DIDerivedType(tag: DW_TAG_member, name: "details_l1", scope: !2439, file: !54, line: 884, baseType: !555, size: 8, offset: 32, flags: DIFlagBitField, extraData: i64 32)
+!2452 = !DIDerivedType(tag: DW_TAG_member, name: "clas", scope: !2439, file: !54, line: 885, baseType: !555, size: 8, offset: 40, flags: DIFlagBitField, extraData: i64 32)
+!2453 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !2439, file: !54, line: 886, baseType: !555, size: 12, offset: 48, flags: DIFlagBitField, extraData: i64 32)
+!2454 = !DIDerivedType(tag: DW_TAG_member, name: "host_recoverability_hint", scope: !2439, file: !54, line: 887, baseType: !555, size: 1, offset: 60, flags: DIFlagBitField, extraData: i64 32)
+!2455 = !DIDerivedType(tag: DW_TAG_member, name: "fatal", scope: !2439, file: !54, line: 888, baseType: !555, size: 1, offset: 61, flags: DIFlagBitField, extraData: i64 32)
+!2456 = !DIDerivedType(tag: DW_TAG_member, name: "non_recoverable", scope: !2439, file: !54, line: 889, baseType: !555, size: 1, offset: 62, flags: DIFlagBitField, extraData: i64 32)
+!2457 = !DIDerivedType(tag: DW_TAG_member, name: "error", scope: !2439, file: !54, line: 890, baseType: !555, size: 1, offset: 63, flags: DIFlagBitField, extraData: i64 32)
+!2458 = !DIDerivedType(tag: DW_TAG_member, scope: !2436, file: !54, line: 893, baseType: !2459, size: 64)
+!2459 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !2436, file: !54, line: 893, size: 64, elements: !2460)
+!2460 = !{!2461, !2462, !2463, !2464, !2465}
+!2461 = !DIDerivedType(tag: DW_TAG_member, name: "info_0", scope: !2459, file: !54, line: 895, baseType: !528, size: 8, flags: DIFlagBitField, extraData: i64 0)
+!2462 = !DIDerivedType(tag: DW_TAG_member, name: "info_1", scope: !2459, file: !54, line: 896, baseType: !528, size: 8, offset: 8, flags: DIFlagBitField, extraData: i64 0)
+!2463 = !DIDerivedType(tag: DW_TAG_member, name: "info_2", scope: !2459, file: !54, line: 897, baseType: !528, size: 8, offset: 16, flags: DIFlagBitField, extraData: i64 0)
+!2464 = !DIDerivedType(tag: DW_TAG_member, name: "info_3", scope: !2459, file: !54, line: 898, baseType: !528, size: 8, offset: 24, flags: DIFlagBitField, extraData: i64 0)
+!2465 = !DIDerivedType(tag: DW_TAG_member, name: "rsrvd", scope: !2459, file: !54, line: 899, baseType: !528, size: 32, offset: 32, flags: DIFlagBitField, extraData: i64 0)
+!2466 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !2436, file: !54, line: 902, baseType: !528, size: 64)
+!2467 = !DILocation(line: 910, column: 22, scope: !2427)
+!2468 = !DILocation(line: 910, column: 43, scope: !2427)
+!2469 = !DILocation(line: 910, column: 35, scope: !2427)
+!2470 = !DILocation(line: 911, column: 36, scope: !2427)
+!2471 = !DILocation(line: 911, column: 26, scope: !2427)
+!2472 = !DILocation(line: 911, column: 16, scope: !2427)
+!2473 = !DILocation(line: 911, column: 24, scope: !2427)
+!2474 = !DILocation(line: 912, column: 23, scope: !2427)
+!2475 = !DILocation(line: 912, column: 5, scope: !2427)
+!2476 = distinct !DISubprogram(name: "lfence", scope: !2477, file: !2477, line: 648, type: !2478, scopeLine: 649, flags: DIFlagPrototyped, spFlags: DISPFlagLocalToUnit | DISPFlagDefinition, unit: !0)
+!2477 = !DIFile(filename: "src/common/accessors/ia32_accessors.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "18943fc0391816096168b435f3390bd5")
+!2478 = !DISubroutineType(types: !2479)
+!2479 = !{null}
+!2480 = !DILocation(line: 650, column: 5, scope: !2476)
+!2481 = !{i64 234782}
+!2482 = !DILocation(line: 651, column: 1, scope: !2476)
+!2483 = distinct !DISubprogram(name: "migsc_lock", scope: !515, file: !515, line: 370, type: !2484, scopeLine: 371, flags: DIFlagPrototyped, spFlags: DISPFlagLocalToUnit | DISPFlagDefinition, unit: !0, retainedNodes: !1532)
+!2484 = !DISubroutineType(types: !2485)
+!2485 = !{!525, !2486}
+!2486 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !2129, size: 64)
+!2487 = !DILocalVariable(name: "mgsc_link", arg: 1, scope: !2483, file: !515, line: 370, type: !2486)
+!2488 = !DILocation(line: 370, column: 49, scope: !2483)
+!2489 = !DILocation(line: 372, column: 27, scope: !2483)
+!2490 = !DILocation(line: 372, column: 12, scope: !2483)
+!2491 = !DILocation(line: 372, column: 64, scope: !2483)
+!2492 = !DILocation(line: 372, column: 5, scope: !2483)
+!2493 = distinct !DISubprogram(name: "_lock_xadd_16b", scope: !2477, file: !2477, line: 511, type: !2494, scopeLine: 512, flags: DIFlagPrototyped, spFlags: DISPFlagLocalToUnit | DISPFlagDefinition, unit: !0, retainedNodes: !1532)
+!2494 = !DISubroutineType(types: !2495)
+!2495 = !{!548, !2496, !548}
+!2496 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !548, size: 64)
+!2497 = !DILocalVariable(name: "mem", arg: 1, scope: !2493, file: !2477, line: 511, type: !2496)
+!2498 = !DILocation(line: 511, column: 51, scope: !2493)
+!2499 = !DILocalVariable(name: "quantum", arg: 2, scope: !2493, file: !2477, line: 511, type: !548)
+!2500 = !DILocation(line: 511, column: 65, scope: !2493)
+!2501 = !DILocation(line: 513, column: 52, scope: !2493)
+!2502 = !DILocation(line: 513, column: 79, scope: !2493)
+!2503 = !DILocation(line: 513, column: 5, scope: !2493)
+!2504 = !{i64 230647}
+!2505 = !DILocation(line: 514, column: 12, scope: !2493)
+!2506 = !DILocation(line: 514, column: 5, scope: !2493)
+!2507 = distinct !DISubprogram(name: "get_global_data", scope: !2508, file: !2508, line: 71, type: !2509, scopeLine: 72, flags: DIFlagPrototyped, spFlags: DISPFlagLocalToUnit | DISPFlagDefinition, unit: !0, retainedNodes: !1532)
+!2508 = !DIFile(filename: "src/common/accessors/data_accessors.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "ff2df9f7eee15f0478ee5c6807b1bd0a")
+!2509 = !DISubroutineType(types: !2510)
+!2510 = !{!808}
+!2511 = !DILocalVariable(name: "global_data_addr", scope: !2507, file: !2508, line: 73, type: !528)
+!2512 = !DILocation(line: 73, column: 14, scope: !2507)
+!2513 = !DILocation(line: 74, column: 5, scope: !2507)
+!2514 = !{i64 272668, i64 272700}
+!2515 = !DILocation(line: 78, column: 34, scope: !2507)
+!2516 = !DILocation(line: 78, column: 12, scope: !2507)
+!2517 = !DILocation(line: 78, column: 5, scope: !2507)
+!2518 = distinct !DISubprogram(name: "map_pa_with_hkid", scope: !2519, file: !2519, line: 268, type: !2520, scopeLine: 269, flags: DIFlagPrototyped, spFlags: DISPFlagLocalToUnit | DISPFlagDefinition, unit: !0, retainedNodes: !1532)
+!2519 = !DIFile(filename: "src/common/helpers/helpers.h", directory: "/Users/sz7155/tdx-module", checksumkind: CSK_MD5, checksum: "ce93bc3cdc9dbe4d9db5854fa95df77c")
+!2520 = !DISubroutineType(types: !2521)
+!2521 = !{!765, !765, !548, !2522}
+!2522 = !DIDerivedType(tag: DW_TAG_typedef, name: "mapping_type_t", file: !49, line: 62, baseType: !48)
+!2523 = !DILocalVariable(name: "pa", arg: 1, scope: !2518, file: !2519, line: 268, type: !765)
+!2524 = !DILocation(line: 268, column: 46, scope: !2518)
+!2525 = !DILocalVariable(name: "hkid", arg: 2, scope: !2518, file: !2519, line: 268, type: !548)
+!2526 = !DILocation(line: 268, column: 59, scope: !2518)
+!2527 = !DILocalVariable(name: "mapping_type", arg: 3, scope: !2518, file: !2519, line: 268, type: !2522)
+!2528 = !DILocation(line: 268, column: 80, scope: !2518)
+!2529 = !DILocalVariable(name: "temp_pa", scope: !2518, file: !2519, line: 270, type: !698)
+!2530 = !DILocation(line: 270, column: 10, scope: !2518)
+!2531 = !DILocation(line: 270, column: 33, scope: !2518)
+!2532 = !DILocation(line: 270, column: 20, scope: !2518)
+!2533 = !DILocalVariable(name: "pa_with_hkid", scope: !2518, file: !2519, line: 271, type: !698)
+!2534 = !DILocation(line: 271, column: 10, scope: !2518)
+!2535 = !DILocation(line: 271, column: 49, scope: !2518)
+!2536 = !DILocation(line: 271, column: 25, scope: !2518)
+!2537 = !DILocation(line: 272, column: 40, scope: !2518)
+!2538 = !DILocation(line: 272, column: 19, scope: !2518)
+!2539 = !DILocation(line: 272, column: 45, scope: !2518)
+!2540 = !DILocation(line: 272, column: 12, scope: !2518)
+!2541 = !DILocation(line: 272, column: 5, scope: !2518)
+!2542 = distinct !DISubprogram(name: "reset_to_next_iv", scope: !2519, file: !2519, line: 1920, type: !2543, scopeLine: 1921, flags: DIFlagPrototyped, spFlags: DISPFlagLocalToUnit | DISPFlagDefinition, unit: !0, retainedNodes: !1532)
+!2543 = !DISubroutineType(types: !2544)
+!2544 = !{null, !612, !528, !548}
+!2545 = !DILocalVariable(name: "migsc", arg: 1, scope: !2542, file: !2519, line: 1920, type: !612)
+!2546 = !DILocation(line: 1920, column: 48, scope: !2542)
+!2547 = !DILocalVariable(name: "iv_counter", arg: 2, scope: !2542, file: !2519, line: 1920, type: !528)
+!2548 = !DILocation(line: 1920, column: 64, scope: !2542)
+!2549 = !DILocalVariable(name: "migs_index", arg: 3, scope: !2542, file: !2519, line: 1920, type: !548)
+!2550 = !DILocation(line: 1920, column: 85, scope: !2542)
+!2551 = !DILocalVariable(name: "iv", scope: !2542, file: !2519, line: 1922, type: !2552)
+!2552 = !DIDerivedType(tag: DW_TAG_typedef, name: "migs_iv_t", file: !798, line: 74, baseType: !2553)
+!2553 = distinct !DICompositeType(tag: DW_TAG_union_type, name: "migs_iv_s", file: !798, line: 65, size: 96, elements: !2554)
+!2554 = !{!2555, !2561}
+!2555 = !DIDerivedType(tag: DW_TAG_member, scope: !2553, file: !798, line: 67, baseType: !2556, size: 96)
+!2556 = distinct !DICompositeType(tag: DW_TAG_structure_type, scope: !2553, file: !798, line: 67, size: 96, elements: !2557)
+!2557 = !{!2558, !2559, !2560}
+!2558 = !DIDerivedType(tag: DW_TAG_member, name: "iv_counter", scope: !2556, file: !798, line: 69, baseType: !528, size: 64)
+!2559 = !DIDerivedType(tag: DW_TAG_member, name: "migs_index", scope: !2556, file: !798, line: 70, baseType: !548, size: 16, offset: 64)
+!2560 = !DIDerivedType(tag: DW_TAG_member, name: "reserved", scope: !2556, file: !798, line: 71, baseType: !548, size: 16, offset: 80)
+!2561 = !DIDerivedType(tag: DW_TAG_member, name: "raw", scope: !2553, file: !798, line: 73, baseType: !2562, size: 96)
+!2562 = !DIDerivedType(tag: DW_TAG_typedef, name: "crypto_iv_t", file: !798, line: 58, baseType: !2563)
+!2563 = !DICompositeType(tag: DW_TAG_array_type, baseType: !527, size: 96, elements: !2564)
+!2564 = !{!2565}
+!2565 = !DISubrange(count: 12)
+!2566 = !DILocation(line: 1922, column: 15, scope: !2542)
+!2567 = !DILocation(line: 1925, column: 21, scope: !2542)
+!2568 = !DILocation(line: 1925, column: 8, scope: !2542)
+!2569 = !DILocation(line: 1925, column: 19, scope: !2542)
+!2570 = !DILocation(line: 1926, column: 21, scope: !2542)
+!2571 = !DILocation(line: 1926, column: 8, scope: !2542)
+!2572 = !DILocation(line: 1926, column: 19, scope: !2542)
+!2573 = !DILocation(line: 1927, column: 8, scope: !2542)
+!2574 = !DILocation(line: 1927, column: 17, scope: !2542)
+!2575 = !DILocation(line: 1930, column: 34, scope: !2576)
+!2576 = distinct !DILexicalBlock(scope: !2542, file: !2519, line: 1930, column: 9)
+!2577 = !DILocation(line: 1930, column: 41, scope: !2576)
+!2578 = !DILocation(line: 1930, column: 9, scope: !2576)
+!2579 = !DILocation(line: 1930, column: 58, scope: !2576)
+!2580 = !DILocation(line: 1930, column: 9, scope: !2542)
+!2581 = !DILocation(line: 1932, column: 9, scope: !2582)
+!2582 = distinct !DILexicalBlock(scope: !2576, file: !2519, line: 1931, column: 5)
+!2583 = !DILocation(line: 1933, column: 5, scope: !2582)
+!2584 = !DILocation(line: 1936, column: 24, scope: !2585)
+!2585 = distinct !DILexicalBlock(scope: !2542, file: !2519, line: 1936, column: 9)
+!2586 = !DILocation(line: 1936, column: 31, scope: !2585)
+!2587 = !DILocation(line: 1936, column: 9, scope: !2585)
+!2588 = !DILocation(line: 1936, column: 53, scope: !2585)
+!2589 = !DILocation(line: 1936, column: 9, scope: !2542)
+!2590 = !DILocation(line: 1938, column: 9, scope: !2591)
+!2591 = distinct !DILexicalBlock(scope: !2585, file: !2519, line: 1937, column: 5)
+!2592 = !DILocation(line: 1939, column: 5, scope: !2591)
+!2593 = !DILocation(line: 1940, column: 1, scope: !2542)
+!2594 = distinct !DISubprogram(name: "api_error_fatal", scope: !54, file: !54, line: 944, type: !2595, scopeLine: 945, flags: DIFlagPrototyped, spFlags: DISPFlagLocalToUnit | DISPFlagDefinition, unit: !0, retainedNodes: !1532)
+!2595 = !DISubroutineType(types: !2596)
+!2596 = !{!786, !786}
+!2597 = !DILocalVariable(name: "error", arg: 1, scope: !2594, file: !54, line: 944, type: !786)
+!2598 = !DILocation(line: 944, column: 63, scope: !2594)
+!2599 = !DILocalVariable(name: "error_code", scope: !2594, file: !54, line: 946, type: !2435)
+!2600 = !DILocation(line: 946, column: 22, scope: !2594)
+!2601 = !DILocation(line: 948, column: 32, scope: !2594)
+!2602 = !DILocation(line: 948, column: 20, scope: !2594)
+!2603 = !DILocation(line: 949, column: 16, scope: !2594)
+!2604 = !DILocation(line: 949, column: 22, scope: !2594)
+!2605 = !DILocation(line: 951, column: 23, scope: !2594)
+!2606 = !DILocation(line: 951, column: 5, scope: !2594)
+!2607 = distinct !DISubprogram(name: "migsc_unlock", scope: !515, file: !515, line: 376, type: !2608, scopeLine: 377, flags: DIFlagPrototyped, spFlags: DISPFlagLocalToUnit | DISPFlagDefinition, unit: !0, retainedNodes: !1532)
+!2608 = !DISubroutineType(types: !2609)
+!2609 = !{null, !2486}
+!2610 = !DILocalVariable(name: "mgsc_link", arg: 1, scope: !2607, file: !515, line: 376, type: !2486)
+!2611 = !DILocation(line: 376, column: 49, scope: !2607)
+!2612 = !DILocalVariable(name: "old", scope: !2607, file: !515, line: 378, type: !525)
+!2613 = !DILocation(line: 378, column: 12, scope: !2607)
+!2614 = !DILocation(line: 380, column: 26, scope: !2607)
+!2615 = !DILocation(line: 380, column: 11, scope: !2607)
+!2616 = !DILocation(line: 380, column: 9, scope: !2607)
+!2617 = !DILocation(line: 381, column: 5, scope: !2618)
+!2618 = distinct !DILexicalBlock(scope: !2607, file: !515, line: 381, column: 5)
+!2619 = !DILocation(line: 381, column: 5, scope: !2607)
+!2620 = !DILocation(line: 381, column: 5, scope: !2621)
+!2621 = distinct !DILexicalBlock(scope: !2618, file: !515, line: 381, column: 5)
+!2622 = !DILocation(line: 382, column: 1, scope: !2607)
+!2623 = distinct !DISubprogram(name: "_lock_bts_64b", scope: !2477, file: !2477, line: 591, type: !2624, scopeLine: 592, flags: DIFlagPrototyped, spFlags: DISPFlagLocalToUnit | DISPFlagDefinition, unit: !0, retainedNodes: !1532)
+!2624 = !DISubroutineType(types: !2625)
+!2625 = !{!525, !2626, !528}
+!2626 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !2627, size: 64)
+!2627 = !DIDerivedType(tag: DW_TAG_volatile_type, baseType: !528)
+!2628 = !DILocalVariable(name: "mem", arg: 1, scope: !2623, file: !2477, line: 591, type: !2626)
+!2629 = !DILocation(line: 591, column: 57, scope: !2623)
+!2630 = !DILocalVariable(name: "bit", arg: 2, scope: !2623, file: !2477, line: 591, type: !528)
+!2631 = !DILocation(line: 591, column: 71, scope: !2623)
+!2632 = !DILocalVariable(name: "result", scope: !2623, file: !2477, line: 593, type: !525)
+!2633 = !DILocation(line: 593, column: 12, scope: !2623)
+!2634 = !DILocation(line: 595, column: 62, scope: !2623)
+!2635 = !DILocation(line: 595, column: 89, scope: !2623)
+!2636 = !DILocation(line: 595, column: 5, scope: !2623)
+!2637 = !{i64 233175}
+!2638 = !DILocation(line: 596, column: 12, scope: !2623)
+!2639 = !DILocation(line: 596, column: 5, scope: !2623)
+!2640 = distinct !DISubprogram(name: "set_hkid_to_pa", scope: !2519, file: !2519, line: 168, type: !2641, scopeLine: 169, flags: DIFlagPrototyped, spFlags: DISPFlagLocalToUnit | DISPFlagDefinition, unit: !0, retainedNodes: !1532)
+!2641 = !DISubroutineType(types: !2642)
+!2642 = !{!698, !698, !548}
+!2643 = !DILocalVariable(name: "pa", arg: 1, scope: !2640, file: !2519, line: 168, type: !698)
+!2644 = !DILocation(line: 168, column: 42, scope: !2640)
+!2645 = !DILocalVariable(name: "hkid", arg: 2, scope: !2640, file: !2519, line: 168, type: !548)
+!2646 = !DILocation(line: 168, column: 55, scope: !2640)
+!2647 = !DILocalVariable(name: "global_data", scope: !2640, file: !2519, line: 170, type: !808)
+!2648 = !DILocation(line: 170, column: 26, scope: !2640)
+!2649 = !DILocation(line: 170, column: 40, scope: !2640)
+!2650 = !DILocation(line: 172, column: 21, scope: !2640)
+!2651 = !DILocation(line: 172, column: 34, scope: !2640)
+!2652 = !DILocation(line: 172, column: 19, scope: !2640)
+!2653 = !DILocation(line: 172, column: 8, scope: !2640)
+!2654 = !DILocation(line: 172, column: 16, scope: !2640)
+!2655 = !DILocation(line: 173, column: 30, scope: !2640)
+!2656 = !DILocation(line: 173, column: 20, scope: !2640)
+!2657 = !DILocation(line: 173, column: 38, scope: !2640)
+!2658 = !DILocation(line: 173, column: 51, scope: !2640)
+!2659 = !DILocation(line: 173, column: 35, scope: !2640)
+!2660 = !DILocation(line: 173, column: 8, scope: !2640)
+!2661 = !DILocation(line: 173, column: 16, scope: !2640)
+!2662 = !DILocation(line: 175, column: 12, scope: !2640)
+!2663 = !DILocation(line: 175, column: 5, scope: !2640)
+!2664 = distinct !DISubprogram(name: "_lock_btr_64b", scope: !2477, file: !2477, line: 599, type: !2624, scopeLine: 600, flags: DIFlagPrototyped, spFlags: DISPFlagLocalToUnit | DISPFlagDefinition, unit: !0, retainedNodes: !1532)
+!2665 = !DILocalVariable(name: "mem", arg: 1, scope: !2664, file: !2477, line: 599, type: !2626)
+!2666 = !DILocation(line: 599, column: 57, scope: !2664)
+!2667 = !DILocalVariable(name: "bit", arg: 2, scope: !2664, file: !2477, line: 599, type: !528)
+!2668 = !DILocation(line: 599, column: 71, scope: !2664)
+!2669 = !DILocalVariable(name: "result", scope: !2664, file: !2477, line: 601, type: !525)
+!2670 = !DILocation(line: 601, column: 12, scope: !2664)
+!2671 = !DILocation(line: 603, column: 62, scope: !2664)
+!2672 = !DILocation(line: 603, column: 89, scope: !2664)
+!2673 = !DILocation(line: 603, column: 5, scope: !2664)
+!2674 = !{i64 233416}
+!2675 = !DILocation(line: 604, column: 12, scope: !2664)
+!2676 = !DILocation(line: 604, column: 5, scope: !2664)
